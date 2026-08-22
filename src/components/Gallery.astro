@@ -1,0 +1,50 @@
+---
+/**
+ * Photos attached to an assignment.
+ *
+ * One photo renders full width. Several render as a thumbnail grid — some
+ * assignments (the roof walking tour, the paper tower build) carry nine or
+ * more, and stacking those full width buries the rest of the page. Each
+ * thumbnail links to the full-size file.
+ */
+interface Props {
+  images: { src: string; alt: string }[];
+}
+const { images } = Astro.props;
+const single = images.length === 1;
+---
+
+{images.length > 0 && (
+  <div class={single ? 'single' : 'grid-gallery'}>
+    {images.map((img) => (
+      <figure>
+        <a href={img.src} target="_blank" rel="noopener noreferrer">
+          <img src={img.src} alt={img.alt} loading="lazy" />
+        </a>
+      </figure>
+    ))}
+  </div>
+)}
+
+<style>
+  figure { margin: 0; }
+  figure img {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .single { margin: 1.25rem 0; }
+
+  .grid-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+  }
+  .grid-gallery figure img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  .grid-gallery a:hover img { border-color: var(--accent); }
+</style>

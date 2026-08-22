@@ -37,8 +37,8 @@ export const courses = [
     short: 'CEA',
     credit: 'Dual credit',
     blurb:
-      'Architectural history, design principles, and residential structural systems.',
-    units: ['unit-1', 'unit-2'],
+      'A full year: architectural history and design principles, a residential tiny house built in Revit, a commercial brownfield renovation, land surveying, and structural analysis.',
+    units: ['unit-1', 'unit-2', 'unit-3', 'unit-4'],
   },
 ] as const;
 

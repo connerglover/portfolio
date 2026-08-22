@@ -75,9 +75,13 @@ partners:                # optional
 The write-up goes here, in Markdown.
 ```
 
-Adding a whole new course means adding an entry to `courses` in
-`src/data/site.ts` — that array drives the routes, the nav counts, and the
-unit ordering.
+Adding a whole new course, or a new unit to an existing one, means editing
+`courses` in `src/data/site.ts` — that array drives the routes, the nav counts,
+and the unit ordering.
+
+`decks:` holds any PDF you want shown inline, not just slide decks — reports,
+worksheets and quizzes all render through the same viewer. `images:` renders as
+a single full-width photo, or as a thumbnail grid once there is more than one.
 
 ---
 
@@ -129,11 +133,11 @@ src/
   content.config.ts               frontmatter schemas for both collections
   data/site.ts                    name, contact, course list and ordering
   layouts/BaseLayout.astro        <head>, nav, footer, skip link
-  components/                     Nav, Footer, Deck, DriveFile
+  components/                     Nav, Footer, Deck, DriveFile, Gallery
   pages/                          routes (file-based)
   styles/global.css               design tokens + base styles
 public/images/                    self-hosted images
-public/decks/                     slide decks exported to PDF (~40 MB)
+public/decks/                     PDF attachments — decks, reports, worksheets
 ```
 
 Styling is deliberately plain for now — everything is driven by CSS custom
@@ -144,7 +148,10 @@ a token swap plus per-component polish.
 
 ## Migration notes
 
-Content came from the old Google Sites portfolio. Two things worth knowing:
+### Google Sites
+
+The original site content came from the old Google Sites portfolio. Two things
+worth knowing:
 
 **Deleted attachments were dropped.** The site had 44 Google Drive attachments;
 24 of them had already been deleted and returned HTTP 410/404. Those embeds are
@@ -169,3 +176,20 @@ The exported filenames credited several collaborators the old site never
 listed — those were folded into `partners:`. A few decks name others on their
 title slide (4.1.1 credits Claire Susanto, for example) that aren't captured
 in frontmatter yet.
+
+### CEA course archive
+
+The Civil Engineering and Architecture entries were later rebuilt from the
+files Conner submitted over the year, cross-referenced against the Fall and
+Spring assignment schedules. That covers all four units:
+
+- 30 PDFs — reports, presentations, worksheets and quizzes — in `public/decks/cea/`
+- 22 photos, converted from HEIC/JPEG and resized to 1600px (70 MB → 6 MB)
+- Three PDFs were re-exports of decks already imported from Google Sites and
+  were skipped rather than duplicated
+- Two video clips (a beam test and a paper tower) were left out
+
+The write-ups on those entries were drafted from the submitted documents —
+mostly from Conner's own Right / Wrong / Learned reflections — rather than
+copied from an existing portfolio page, since the Google Site was never updated
+past Unit 2. They're worth a read-through.

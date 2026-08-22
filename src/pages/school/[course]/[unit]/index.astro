@@ -4,6 +4,7 @@ import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
 import Deck from '../../../../components/Deck.astro';
 import DriveFile from '../../../../components/DriveFile.astro';
+import Gallery from '../../../../components/Gallery.astro';
 import { courses, unitLabel } from '../../../../data/site';
 
 export const getStaticPaths = (async () => {
@@ -64,11 +65,7 @@ const next = idx < units.length - 1 ? units[idx + 1] : null;
           <p class="muted byline">With {item.data.partners.join(', ')}</p>
         )}
         <div class="prose"><Content /></div>
-        {item.data.images.map((img) => (
-          <figure>
-            <img src={img.src} alt={img.alt} loading="lazy" />
-          </figure>
-        ))}
+        <Gallery images={item.data.images} />
         {item.data.decks.map((d) => <Deck pdf={d.pdf} title={d.title} />)}
         {item.data.files.map((f) => <DriveFile id={f.id} title={f.title} />)}
       </article>
@@ -88,11 +85,6 @@ const next = idx < units.length - 1 ? units[idx + 1] : null;
   }
   .assignment h2 { margin-top: 0; scroll-margin-top: 1rem; }
   .byline { font-size: 0.9rem; margin-top: -0.25rem; }
-  .assignment figure { margin: 1.25rem 0; }
-  .assignment figure img {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-  }
   .unit-nav {
     display: flex;
     justify-content: space-between;
