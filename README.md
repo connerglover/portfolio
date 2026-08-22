@@ -107,21 +107,6 @@ the year.
 
 ---
 
-## Before the first deploy
-
-Three things in `src/data/site.ts` are intentionally left blank, marked with a
-`TODO(conner)` comment:
-
-- `email` — the old site used `cglover.2028@carmelhs.org`, which stops working
-  at graduation. Pick an address you'll keep.
-- `github` — your profile URL.
-- `linkedin` — optional; delete the field if you don't want it.
-
-Also set `site` in `astro.config.mjs` to your real domain. It's currently a
-placeholder, and it's what canonical URLs and `sitemap.xml` are generated from.
-
----
-
 ## Deploying
 
 Recommended: **Cloudflare Pages**. Unmetered bandwidth on the free tier, free
@@ -183,7 +168,15 @@ browsers refuse to render one inline at all.
 To make that work, `scripts/render_decks.py` rasterises every page of every PDF
 in `public/decks/` to a WebP image in `public/deck-pages/`, and writes
 `src/data/decks.json` so the component knows the page count and aspect ratio.
-All 46 decks come to 275 pages and about 18 MB.
+All 49 attachments come to 287 pages and about 19 MB.
+
+The aspect ratio also picks the presentation, with no configuration needed:
+
+- **Landscape** pages are slide decks. One slide at a time, arrows, click to
+  advance, keyboard and swipe.
+- **Portrait** pages are documents — reports, worksheets, scanned notes. They
+  read as documents: sheets of paper stacked in a scrolling frame, with the page
+  counter following the scroll.
 
 ```bash
 npm run decks

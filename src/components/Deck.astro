@@ -1,22 +1,24 @@
 ---
 /**
- * A slide deck, shown as a slideshow rather than as a PDF document.
+ * A PDF attachment, rendered from images rather than in a browser PDF frame.
  *
- * The originals were exported out of Google Slides during the migration and
- * are locked to a school account, so the PDF in `public/decks/` is the
- * canonical copy. Browsers render a PDF in an <iframe> with their own toolbar,
- * sidebar and print controls wrapped around it, which reads as a document
- * viewer, not an embedded deck — and most mobile browsers refuse to render one
- * inline at all.
+ * Browsers wrap a PDF in their own toolbar, thumbnail sidebar and print
+ * controls, which reads as a document viewer bolted to the page — and most
+ * mobile browsers refuse to render one inline at all. So
+ * `scripts/render_decks.py` rasterises each page to WebP ahead of time and this
+ * component presents those images.
  *
- * So `scripts/render_decks.py` rasterises each page to WebP ahead of time and
- * this component flips through those images: one slide in view, arrows, a
- * counter, fullscreen, keyboard and swipe. The PDF is still linked for anyone
- * who wants the file.
+ * Two presentations, picked from the page's aspect ratio:
  *
- * Without JavaScript the pages stack down the page and stay readable (see the
- * `scripting: none` block below). If a PDF has no rendered pages yet (added
- * but not re-rendered), it falls back to the plain browser frame.
+ *   slides    landscape pages — one at a time, arrows, click to advance,
+ *             keyboard and swipe, the way a slide embed behaves.
+ *   document  portrait pages — reports, worksheets, scanned notes. These are
+ *             documents, so they read as documents: sheets of paper stacked in
+ *             a scrolling frame, with the page counter following the scroll.
+ *
+ * The PDF is still linked either way. Without JavaScript the pages stack down
+ * the page and stay readable. A PDF with no rendered pages yet falls back to
+ * the plain browser frame.
  */
 import decks from '../data/decks.json';
 
@@ -25,23 +27,32 @@ interface Props {
   title?: string;
 }
 const { pdf, title } = Astro.props;
-const label = title ?? 'Slide deck';
+const label = title ?? 'Attachment';
 
 const meta = (decks as Record<string, { pages: number; dir: string; width: number; height: number }>)[pdf];
+
+// Anything taller than it is wide is a document, not a deck.
+const isDocument = meta ? meta.height > meta.width : false;
 const ratio = meta ? `${meta.width} / ${meta.height}` : '16 / 10';
 const pages = meta
   ? Array.from({ length: meta.pages }, (_, i) => `${meta.dir}/p${String(i + 1).padStart(2, '0')}.webp`)
   : [];
+const paged = meta ? meta.pages > 1 : false;
 ---
 
 <figure class="deck">
   {meta ? (
-    <slide-deck class="viewer" data-pages={meta.pages} style={`--ratio: ${ratio}`}>
+    <slide-deck
+      class:list={['viewer', isDocument ? 'document' : 'slides']}
+      data-variant={isDocument ? 'document' : 'slides'}
+      data-pages={meta.pages}
+      style={`--ratio: ${ratio}`}
+    >
       <div class="stage" data-stage>
         {pages.map((src, i) => (
           <img
             src={src}
-            alt={`${label} — slide ${i + 1} of ${meta.pages}`}
+            alt={`${label} — page ${i + 1} of ${meta.pages}`}
             loading="lazy"
             decoding="async"
             draggable="false"
@@ -52,9 +63,8 @@ const pages = meta
       </div>
 
       <div class="bar">
-        {/* A one-page attachment has nothing to page through, so it gets the
-            fullscreen and PDF controls only. */}
-        {meta.pages > 1 && (
+        {/* Slides get paging controls; a document is navigated by scrolling. */}
+        {!isDocument && paged && (
           <>
             <button type="button" data-prev aria-label="Previous slide">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
@@ -62,8 +72,12 @@ const pages = meta
             <button type="button" data-next aria-label="Next slide">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
             </button>
-            <span class="count" aria-live="polite"><span data-cur>1</span> / {meta.pages}</span>
           </>
+        )}
+        {paged && (
+          <span class="count" aria-live="polite">
+            {isDocument && 'Page '}<span data-cur>1</span> / {meta.pages}
+          </span>
         )}
         <span class="gap"></span>
         <button type="button" data-full aria-label="Full screen">
@@ -90,8 +104,6 @@ const pages = meta
     margin-top: 0.5rem;
   }
 
-  /* ---------- viewer ---------- */
-
   .viewer {
     display: block;
     border: 1px solid var(--border);
@@ -104,22 +116,20 @@ const pages = meta
     outline-offset: 2px;
   }
 
-  /* Only the current slide is in flow. This is done in CSS rather than by the
-     script on hydration: if the slides start out visible, the browser begins
-     fetching every one that is near the viewport before the script can hide
-     them, which on a unit page with a dozen decks is megabytes of slides
-     nobody asked for. */
-  .stage {
+  /* ---------- slides ---------- */
+
+  /* Only the current slide is in flow, done in CSS rather than by the script on
+     hydration: if the slides start out visible the browser begins fetching every
+     one near the viewport before the script can hide them, which on a unit page
+     with a dozen decks is megabytes of slides nobody asked for. */
+  .slides .stage {
     position: relative;
     aspect-ratio: var(--ratio);
-    /* Portrait attachments — scanned worksheets, reports — would otherwise
-       make a stage taller than the window and push everything below it off
-       screen. Capping the height letterboxes them into side gutters instead. */
     max-height: min(78vh, 900px);
     cursor: pointer;
     display: block;
   }
-  .stage img {
+  .slides .stage img {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -127,26 +137,30 @@ const pages = meta
     object-fit: contain;
     display: none;
   }
-  .stage img.current { display: block; }
+  .slides .stage img.current { display: block; }
 
-  /* With scripting off the controls cannot work, so let the pages stack down
-     the page and stay readable instead. */
-  @media (scripting: none) {
-    .stage {
-      position: static;
-      aspect-ratio: auto;
-      max-height: none;
-      cursor: default;
-    }
-    .stage img {
-      position: static;
-      display: block;
-      width: 100%;
-      height: auto;
-      background: #fff;
-    }
-    .bar button,
-    .count { display: none; }
+  /* ---------- document ---------- */
+
+  .document .stage {
+    max-height: min(78vh, 46rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    /* A slightly darker ground than the page so the sheets read as paper. */
+    background: color-mix(in srgb, var(--bg-subtle) 70%, var(--border));
+  }
+  .document .stage img {
+    display: block;
+    width: 100%;
+    max-width: 46rem;
+    height: auto;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.28);
   }
 
   /* ---------- control bar ---------- */
@@ -215,10 +229,11 @@ const pages = meta
   }
   .viewer:fullscreen .stage {
     flex: 1;
-    aspect-ratio: auto;
     max-height: none;
     min-height: 0;
   }
+  .slides:fullscreen .stage { aspect-ratio: auto; }
+  .document:fullscreen .stage { background: #15181c; }
   .viewer:fullscreen .bar {
     background: #0b0d10;
     border-top-color: #2a2f36;
@@ -226,6 +241,27 @@ const pages = meta
   .viewer:fullscreen .count,
   .viewer:fullscreen .pdf,
   .viewer:fullscreen button { color: #c9d1d9; }
+
+  /* ---------- no scripting ---------- */
+
+  @media (scripting: none) {
+    .slides .stage {
+      position: static;
+      aspect-ratio: auto;
+      max-height: none;
+      cursor: default;
+    }
+    .slides .stage img {
+      position: static;
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #fff;
+    }
+    .document .stage { max-height: none; overflow: visible; }
+    .bar button,
+    .count { display: none; }
+  }
 
   /* ---------- fallback frame ---------- */
 
@@ -250,18 +286,75 @@ const pages = meta
 
       const stage = this.querySelector<HTMLElement>('[data-stage]')!;
       const full = this.querySelector<HTMLButtonElement>('[data-full]')!;
+      const cur = this.querySelector<HTMLElement>('[data-cur]');
+
+      full.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (document.fullscreenElement === this) document.exitFullscreen();
+        else this.requestFullscreen?.().catch(() => {});
+      });
+
+      if (this.dataset.variant === 'document') {
+        this.setUpDocument(stage, cur);
+      } else {
+        this.setUpSlides(stage, cur);
+      }
+    }
+
+    /**
+     * Pages scroll; the counter reports whichever page crosses the middle of
+     * the frame. Measured off scroll position rather than an
+     * IntersectionObserver — a page is normally taller than the frame, so its
+     * intersection ratio never reaches the thresholds you would want to watch.
+     */
+    private setUpDocument(stage: HTMLElement, cur: HTMLElement | null) {
+      if (!cur) return;
+      let queued = false;
+
+      const update = () => {
+        queued = false;
+        const frame = stage.getBoundingClientRect();
+        const middle = frame.top + frame.height / 2;
+        let best = 0;
+        let nearest = Infinity;
+        this.slides.forEach((img, i) => {
+          const r = img.getBoundingClientRect();
+          const distance =
+            r.top <= middle && r.bottom >= middle
+              ? 0
+              : Math.min(Math.abs(r.top - middle), Math.abs(r.bottom - middle));
+          if (distance < nearest) {
+            nearest = distance;
+            best = i;
+          }
+        });
+        cur.textContent = String(best + 1);
+      };
+
+      stage.addEventListener(
+        'scroll',
+        () => {
+          if (queued) return;
+          queued = true;
+          requestAnimationFrame(update);
+        },
+        { passive: true },
+      );
+      update();
+    }
+
+    /** One slide at a time, with arrows, keyboard, click and swipe. */
+    private setUpSlides(stage: HTMLElement, cur: HTMLElement | null) {
       // Absent on single-page attachments, which render no paging controls.
       const prev = this.querySelector<HTMLButtonElement>('[data-prev]');
       const next = this.querySelector<HTMLButtonElement>('[data-next]');
-      const cur = this.querySelector<HTMLElement>('[data-cur]');
 
       this.tabIndex = 0;
 
       // `warm` preloads the next slide so paging feels instant. It is off for
       // the initial call: a unit page can carry a dozen decks, and warming
       // every one of them on load pulls megabytes of slides nobody has
-      // scrolled to yet. Hidden slides stay lazy until the reader pages into
-      // the deck.
+      // scrolled to yet.
       const show = (i: number, warm = true) => {
         const n = this.slides.length;
         this.index = Math.max(0, Math.min(n - 1, i));
@@ -281,12 +374,6 @@ const pages = meta
       // Clicking the slide advances, the way a Slides embed does.
       stage.addEventListener('click', () => show(this.index + 1));
 
-      full.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (document.fullscreenElement === this) document.exitFullscreen();
-        else this.requestFullscreen?.().catch(() => {});
-      });
-
       this.addEventListener('keydown', (e: KeyboardEvent) => {
         const keys = ['ArrowRight', 'ArrowLeft', 'Home', 'End', ' ', 'PageDown', 'PageUp'];
         if (!keys.includes(e.key)) return;
@@ -297,7 +384,6 @@ const pages = meta
         else show(this.slides.length - 1);
       });
 
-      // Horizontal swipe on touch.
       let x0 = 0;
       let y0 = 0;
       stage.addEventListener('touchstart', (e: TouchEvent) => {
