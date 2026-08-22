@@ -88,6 +88,20 @@ a single full-width photo, or as a thumbnail grid once there is more than one.
 
 ---
 
+## Updating the academic record
+
+`src/data/academics.ts` holds the transcript that the About page renders.
+Letter grades only, on the school scale (A 100-90, B 89-80, C 79-70) — the
+underlying percentages are deliberately not stored, since this repo is public
+and the numbers add exposure without adding anything a portfolio needs.
+
+Each new semester, add the courses to the current year's `terms` entry and
+update `gpa.cumulative`, `gpa.honors` and `gpa.asOf` from the latest report
+card. A `null` semester renders as an em dash, for courses that only ran half
+the year.
+
+---
+
 ## Before the first deploy
 
 Three things in `src/data/site.ts` are intentionally left blank, marked with a
@@ -135,6 +149,7 @@ src/
     projects/*.md                 personal projects, one file per project
   content.config.ts               frontmatter schemas for both collections
   data/site.ts                    name, contact, course list and ordering
+  data/academics.ts               transcript — courses, letter grades, GPA
   layouts/BaseLayout.astro        <head>, nav, footer, skip link
   components/                     Nav, Footer, Deck, DriveFile, Gallery
   data/decks.json                 generated deck manifest — do not hand-edit

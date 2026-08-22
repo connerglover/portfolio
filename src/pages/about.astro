@@ -1,38 +1,182 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { courseTimeline, site } from '../data/site';
+import { site } from '../data/site';
+import { courseLevelKey, gpa, terms, ungraded } from '../data/academics';
 ---
 
 <BaseLayout title="About" description={`About ${site.name}`}>
-  <div class="wrap prose stack">
-    <h1>About me</h1>
+  <div class="wrap stack">
+    <section class="prose">
+      <h1>About me</h1>
+      <!--
+        TODO(conner): this is still close to what the Google Site said in
+        freshman year. The grade level is updated to match the transcript, but
+        the rest is two years old — rewrite it when you get a chance.
+      -->
+      <p>
+        I&rsquo;m a junior at Carmel Catholic High School, working through the
+        Project Lead The Way engineering sequence. If there&rsquo;s anything I can do
+        for you, please reach out.
+      </p>
+    </section>
 
-    <!--
-      Migrated verbatim from the Google Sites "About me" block. Heads up: this
-      was written during freshman year and is now out of date (the job and the
-      grade level both). Rewrite when you get a chance.
-    -->
-    <p>
-      I am a freshman at Carmel Catholic. I am currently employed at Culver&rsquo;s in
-      Island Lake. If there&rsquo;s anything I can do for you, please reach out to me.
-    </p>
+    <section>
+      <h2>Academic record</h2>
+      <p class="gpa">
+        <strong>{gpa.cumulative}</strong> weighted cumulative GPA
+        <span class="muted"> &middot; {gpa.honors} &middot; as of {gpa.asOf}</span>
+      </p>
+      <p class="muted scale">
+        Weighted on the school&rsquo;s scale, where course level sets the ceiling:
+        AP and dual-credit courses top out at 5.00, Honors at 4.50, and college
+        prep at 4.00. Letter grades follow the school scale &mdash; A is 100&ndash;90,
+        B is 89&ndash;80, C is 79&ndash;70.
+      </p>
 
-    <h2>Engineering courses taken</h2>
-    <p class="muted">In chronological order.</p>
-    <ol>
-      {courseTimeline.map((c) => (
-        <li>
-          {'slug' in c ? <a href={`/school/${c.slug}/`}>{c.name}</a> : c.name}
-          <span class="muted"> &mdash; {c.credit}</span>
-        </li>
+      {terms.map((term) => (
+        <div class="term">
+          <h3>{term.label}</h3>
+          {term.note && <p class="muted note">{term.note}</p>}
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Course</th>
+                  <th scope="col">Level</th>
+                  <th scope="col" class="g">Sem 1</th>
+                  <th scope="col" class="g">Sem 2</th>
+                </tr>
+              </thead>
+              <tbody>
+                {term.courses.map((c) => (
+                  <tr>
+                    <th scope="row">
+                      {c.href ? <a href={c.href}>{c.name}</a> : c.name}
+                      {c.summer && <span class="muted summer"> summer term</span>}
+                    </th>
+                    <td class="lvl">{c.level}</td>
+                    <td class="g">{c.s1 ?? <span class="muted">&mdash;</span>}</td>
+                    <td class="g">{c.s2 ?? <span class="muted">&mdash;</span>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       ))}
-    </ol>
+
+      {ungraded.length > 0 && (
+        <div class="term">
+          <h3>Also taken</h3>
+          <ul>
+            {ungraded.map((c) => (
+              <li>
+                {c.href ? <a href={c.href}>{c.name}</a> : c.name}
+                <span class="muted"> ({c.level})</span>
+              </li>
+            ))}
+          </ul>
+          <p class="muted note">
+            Coursework for this is on the site, but I don&rsquo;t have the report
+            card to hand, so no grade is listed.
+          </p>
+        </div>
+      )}
+
+      <p class="muted key">
+        {courseLevelKey.map(([abbr, full], i) => (
+          <>{i > 0 && ' · '}<abbr title={full}>{abbr}</abbr> {full}</>
+        ))}
+      </p>
+    </section>
 
     {site.email && (
-      <>
+      <section class="prose">
         <h2>Contact</h2>
         <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
-      </>
+      </section>
     )}
   </div>
 </BaseLayout>
+
+<style>
+  .gpa {
+    font-size: 1.15rem;
+    margin-bottom: 0.35rem;
+  }
+  .gpa strong {
+    font-size: 1.5rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .gpa span { font-size: 0.95rem; }
+
+  .scale,
+  .note,
+  .key {
+    max-width: var(--measure);
+    font-size: 0.88rem;
+  }
+
+  .term { margin-top: 2rem; }
+  .term h3 { margin-bottom: 0.25rem; }
+  .note { margin: 0 0 0.75rem; }
+
+  /* Tables scroll inside their own box rather than pushing the page wide. */
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.94rem;
+  }
+  th,
+  td {
+    text-align: left;
+    padding: 0.5rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr:last-child th,
+  tbody tr:last-child td { border-bottom: 0; }
+
+  thead th {
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+    background: var(--bg-subtle);
+    white-space: nowrap;
+  }
+  tbody th {
+    font-weight: 500;
+    min-width: 15rem;
+  }
+
+  .lvl {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  .g {
+    width: 4.5rem;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  tbody .g { font-weight: 600; }
+
+  .summer {
+    font-size: 0.78rem;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  .key abbr {
+    text-decoration: none;
+    font-weight: 600;
+    color: var(--text);
+  }
+</style>
