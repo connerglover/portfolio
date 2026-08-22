@@ -112,6 +112,10 @@ const pages = meta
   .stage {
     position: relative;
     aspect-ratio: var(--ratio);
+    /* Portrait attachments — scanned worksheets, reports — would otherwise
+       make a stage taller than the window and push everything below it off
+       screen. Capping the height letterboxes them into side gutters instead. */
+    max-height: min(78vh, 900px);
     cursor: pointer;
     display: block;
   }
@@ -131,6 +135,7 @@ const pages = meta
     .stage {
       position: static;
       aspect-ratio: auto;
+      max-height: none;
       cursor: default;
     }
     .stage img {
@@ -211,6 +216,7 @@ const pages = meta
   .viewer:fullscreen .stage {
     flex: 1;
     aspect-ratio: auto;
+    max-height: none;
     min-height: 0;
   }
   .viewer:fullscreen .bar {
