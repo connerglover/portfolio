@@ -3,7 +3,7 @@ export const site = {
   tagline: 'Engineering portfolio',
   email: 'cglover.2009@outlook.com',
   github: 'https://github.com/connerglover',
-  linkedin: 'https://www.linkedin.com/',
+  linkedin: 'https://www.linkedin.com/in/conner-glover/',
   description:
     'Engineering coursework, personal projects, and achievements — Conner Glover.',
 };
