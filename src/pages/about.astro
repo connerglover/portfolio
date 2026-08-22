@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { site } from '../data/site';
-import { courseLevelKey, gpa, terms, ungraded } from '../data/academics';
+import { courseLevelKey, gpa, terms } from '../data/academics';
 ---
 
 <BaseLayout title="About" description={`About ${site.name}`}>
@@ -55,8 +55,8 @@ import { courseLevelKey, gpa, terms, ungraded } from '../data/academics';
                       {c.summer && <span class="muted summer"> summer term</span>}
                     </th>
                     <td class="lvl">{c.level}</td>
-                    <td class="g">{c.s1 ?? <span class="muted">&mdash;</span>}</td>
-                    <td class="g">{c.s2 ?? <span class="muted">&mdash;</span>}</td>
+                    <td class="g">{c.s1 ?? <span class="muted">{term.inProgress ? '·' : '—'}</span>}</td>
+                    <td class="g">{c.s2 ?? <span class="muted">{term.inProgress ? '·' : '—'}</span>}</td>
                   </tr>
                 ))}
               </tbody>
@@ -64,24 +64,6 @@ import { courseLevelKey, gpa, terms, ungraded } from '../data/academics';
           </div>
         </div>
       ))}
-
-      {ungraded.length > 0 && (
-        <div class="term">
-          <h3>Also taken</h3>
-          <ul>
-            {ungraded.map((c) => (
-              <li>
-                {c.href ? <a href={c.href}>{c.name}</a> : c.name}
-                <span class="muted"> ({c.level})</span>
-              </li>
-            ))}
-          </ul>
-          <p class="muted note">
-            Coursework for this is on the site, but I don&rsquo;t have the report
-            card to hand, so no grade is listed.
-          </p>
-        </div>
-      )}
 
       <p class="muted key">
         {courseLevelKey.map(([abbr, full], i) => (

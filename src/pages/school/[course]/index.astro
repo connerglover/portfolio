@@ -24,11 +24,15 @@ const school = await getCollection('school', (a) => a.data.courseSlug === course
       {course.units.map((u) => {
         const items = school.filter((a) => a.data.unit === u);
         const decks = items.filter((a) => a.data.decks.length > 0).length;
+        const upcoming = items.filter((a) => a.data.status === 'not-started').length;
+        const done = items.filter((a) => a.data.status === 'complete').length;
         return (
           <article class="card">
             <h3><a href={`/school/${course.slug}/${u}/`}>{unitLabel(u)}</a></h3>
             <p class="muted">
-              {items.length} assignments{decks > 0 && <> &middot; {decks} with files</>}
+              {upcoming > 0
+                ? <>{done} of {items.length} done</>
+                : <>{items.length} assignments{decks > 0 && <> &middot; {decks} with files</>}</>}
             </p>
           </article>
         );

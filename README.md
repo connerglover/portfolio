@@ -68,7 +68,7 @@ files:                   # optional — Google Drive attachments
 images:                  # optional
   - src: '/images/school/ied-unit-1/1-3-concept-sketching.jpg'
     alt: 'Describe it for screen readers'
-status: in-progress      # optional; omit when complete
+status: in-progress      # complete (default) | in-progress | not-started
 partners:                # optional
   - 'Ryan Frels'
 ---
@@ -79,6 +79,11 @@ The write-up goes here, in Markdown.
 Adding a whole new course, or a new unit to an existing one, means editing
 `courses` in `src/data/site.ts` — that array drives the routes, the nav counts,
 and the unit ordering.
+
+`status: not-started` is for work still ahead on the course schedule. Those
+entries render compact and muted with a chip, so a course in progress reads as
+a roadmap and the unit shows "3 of 16 done" rather than only listing what is
+finished. Digital Electronics is set up that way from its Fall schedule.
 
 `decks:` holds any PDF you want shown inline, not just slide decks — reports,
 worksheets and quizzes all render through the same viewer. `images:` renders as

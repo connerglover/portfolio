@@ -33,6 +33,9 @@ const rendered = await Promise.all(
 
 // `courses` is `as const`, so each course's `units` is a narrow tuple.
 // Widen it so indexOf accepts any unit slug.
+const done = items.filter((a) => a.data.status === 'complete').length;
+const upcoming = items.filter((a) => a.data.status === 'not-started').length;
+
 const units: readonly string[] = course.units;
 const idx = units.indexOf(unit);
 const prev = idx > 0 ? units[idx - 1] : null;
@@ -50,7 +53,10 @@ const next = idx < units.length - 1 ? units[idx + 1] : null;
 
     <section class="prose">
       <h1>{unitLabel(unit)}</h1>
-      <p class="muted">{course.name}</p>
+      <p class="muted">
+        {course.name}
+        {upcoming > 0 && <> &middot; {done} of {items.length} done</>}
+      </p>
     </section>
 
     {rendered.length === 0 && (
@@ -58,9 +64,12 @@ const next = idx < units.length - 1 ? units[idx + 1] : null;
     )}
 
     {rendered.map(({ item, Content }) => (
-      <article class="assignment">
-        <h2 id={item.id}>{item.data.title}</h2>
-        {item.data.status === 'in-progress' && <p class="tag">In progress</p>}
+      <article class:list={['assignment', { upcoming: item.data.status === 'not-started' }]}>
+        <h2 id={item.id}>
+          {item.data.title}
+          {item.data.status === 'in-progress' && <span class="chip">In progress</span>}
+          {item.data.status === 'not-started' && <span class="chip">Not started</span>}
+        </h2>
         {item.data.partners.length > 0 && (
           <p class="muted byline">With {item.data.partners.join(', ')}</p>
         )}
@@ -84,6 +93,34 @@ const next = idx < units.length - 1 ? units[idx + 1] : null;
     padding-top: 1.5rem;
   }
   .assignment h2 { margin-top: 0; scroll-margin-top: 1rem; }
+
+  /* Work that is still ahead on the schedule is listed so the unit reads as a
+     roadmap, but kept quiet so it does not compete with what is finished. */
+  .assignment.upcoming { padding-top: 1rem; }
+  .assignment.upcoming h2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .assignment.upcoming :global(p) {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+  }
+
+  .chip {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 0.6rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    background: var(--bg-subtle);
+    border-radius: 999px;
+    padding: 0.1rem 0.55rem;
+  }
   .byline { font-size: 0.9rem; margin-top: -0.25rem; }
   .unit-nav {
     display: flex;

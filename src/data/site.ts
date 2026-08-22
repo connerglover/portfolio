@@ -40,6 +40,15 @@ export const courses = [
       'A full year: architectural history and design principles, a residential tiny house built in Revit, a commercial brownfield renovation, land surveying, and structural analysis.',
     units: ['unit-1', 'unit-2', 'unit-3', 'unit-4'],
   },
+  {
+    slug: 'de',
+    name: 'Digital Electronics',
+    short: 'DE',
+    credit: 'Dual credit',
+    blurb:
+      'Combinational and sequential logic, from breadboards and soldering irons to Boolean simplification, Karnaugh maps and a date-of-birth decoder. In progress.',
+    units: ['unit-1', 'unit-2'],
+  },
 ] as const;
 
 export type CourseSlug = (typeof courses)[number]['slug'];
@@ -60,4 +69,5 @@ export const courseTimeline = [
   { name: 'Principles of Engineering', credit: 'Dual credit', slug: 'poe' },
   { name: 'Computer Science Principles', credit: 'AP / Dual credit' },
   { name: 'Civil Engineering and Architecture', credit: 'Dual credit', slug: 'cea' },
+  { name: 'Digital Electronics', credit: 'Dual credit', slug: 'de' },
 ] as const;

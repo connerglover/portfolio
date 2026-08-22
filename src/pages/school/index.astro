@@ -4,8 +4,8 @@ import { getCollection } from 'astro:content';
 import { courses, unitLabel } from '../../data/site';
 
 const school = await getCollection('school');
-const countFor = (slug: string, unit?: string) =>
-  school.filter((a) => a.data.courseSlug === slug && (!unit || a.data.unit === unit)).length;
+const inUnit = (slug: string, unit: string) =>
+  school.filter((a) => a.data.courseSlug === slug && a.data.unit === unit);
 ---
 
 <BaseLayout
@@ -30,7 +30,11 @@ const countFor = (slug: string, unit?: string) =>
           {c.units.map((u) => (
             <article class="card">
               <h3><a href={`/school/${c.slug}/${u}/`}>{unitLabel(u)}</a></h3>
-              <p class="muted">{countFor(c.slug, u)} assignments</p>
+              <p class="muted">
+                {inUnit(c.slug, u).some((a) => a.data.status === 'not-started')
+                  ? <>{inUnit(c.slug, u).filter((a) => a.data.status === 'complete').length} of {inUnit(c.slug, u).length} done</>
+                  : <>{inUnit(c.slug, u).length} assignments</>}
+              </p>
             </article>
           ))}
         </div>

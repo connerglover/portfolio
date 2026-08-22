@@ -31,6 +31,8 @@ export interface Term {
   label: string;
   /** Shown under the heading — year standing, honors roll, semester GPAs. */
   note?: string;
+  /** Current year: grade cells read "in progress" rather than an em dash. */
+  inProgress?: boolean;
   courses: Course[];
 }
 
@@ -52,9 +54,16 @@ export const courseLevelKey = [
 export const terms: Term[] = [
   {
     label: 'Summer 2023',
-    note: 'Taken at Carmel before starting high school',
+    note: 'Taken at Carmel the summer before eighth grade',
     courses: [
       { name: 'Robotics 1', level: 'H', s1: 'A', s2: null, summer: true },
+    ],
+  },
+  {
+    label: 'Eighth grade — 2023-24',
+    note: 'Taken at Carmel on Saturdays, a year ahead of starting there',
+    courses: [
+      { name: 'Introduction to Engineering Design PLTW', level: 'DC', s1: 'A', s2: 'A', href: '/school/ied/' },
     ],
   },
   {
@@ -88,12 +97,18 @@ export const terms: Term[] = [
       { name: 'Church History', level: 'UCP', s1: null, s2: 'B' },
     ],
   },
-];
-
-/**
- * Taken — the site has a whole section of the coursework — but the report card
- * for it was not among the records transcribed above, so no grade is claimed.
- */
-export const ungraded: Course[] = [
-  { name: 'Introduction to Engineering Design PLTW', level: 'DC', s1: null, s2: null, href: '/school/ied/' },
+  {
+    label: 'Junior year — 2026-27',
+    note: 'In progress — semester grades post as the year goes on',
+    inProgress: true,
+    courses: [
+      { name: 'Digital Electronics PLTW', level: 'DC', s1: null, s2: null, href: '/school/de/' },
+      { name: 'AP Calculus BC', level: 'AP', s1: null, s2: null },
+      { name: 'English 11', level: 'H', s1: null, s2: null },
+      { name: 'U.S. History', level: 'H', s1: null, s2: null },
+      { name: 'Biology', level: 'H', s1: null, s2: null },
+      { name: 'Spanish Civilization I', level: 'DC', s1: null, s2: null },
+      { name: 'Catholic Morality', level: 'UCP', s1: null, s2: null },
+    ],
+  },
 ];
