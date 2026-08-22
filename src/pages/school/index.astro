@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FeatureList from '../../components/FeatureList.astro';
+import { getCollection } from 'astro:content';
+import { courses, courseTimeline } from '../../data/site';
+
+const school = await getCollection('school');
+
+const rows = courses.map((c) => {
+  const items = school.filter((a) => a.data.courseSlug === c.slug);
+  const done = items.filter((a) => a.data.status === 'complete').length;
+  const upcoming = items.filter((a) => a.data.status === 'not-started').length;
+  const withWork = items.filter(
+    (a) => a.data.decks.length > 0 || a.data.files.length > 0,
+  ).length;
+  return {
+    href: `/school/${c.slug}/`,
+    title: c.name,
+    summary: c.blurb,
+    meta: `${c.short} · ${c.credit}`,
+    tags: [
+      upcoming > 0 ? `${done} of ${items.length} done` : `${items.length} assignments`,
+      `${withWork} with work attached`,
+      `${c.units.length} units`,
+    ],
+  };
+});
+
+const alsoTaken = courseTimeline.filter((c) => !('slug' in c));
+const total = school.length;
+---
+
+<BaseLayout
+  title="School engineering"
+  description="PLTW engineering coursework: Introduction to Engineering Design, Principles of Engineering, Civil Engineering and Architecture, and Digital Electronics."
+>
+  <div class="wrap wide">
+    <header class="head">
+      <p class="eyebrow">Project Lead The Way</p>
+      <h1>School engineering</h1>
+      <p class="blurb">
+        Four courses in the Project Lead The Way engineering sequence at Carmel
+        Catholic &mdash; {total} assignments so far, the last of them still in
+        progress. Every course keeps its own page, with each unit&rsquo;s work and
+        the files that went with it.
+      </p>
+    </header>
+
+    <FeatureList items={rows} />
+
+    <p class="also muted">
+      Also taken: {alsoTaken.map((c) => `${c.name} (${c.credit})`).join(', ')}.
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+  .head { margin-bottom: 2.5rem; }
+  .head h1 { margin-bottom: 0.5rem; }
+  .blurb { color: var(--text-muted); max-width: 60ch; margin: 0; }
+  .also {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    max-width: var(--measure);
+  }
+</style>

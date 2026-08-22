@@ -2,19 +2,42 @@
 /**
  * Top nav for every page except home.
  *
- * There is no school index any more — the courses hang off a dropdown here
- * instead. It opens on hover and on keyboard focus (`:focus-within`), so it
- * needs no JavaScript and nothing to re-initialise after a view transition.
- * The trigger is a real link to the first course, which is what a click or a
- * tap gets you; below 52rem the dropdown flattens into ordinary nav items,
- * since there is no hover on a touchscreen.
+ * Projects and School each carry a dropdown listing what is under them. The
+ * menus open on hover and on keyboard focus (`:focus-within`), so they need no
+ * JavaScript and nothing to re-initialise after a view transition. Each trigger
+ * is a real link to its index page, which is what a click or a tap gets you;
+ * below 52rem the menus are dropped and the index pages carry the navigation.
  */
+import { getCollection } from 'astro:content';
 import { site, courses } from '../data/site';
 
 const path = Astro.url.pathname;
-const isActive = (href: string) =>
-  href === '/' ? path === '/' : path.startsWith(href);
-const inSchool = path.startsWith('/school/');
+const isUnder = (href: string) => path.startsWith(href);
+
+const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const groups = [
+  {
+    label: 'Projects',
+    href: '/projects/',
+    items: projects.map((p) => ({
+      href: `/projects/${p.id}/`,
+      hint: String(p.data.date.getFullYear()),
+      label: p.data.title,
+    })),
+  },
+  {
+    label: 'School',
+    href: '/school/',
+    items: courses.map((c) => ({
+      href: `/school/${c.slug}/`,
+      hint: c.short,
+      label: c.name,
+    })),
+  },
+];
 ---
 
 <header class="site-header">
@@ -23,43 +46,33 @@ const inSchool = path.startsWith('/school/');
 
     <nav aria-label="Primary">
       <ul class="top">
-        <li><a href="/projects/" aria-current={isActive('/projects/') ? 'page' : undefined}>Projects</a></li>
-
-        <li class="has-menu">
-          <a
-            href={`/school/${courses[0].slug}/`}
-            class="menu-trigger"
-            aria-current={inSchool ? 'page' : undefined}
-          >
-            School
-            <svg viewBox="0 0 24 24" aria-hidden="true" class="caret"><path d="M6 9l6 6 6-6" /></svg>
-          </a>
-          <ul class="menu">
-            {courses.map((c) => (
-              <li>
-                <a href={`/school/${c.slug}/`} aria-current={path.startsWith(`/school/${c.slug}/`) ? 'page' : undefined}>
-                  <span class="abbr">{c.short}</span>
-                  <span class="full">{c.name}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </li>
-
-        <li><a href="/about/" aria-current={isActive('/about/') ? 'page' : undefined}>About</a></li>
-      </ul>
-
-      {/* Flattened equivalent for narrow screens, where hover does not exist. */}
-      <ul class="flat">
-        <li><a href="/projects/" aria-current={isActive('/projects/') ? 'page' : undefined}>Projects</a></li>
-        {courses.map((c) => (
-          <li>
-            <a href={`/school/${c.slug}/`} aria-current={path.startsWith(`/school/${c.slug}/`) ? 'page' : undefined}>
-              {c.short}
+        {groups.map((g) => (
+          <li class="has-menu">
+            <a href={g.href} class="menu-trigger" aria-current={isUnder(g.href) ? 'page' : undefined}>
+              {g.label}
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="caret"><path d="M6 9l6 6 6-6" /></svg>
             </a>
+            <ul class="menu">
+              {g.items.map((it) => (
+                <li>
+                  <a href={it.href} aria-current={path === it.href ? 'page' : undefined}>
+                    <span class="hint">{it.hint}</span>
+                    <span class="full">{it.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
           </li>
         ))}
-        <li><a href="/about/" aria-current={isActive('/about/') ? 'page' : undefined}>About</a></li>
+        <li><a href="/about/" aria-current={isUnder('/about/') ? 'page' : undefined}>About</a></li>
+      </ul>
+
+      {/* Narrow screens have no hover, so the menus are dropped. */}
+      <ul class="flat">
+        {groups.map((g) => (
+          <li><a href={g.href} aria-current={isUnder(g.href) ? 'page' : undefined}>{g.label}</a></li>
+        ))}
+        <li><a href="/about/" aria-current={isUnder('/about/') ? 'page' : undefined}>About</a></li>
       </ul>
     </nav>
   </div>
@@ -126,7 +139,7 @@ const inSchool = path.startsWith('/school/');
   nav a[aria-current='page'] { color: var(--accent-bright); }
   .top > li > a[aria-current='page']::after { right: 0; }
 
-  /* ---------- dropdown ---------- */
+  /* ---------- dropdowns ---------- */
 
   .has-menu { position: relative; }
   .menu-trigger {
@@ -147,15 +160,15 @@ const inSchool = path.startsWith('/school/');
   .has-menu:hover .caret,
   .has-menu:focus-within .caret { transform: rotate(180deg); }
 
-  /* Qualified as `nav ul.menu`, not `.menu`. Astro scopes styles by appending
-     a data attribute to every selector, which lifts the earlier `nav ul` rule
-     above a bare class — so `display: flex` and its 1.4rem gap were winning
-     and laying the courses out in a row. */
+  /* Qualified as `nav ul.menu`, not `.menu`. Astro scopes styles by appending a
+     data attribute to every selector, which lifts the `nav ul` rule above a
+     bare class — so `display: flex` and its 1.4rem gap would win and lay the
+     menu out as a row. */
   nav ul.menu {
     position: absolute;
     top: calc(100% + 0.7rem);
-    /* Anchored to the trigger's right edge, not its left: the course names
-       make this menu wide, and growing rightward runs it off the viewport. */
+    /* Anchored right: the titles make these menus wide, and growing rightward
+       runs them off the viewport. */
     right: -0.6rem;
     display: block;
     gap: 0;
@@ -180,7 +193,7 @@ const inSchool = path.startsWith('/school/');
     transform: translateY(0);
   }
   /* Keeps the pointer from falling through the gap between trigger and menu. */
-  .menu::before {
+  nav ul.menu::before {
     content: '';
     position: absolute;
     inset: -0.8rem 0 auto;
@@ -188,8 +201,6 @@ const inSchool = path.startsWith('/school/');
   }
 
   .menu li { width: 100%; }
-  /* `max-content` on the menu plus `nowrap` here keeps every course on one
-     line, so the rows are a uniform height instead of some wrapping to two. */
   .menu a {
     display: flex;
     align-items: center;
@@ -202,10 +213,10 @@ const inSchool = path.startsWith('/school/');
     transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
   }
   .menu a:hover { background: var(--bg-subtle); color: var(--text); }
-  .menu .abbr {
+  .menu .hint {
     flex: none;
-    width: 2.2rem;
-    font-size: 0.7rem;
+    width: 2.6rem;
+    font-size: 0.68rem;
     letter-spacing: 0.08em;
     color: var(--accent);
   }
@@ -216,14 +227,11 @@ const inSchool = path.startsWith('/school/');
 
   /* ---------- narrow screens ---------- */
 
-  /* Qualified with `nav ul` deliberately: Astro scopes styles by appending a
-     data attribute to every selector, which lifts `nav ul` to two classes'
-     worth of specificity. A bare `.flat` loses to it and both navs render. */
   nav ul.flat { display: none; }
 
   @media (max-width: 52rem) {
     nav ul.top { display: none; }
-    nav ul.flat { display: flex; gap: 1rem 1.1rem; }
-    nav ul.flat a { font-size: 0.7rem; letter-spacing: 0.08em; }
+    nav ul.flat { display: flex; gap: 1.2rem; }
+    nav ul.flat a { font-size: 0.72rem; letter-spacing: 0.08em; }
   }
 </style>

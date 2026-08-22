@@ -1,0 +1,180 @@
+---
+/**
+ * A list of large rows where hovering one enlarges it and dims the rest.
+ *
+ * The idea is Micah Lindley's project list, adapted: his rows sit flush edge to
+ * edge and bloom into full-bleed bands, which is striking but leaves nowhere
+ * for the eye to rest. These keep a container, gaps between rows and a border,
+ * so the page still reads as a list — the hovered row grows out of a calm
+ * arrangement rather than out of a solid block.
+ *
+ * The growth is real layout — padding and font-size — rather than a transform.
+ * A scaled row rasterises at its old size and the text goes soft while it
+ * animates, which on a page this typographic is not worth the free GPU ride.
+ *
+ * Dimming siblings uses `:has()` on the list, so it costs no JavaScript. With
+ * no hover available every row simply stays at full strength.
+ */
+interface Item {
+  href: string;
+  title: string;
+  summary: string;
+  /** Short label above the title — a date, a course code. */
+  meta?: string;
+  tags?: string[];
+}
+interface Props {
+  items: Item[];
+  /** Show the 01/02/03 rail down the left. */
+  numbered?: boolean;
+}
+const { items, numbered = true } = Astro.props;
+---
+
+<ul class="feature">
+  {items.map((item, i) => (
+    <li>
+      <a href={item.href}>
+        {numbered && <span class="index">{String(i + 1).padStart(2, '0')}</span>}
+        <div class="text">
+          {item.meta && <p class="meta">{item.meta}</p>}
+          <h3>{item.title}</h3>
+          <p class="summary">{item.summary}</p>
+          {item.tags && item.tags.length > 0 && (
+            <ul class="tag-row">
+              {item.tags.map((t) => <li class="tag">{t}</li>)}
+            </ul>
+          )}
+        </div>
+        <span class="arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M5 12h13M12 5l7 7-7 7" /></svg>
+        </span>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .feature {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .feature > li > a {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.6rem 1.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-subtle);
+    color: inherit;
+    transition:
+      padding var(--dur) var(--ease),
+      opacity var(--dur) var(--ease),
+      background var(--dur) var(--ease),
+      border-color var(--dur) var(--ease);
+  }
+
+  /* The group recedes so the hovered row can come forward. */
+  @media (hover: hover) {
+    .feature:has(a:hover) > li > a { opacity: 0.32; }
+    .feature:has(a:hover) > li > a:hover { opacity: 1; }
+  }
+
+  .feature > li > a:hover,
+  .feature > li > a:focus-visible {
+    padding-block: 2.4rem;
+    background: var(--bg-raised);
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  }
+
+  /* ---------- number rail ---------- */
+
+  .index {
+    flex: none;
+    width: 2.25rem;
+    padding-top: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    transition: color var(--dur) var(--ease);
+  }
+  .feature > li > a:hover .index { color: var(--accent); }
+
+  .text { flex: 1; min-width: 0; }
+
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin: 0 0 0.35rem;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    transition:
+      font-size var(--dur) var(--ease),
+      color var(--dur) var(--ease);
+  }
+  .feature > li > a:hover h3,
+  .feature > li > a:focus-visible h3 {
+    font-size: 1.75rem;
+    color: var(--accent-bright);
+  }
+
+  .summary {
+    margin: 0.5rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.96rem;
+    max-width: 68ch;
+  }
+
+  /* ---------- arrow ---------- */
+
+  .arrow {
+    flex: none;
+    align-self: center;
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    color: var(--text-faint);
+    transition: all var(--dur) var(--ease);
+  }
+  .arrow svg {
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .feature > li > a:hover .arrow,
+  .feature > li > a:focus-visible .arrow {
+    border-color: var(--accent);
+    color: var(--accent-bright);
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 40rem) {
+    .feature > li > a { padding: 1.25rem 1.15rem; gap: 0.9rem; }
+    .feature > li > a:hover { padding-block: 1.6rem; }
+    .index { display: none; }
+    .arrow { display: none; }
+    h3 { font-size: 1.2rem; }
+    .feature > li > a:hover h3 { font-size: 1.35rem; }
+  }
+</style>

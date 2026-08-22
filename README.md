@@ -185,11 +185,19 @@ runs to thirty-odd assignments and each can carry a PDF viewer, so opening them
 all by default buries the list and loads a lot of images nobody asked for. Rows
 open independently rather than as an exclusive accordion.
 
-There is no school index page. The four courses hang off a dropdown in the nav,
-which opens on hover and on keyboard focus using `:focus-within` — no
-JavaScript, and nothing to re-initialise after a view transition. Below 52rem it
-flattens into ordinary nav items, since there is no hover on a touchscreen.
-`/school/` redirects to the first course so old links do not 404.
+`/projects/` and `/school/` are both index pages built on `FeatureList.astro`:
+large rows where hovering one enlarges it and dims the rest. The growth is real
+layout — padding and font-size — rather than a transform, because a scaled row
+rasterises at its old size and the text goes soft while it animates. Dimming the
+siblings uses `:has()` on the list, so it costs no JavaScript and every row
+stays at full strength where there is no hover. Those two pages use
+`.wrap.wide`, so the rows have somewhere to grow into.
+
+Both also hang off dropdowns in the nav — Projects lists the projects, School
+lists the courses. They open on hover and on keyboard focus using
+`:focus-within`, so there is no JavaScript and nothing to re-initialise after a
+view transition. Below 52rem the menus are dropped and the index pages carry the
+navigation instead.
 
 The backdrop (`Backdrop.astro`) is a drifting dot field on a 2D canvas, with a
 green trail that lights the dots it passes over. The dots are a simplex noise

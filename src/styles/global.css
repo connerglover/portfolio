@@ -40,6 +40,7 @@
 
   --measure: 68ch;
   --page-max: 72rem;
+  --page-wide: 82rem;
   --radius: 10px;
   --radius-sm: 6px;
   --space: 1rem;
@@ -162,6 +163,10 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 3rem 0; }
   margin-inline: auto;
   padding-inline: 1.5rem;
 }
+
+/* Index pages that lead with a hover-to-enlarge list get more room, so the
+   rows have somewhere to grow into. */
+.wrap.wide { max-width: var(--page-wide); }
 
 .prose { max-width: var(--measure); }
 .prose a { border-bottom-color: color-mix(in srgb, var(--accent) 35%, transparent); }

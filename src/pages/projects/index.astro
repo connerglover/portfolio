@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SpotlightList from '../../components/SpotlightList.astro';
+import FeatureList from '../../components/FeatureList.astro';
 import { getCollection } from 'astro:content';
 
 const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
@@ -14,14 +14,15 @@ const fmt = (d: Date) =>
   title="Projects"
   description="Personal software and hardware projects by Conner Glover."
 >
-  <div class="wrap stack">
-    <section class="prose">
+  <div class="wrap wide">
+    <header class="head">
+      <p class="eyebrow">Personal work</p>
       <h1>Projects</h1>
-      <p>
+      <p class="blurb">
         Things I&rsquo;ve built on my own time. Each one gets a full write-up: what
         it does, why I built it, and what I learned.
       </p>
-    </section>
+    </header>
 
     {projects.length === 0 ? (
       <p class="muted">
@@ -30,7 +31,7 @@ const fmt = (d: Date) =>
         <code>_template.md</code> for the frontmatter.
       </p>
     ) : (
-      <SpotlightList
+      <FeatureList
         items={projects.map((p) => ({
           href: `/projects/${p.id}/`,
           title: p.data.title,
@@ -40,6 +41,11 @@ const fmt = (d: Date) =>
         }))}
       />
     )}
-
   </div>
 </BaseLayout>
+
+<style>
+  .head { margin-bottom: 2.5rem; }
+  .head h1 { margin-bottom: 0.5rem; }
+  .blurb { color: var(--text-muted); max-width: 58ch; margin: 0; }
+</style>

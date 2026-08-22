@@ -15,11 +15,9 @@ const sections = [
   { id: 'coursework', label: 'Coursework' },
 ];
 
-import { courses } from '../data/site';
-
 const elsewhere = [
   { href: '/projects/', label: 'All projects' },
-  ...courses.map((c) => ({ href: `/school/${c.slug}/`, label: c.name })),
+  { href: '/school/', label: 'All coursework' },
   { href: '/about/', label: 'Academic record' },
 ];
 ---
