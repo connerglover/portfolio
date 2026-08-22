@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+---
+
+<BaseLayout
+  title="Projects"
+  description="Personal software and hardware projects by Conner Glover."
+>
+  <div class="wrap stack">
+    <section class="prose">
+      <h1>Projects</h1>
+      <p>
+        Things I&rsquo;ve built on my own time. Each one gets a full write-up: what
+        it does, why I built it, and what I learned.
+      </p>
+    </section>
+
+    {projects.length === 0 ? (
+      <p class="muted">
+        No projects published yet. Add a Markdown file to{' '}
+        <code>src/content/projects/</code> &mdash; see{' '}
+        <code>_template.md</code> for the frontmatter.
+      </p>
+    ) : (
+      <div class="grid">
+        {projects.map((p) => (
+          <article class="card">
+            <p class="eyebrow">{fmt(p.data.date)}</p>
+            <h3><a href={`/projects/${p.id}/`}>{p.data.title}</a></h3>
+            <p class="muted">{p.data.summary}</p>
+            {p.data.tech.length > 0 && (
+              <ul class="tag-row">
+                {p.data.tech.map((t) => <li class="tag">{t}</li>)}
+              </ul>
+            )}
+          </article>
+        ))}
+      </div>
+    )}
+  </div>
+</BaseLayout>

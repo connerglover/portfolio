@@ -1,0 +1,38 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { courses, unitLabel } from '../../../data/site';
+
+export const getStaticPaths = (() =>
+  courses.map((c) => ({ params: { course: c.slug }, props: { course: c } }))) satisfies GetStaticPaths;
+
+const { course } = Astro.props;
+const school = await getCollection('school', (a) => a.data.courseSlug === course.slug);
+---
+
+<BaseLayout title={course.name} description={course.blurb}>
+  <div class="wrap stack">
+    <p class="eyebrow"><a href="/school/">School</a></p>
+    <section class="prose">
+      <h1>{course.name}</h1>
+      <p>{course.blurb}</p>
+      <p class="muted">{course.short} &middot; {course.credit} &middot; {school.length} assignments</p>
+    </section>
+
+    <div class="grid">
+      {course.units.map((u) => {
+        const items = school.filter((a) => a.data.unit === u);
+        const decks = items.filter((a) => a.data.decks.length > 0).length;
+        return (
+          <article class="card">
+            <h3><a href={`/school/${course.slug}/${u}/`}>{unitLabel(u)}</a></h3>
+            <p class="muted">
+              {items.length} assignments{decks > 0 && <> &middot; {decks} decks</>}
+            </p>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</BaseLayout>

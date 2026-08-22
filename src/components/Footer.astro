@@ -1,0 +1,23 @@
+---
+import { site } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="muted">
+      &copy; {year} {site.name}
+      {site.github && <> &middot; <a href={site.github}>GitHub</a></>}
+      {site.email && <> &middot; <a href={`mailto:${site.email}`}>Email</a></>}
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+    padding-block: 1.5rem;
+    font-size: 0.9rem;
+  }
+  .site-footer p { margin: 0; }
+</style>

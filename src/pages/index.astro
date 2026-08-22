@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { courses, courseTimeline, site } from '../data/site';
+
+const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const featured = projects.filter((p) => p.data.featured).slice(0, 3);
+const shown = featured.length ? featured : projects.slice(0, 3);
+
+const school = await getCollection('school');
+const assignmentCount = school.length;
+const deckCount = school.filter((a) => a.data.decks.length > 0).length;
+---
+
+<BaseLayout>
+  <div class="wrap stack">
+    <section class="prose">
+      <p class="eyebrow">{site.tagline}</p>
+      <h1>{site.name}</h1>
+      <p>
+        Engineering student at Carmel Catholic High School. This site collects my
+        PLTW coursework, personal software and hardware projects, and the things
+        I&rsquo;ve picked up along the way.
+      </p>
+    </section>
+
+    <hr />
+
+    <section>
+      <h2>Projects</h2>
+      <p class="muted">Personal work — built outside of class.</p>
+      {shown.length ? (
+        <div class="grid">
+          {shown.map((p) => (
+            <article class="card">
+              <h3><a href={`/projects/${p.id}/`}>{p.data.title}</a></h3>
+              <p class="muted">{p.data.summary}</p>
+              {p.data.tech.length > 0 && (
+                <ul class="tag-row">
+                  {p.data.tech.slice(0, 4).map((t) => <li class="tag">{t}</li>)}
+                </ul>
+              )}
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class="muted">
+          Nothing here yet — add a Markdown file to{' '}
+          <code>src/content/projects/</code> to publish your first one.
+        </p>
+      )}
+      <p><a href="/projects/">All projects &rarr;</a></p>
+    </section>
+
+    <hr />
+
+    <section>
+      <h2>Engineering coursework</h2>
+      <p class="muted">
+        {assignmentCount} assignments across {courses.length} PLTW courses, {deckCount} with
+        surviving slide decks.
+      </p>
+      <div class="grid">
+        {courses.map((c) => (
+          <article class="card">
+            <p class="eyebrow">{c.short} &middot; {c.credit}</p>
+            <h3><a href={`/school/${c.slug}/`}>{c.name}</a></h3>
+            <p class="muted">{c.blurb}</p>
+          </article>
+        ))}
+      </div>
+      <p class="muted" style="margin-top:1rem">
+        Also taken:{' '}
+        {courseTimeline.filter((c) => !('slug' in c)).map((c) => `${c.name} (${c.credit})`).join(', ')}.
+      </p>
+    </section>
+  </div>
+</BaseLayout>

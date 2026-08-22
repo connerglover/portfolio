@@ -1,0 +1,35 @@
+---
+/**
+ * A surviving Google Drive attachment. Rendered as a link rather than an
+ * embed — Drive's preview iframe is slow and frequently blocked, and these
+ * are mostly worksheets people will want to open in a new tab anyway.
+ */
+interface Props {
+  id: string;
+  title: string;
+}
+const { id, title } = Astro.props;
+---
+
+<a class="drive" href={`https://drive.google.com/file/d/${id}/view`} target="_blank" rel="noopener noreferrer">
+  <span class="icon" aria-hidden="true">&#128196;</span>
+  <span>{title}</span>
+  <span class="ext muted">Google Drive &rarr;</span>
+</a>
+
+<style>
+  .drive {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.7rem 0.9rem;
+    margin: 1rem 0;
+    text-decoration: none;
+    color: var(--text);
+    background: var(--bg-subtle);
+  }
+  .drive:hover { border-color: var(--accent); }
+  .ext { margin-left: auto; font-size: 0.85rem; white-space: nowrap; }
+</style>

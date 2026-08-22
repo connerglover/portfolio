@@ -1,0 +1,104 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import Slides from '../../../../components/Slides.astro';
+import DriveFile from '../../../../components/DriveFile.astro';
+import { courses, unitLabel } from '../../../../data/site';
+
+export const getStaticPaths = (async () => {
+  const school = await getCollection('school');
+  return courses.flatMap((c) =>
+    c.units.map((u) => ({
+      params: { course: c.slug, unit: u },
+      props: {
+        course: c,
+        unit: u,
+        items: school
+          .filter((a) => a.data.courseSlug === c.slug && a.data.unit === u)
+          .sort((a, b) => a.data.order - b.data.order),
+      },
+    })),
+  );
+}) satisfies GetStaticPaths;
+
+const { course, unit, items } = Astro.props;
+
+// Render each assignment's Markdown body up front — Astro components can't
+// call render() inside a template expression.
+const rendered = await Promise.all(
+  items.map(async (item) => ({ item, Content: (await render(item)).Content })),
+);
+
+// `courses` is `as const`, so each course's `units` is a narrow tuple.
+// Widen it so indexOf accepts any unit slug.
+const units: readonly string[] = course.units;
+const idx = units.indexOf(unit);
+const prev = idx > 0 ? units[idx - 1] : null;
+const next = idx < units.length - 1 ? units[idx + 1] : null;
+---
+
+<BaseLayout
+  title={`${course.short} ${unitLabel(unit)}`}
+  description={`${course.name} — ${unitLabel(unit)} coursework.`}
+>
+  <div class="wrap stack">
+    <p class="eyebrow">
+      <a href="/school/">School</a> / <a href={`/school/${course.slug}/`}>{course.short}</a>
+    </p>
+
+    <section class="prose">
+      <h1>{unitLabel(unit)}</h1>
+      <p class="muted">{course.name}</p>
+    </section>
+
+    {rendered.length === 0 && (
+      <p class="muted">No assignments recorded for this unit.</p>
+    )}
+
+    {rendered.map(({ item, Content }) => (
+      <article class="assignment">
+        <h2 id={item.id}>{item.data.title}</h2>
+        {item.data.status === 'in-progress' && <p class="tag">In progress</p>}
+        {item.data.partners.length > 0 && (
+          <p class="muted byline">With {item.data.partners.join(', ')}</p>
+        )}
+        <div class="prose"><Content /></div>
+        {item.data.images.map((img) => (
+          <figure>
+            <img src={img.src} alt={img.alt} loading="lazy" />
+          </figure>
+        ))}
+        {item.data.decks.map((d) => <Slides id={d.id} title={d.title} />)}
+        {item.data.files.map((f) => <DriveFile id={f.id} title={f.title} />)}
+      </article>
+    ))}
+
+    <nav class="unit-nav">
+      {prev && <a href={`/school/${course.slug}/${prev}/`}>&larr; {unitLabel(prev)}</a>}
+      {next && <a class="next" href={`/school/${course.slug}/${next}/`}>{unitLabel(next)} &rarr;</a>}
+    </nav>
+  </div>
+</BaseLayout>
+
+<style>
+  .assignment {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+  }
+  .assignment h2 { margin-top: 0; scroll-margin-top: 1rem; }
+  .byline { font-size: 0.9rem; margin-top: -0.25rem; }
+  .assignment figure { margin: 1.25rem 0; }
+  .assignment figure img {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .unit-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1.25rem;
+  }
+  .unit-nav .next { margin-left: auto; }
+</style>

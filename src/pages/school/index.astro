@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { courses, unitLabel } from '../../data/site';
+
+const school = await getCollection('school');
+const countFor = (slug: string, unit?: string) =>
+  school.filter((a) => a.data.courseSlug === slug && (!unit || a.data.unit === unit)).length;
+---
+
+<BaseLayout
+  title="School engineering"
+  description="PLTW engineering coursework: Introduction to Engineering Design, Principles of Engineering, and Civil Engineering and Architecture."
+>
+  <div class="wrap stack">
+    <section class="prose">
+      <h1>School engineering</h1>
+      <p>
+        Coursework from Carmel Catholic&rsquo;s Project Lead The Way sequence. Each
+        assignment gets a short write-up and, where the deck still exists, the
+        original presentation.
+      </p>
+    </section>
+
+    {courses.map((c) => (
+      <section>
+        <h2><a href={`/school/${c.slug}/`}>{c.name}</a></h2>
+        <p class="muted">{c.blurb}</p>
+        <div class="grid">
+          {c.units.map((u) => (
+            <article class="card">
+              <h3><a href={`/school/${c.slug}/${u}/`}>{unitLabel(u)}</a></h3>
+              <p class="muted">{countFor(c.slug, u)} assignments</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

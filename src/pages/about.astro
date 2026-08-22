@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { courseTimeline, site } from '../data/site';
+---
+
+<BaseLayout title="About" description={`About ${site.name}`}>
+  <div class="wrap prose stack">
+    <h1>About me</h1>
+
+    <!--
+      Migrated verbatim from the Google Sites "About me" block. Heads up: this
+      was written during freshman year and is now out of date (the job and the
+      grade level both). Rewrite when you get a chance.
+    -->
+    <p>
+      I am a freshman at Carmel Catholic. I am currently employed at Culver&rsquo;s in
+      Island Lake. If there&rsquo;s anything I can do for you, please reach out to me.
+    </p>
+
+    <h2>Engineering courses taken</h2>
+    <p class="muted">In chronological order.</p>
+    <ol>
+      {courseTimeline.map((c) => (
+        <li>
+          {'slug' in c ? <a href={`/school/${c.slug}/`}>{c.name}</a> : c.name}
+          <span class="muted"> &mdash; {c.credit}</span>
+        </li>
+      ))}
+    </ol>
+
+    {site.email && (
+      <>
+        <h2>Contact</h2>
+        <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+      </>
+    )}
+  </div>
+</BaseLayout>

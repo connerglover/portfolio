@@ -1,0 +1,142 @@
+/*
+ * Intentionally plain. This is the structural baseline we agreed to build
+ * first — readable defaults, sane spacing, light/dark support, and nothing
+ * that will fight a real theme later. All of it is token-driven so the
+ * theming pass can mostly swap the values in :root.
+ */
+
+:root {
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --bg: #ffffff;
+  --bg-subtle: #f6f7f9;
+  --border: #e3e6ea;
+  --text: #1b1f24;
+  --text-muted: #5c6773;
+  --accent: #1a56db;
+  --accent-contrast: #ffffff;
+
+  --measure: 68ch;
+  --page-max: 72rem;
+  --radius: 8px;
+  --space: 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1216;
+    --bg-subtle: #171b21;
+    --border: #262c35;
+    --text: #e7eaee;
+    --text-muted: #9aa5b1;
+    --accent: #7aa2f7;
+    --accent-contrast: #0f1216;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 { line-height: 1.25; font-weight: 650; margin: 2rem 0 0.5rem; }
+h1 { font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem); margin-top: 0; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.175rem; }
+
+p, ul, ol { margin: 0 0 1rem; }
+ul, ol { padding-left: 1.25rem; }
+
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { text-decoration-thickness: 2px; }
+
+img { max-width: 100%; height: auto; display: block; }
+
+code { font-family: var(--font-mono); font-size: 0.9em; }
+:not(pre) > code {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+pre { padding: 1rem; border-radius: var(--radius); overflow-x: auto; }
+
+hr { border: 0; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+/* ---------- layout primitives ---------- */
+
+.wrap {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+.prose { max-width: var(--measure); }
+
+.muted { color: var(--text-muted); }
+
+.stack > * + * { margin-top: var(--space); }
+
+.grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.2rem;
+  background: var(--bg);
+}
+.card h3 { margin-top: 0; }
+.card > :last-child { margin-bottom: 0; }
+
+.tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; padding: 0; margin: 0.5rem 0 0; }
+.tag {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.1rem 0.6rem;
+  background: var(--bg-subtle);
+}
+
+.eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 0.35rem;
+}
+
+main { flex: 1 0 auto; padding-block: 2.5rem 4rem; }
+
+/* ---------- skip link ---------- */
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+.skip:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 10;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius);
+}
