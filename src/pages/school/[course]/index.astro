@@ -28,7 +28,7 @@ const school = await getCollection('school', (a) => a.data.courseSlug === course
           <article class="card">
             <h3><a href={`/school/${course.slug}/${u}/`}>{unitLabel(u)}</a></h3>
             <p class="muted">
-              {items.length} assignments{decks > 0 && <> &middot; {decks} decks</>}
+              {items.length} assignments{decks > 0 && <> &middot; {decks} with files</>}
             </p>
           </article>
         );
