@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { site } from '../data/site';
-import { courseLevelKey, gpa, terms } from '../data/academics';
+import { apExams, courseLevelKey, gpa, terms } from '../data/academics';
 ---
 
 <BaseLayout title="About" description={`About ${site.name}`}>
@@ -64,6 +64,20 @@ import { courseLevelKey, gpa, terms } from '../data/academics';
           </div>
         </div>
       ))}
+
+      <div class="term ap">
+        <h3>AP exams</h3>
+        <p class="muted note">Scored out of 5</p>
+        <ul class="ap-list">
+          {apExams.map((e) => (
+            <li>
+              <span class="ap-score">{e.score}</span>
+              <span class="ap-name">{e.exam}</span>
+              <span class="ap-year">{e.year}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <p class="muted key">
         {courseLevelKey.map(([abbr, full], i) => (
@@ -179,6 +193,41 @@ import { courseLevelKey, gpa, terms } from '../data/academics';
     text-transform: uppercase;
     color: var(--text-faint);
     white-space: nowrap;
+  }
+
+  /* ---------- AP exams ---------- */
+
+  .ap-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .ap-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 1rem 0.7rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-subtle);
+  }
+  .ap-score {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--accent-bright);
+    font-variant-numeric: tabular-nums;
+  }
+  .ap-name { font-size: 0.94rem; }
+  .ap-year {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
   }
 
   .key abbr {

@@ -1,30 +1,27 @@
 ---
 /**
- * The page backdrop: a dot grid, plus a green trail that lights the dots it
- * passes over.
+ * The page backdrop: a drifting dot field with a green trail that lights the
+ * dots it passes over.
  *
- * Three stacked layers, all of them CSS — no canvas, no particle system:
+ * The dots are a simplex noise flow field, the same technique antfu.me uses.
+ * Each dot has a home position on a fixed grid and is pushed off it by an
+ * angle and a distance both read from 3D noise, with time as the third
+ * dimension. Because the noise is smooth in space and in time, neighbouring
+ * dots move together and the field drifts like a slow current instead of
+ * flickering. Alpha comes off the same angle, so it breathes as well as moves.
  *
- *   1. the dot grid, faint and neutral
- *   2. the same grid in emerald, masked to a circle at the pointer, so only
- *      dots near the cursor are lit. This is where most of the effect lives.
- *   3. a much weaker radial wash on the background itself, so the area around
- *      the pointer lifts slightly rather than only the dots changing.
+ * Drawn on a plain 2D canvas rather than with a WebGL particle library: at
+ * this dot count the cost is in the noise calls, not the fills, and it keeps
+ * the dependency down to one small noise function.
  *
- * The painted position eases toward the real pointer position instead of
- * snapping to it, which is what makes it read as a trail rather than a
- * spotlight glued to the cursor.
- *
- * Rendered on every page. The element is replaced on each client-side
- * navigation, so the script re-resolves it on `astro:page-load` and paints
- * the last known pointer position straight away — otherwise the effect stays
- * dead until the pointer happens to move again.
+ * The pointer is tracked with easing so the lit patch lags behind the cursor
+ * and reads as a trail. The wash behind it is CSS, at a radius deliberately
+ * matched to the lit dots so the two read as a single light.
  */
 ---
 
 <div class="backdrop" aria-hidden="true">
-  <div class="dots"></div>
-  <div class="dots lit"></div>
+  <canvas class="field"></canvas>
   <div class="wash"></div>
 </div>
 
@@ -34,122 +31,213 @@
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    contain: strict;
   }
-  .backdrop > * { position: absolute; inset: 0; }
-
-  .dots {
-    background-image: radial-gradient(circle at center, var(--dot) 1px, transparent 1px);
-    background-size: 26px 26px;
-    --dot: rgb(255 255 255 / 0.05);
+  .field {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
   }
 
-  .dots.lit {
-    --dot: var(--accent-bright);
-    opacity: 0;
-    transition: opacity 700ms var(--ease);
-    -webkit-mask-image: radial-gradient(circle 190px at var(--gx, -100%) var(--gy, -100%), #000 0%, rgb(0 0 0 / 0.35) 45%, transparent 72%);
-    mask-image: radial-gradient(circle 190px at var(--gx, -100%) var(--gy, -100%), #000 0%, rgb(0 0 0 / 0.35) 45%, transparent 72%);
-  }
-  .backdrop.on .dots.lit { opacity: 0.85; }
-
-  /* The background itself lifts only slightly — the dots do the work. */
   .wash {
+    position: absolute;
+    inset: 0;
     opacity: 0;
     transition: opacity 800ms var(--ease);
     background: radial-gradient(
-      30rem 30rem at var(--gx, 50%) var(--gy, -20%),
-      rgb(16 185 129 / 0.05),
-      transparent 68%
+      var(--glow-r, 200px) var(--glow-r, 200px) at var(--gx, 50%) var(--gy, -20%),
+      rgb(16 185 129 / 0.07),
+      transparent 70%
     );
   }
   .backdrop.on .wash { opacity: 1; }
 
-  /* Nothing to follow on a touchscreen, and the trail is motion. The dot grid
-     stays either way — it is the background, not the effect. */
-  @media (pointer: coarse), (prefers-reduced-motion: reduce) {
-    .dots.lit,
+  @media (prefers-reduced-motion: reduce) {
     .wash { display: none; }
   }
 </style>
 
 <script>
-  // All state lives at module scope so it survives client-side navigation.
-  // The element does not — Astro swaps it on every page load — so it is
-  // re-resolved in `bind()` and repainted immediately, rather than waiting for
-  // the pointer to move again. Getting that wrong is what left the trail dead
-  // after navigating away from home and back.
-  const fine = window.matchMedia('(pointer: fine)').matches;
+  import { createNoise3D } from 'simplex-noise';
+
+  const SPACING = 18;   // px between dots at rest
+  const SCALE = 200;    // noise feature size — how far the current reaches
+  const LENGTH = 5;     // max px a dot drifts from home
+  const GLOW_R = 200;   // radius of the lit patch; the CSS wash matches it
+  const DOT = 1.6;      // px
+  const BUCKETS = 6;    // alpha quantisation, to batch canvas state changes
+
   const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const enabled = fine && !still;
+  const fine = window.matchMedia('(pointer: fine)').matches;
 
+  const noise3d = createNoise3D();
+
+  // State lives at module scope so it survives client-side navigation. The
+  // elements do not — Astro replaces them on every page load — so they get
+  // re-resolved in bind().
   let backdrop: HTMLElement | null = null;
-  let tx = -1000;   // pointer
-  let ty = -1000;
-  let px = -1000;   // painted — trails behind the pointer
-  let py = -1000;
-  let running = false;
-  let idle = 0;
+  let canvas: HTMLCanvasElement | null = null;
+  let ctx: CanvasRenderingContext2D | null = null;
 
-  const paint = () => {
-    if (!backdrop) return;
-    backdrop.style.setProperty('--gx', `${px}px`);
-    backdrop.style.setProperty('--gy', `${py}px`);
+  let w = 0;
+  let h = 0;
+  let cols = 0;
+  let rows = 0;
+  let seeds = new Float32Array(0);
+
+  let tx = -9999;
+  let ty = -9999;
+  let px = -9999;
+  let py = -9999;
+  let running = false;
+
+  const resize = () => {
+    if (!canvas || !ctx) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    cols = Math.ceil(w / SPACING) + 2;
+    rows = Math.ceil(h / SPACING) + 2;
+    // A fixed opacity per dot, so the field has texture rather than reading as
+    // a perfectly even grid.
+    seeds = new Float32Array(cols * rows);
+    for (let i = 0; i < seeds.length; i++) seeds[i] = Math.random() * 0.5 + 0.5;
   };
 
-  const frame = () => {
-    if (!backdrop) {
-      running = false;
-      return;
+  const paintBucket = (list: number[][], colour: string, maxAlpha: number) => {
+    if (!ctx) return;
+    for (let b = 0; b < BUCKETS; b++) {
+      const pts = list[b];
+      if (pts.length === 0) continue;
+      ctx.globalAlpha = ((b + 1) / BUCKETS) * maxAlpha;
+      ctx.fillStyle = colour;
+      for (let i = 0; i < pts.length; i += 2) ctx.fillRect(pts[i], pts[i + 1], DOT, DOT);
     }
-    // Ease toward the pointer. The gap between painted and target is the trail.
-    px += (tx - px) * 0.14;
-    py += (ty - py) * 0.14;
-    paint();
+  };
 
-    const settled = Math.hypot(tx - px, ty - py) < 0.4;
-    if (settled && ++idle > 30) {
+  const draw = (time: number) => {
+    if (!ctx) return;
+    const t = time / 10000;
+    ctx.clearRect(0, 0, w, h);
+
+    const lit = fine && !still && px > -5000;
+
+    // Two passes. The grey field is bucketed by alpha so the whole thing costs
+    // a handful of canvas state changes rather than one per dot; the emerald
+    // pass only collects dots inside the glow radius.
+    const grey: number[][] = [];
+    const green: number[][] = [];
+    for (let i = 0; i < BUCKETS; i++) {
+      grey.push([]);
+      green.push([]);
+    }
+
+    for (let cx = 0; cx < cols; cx++) {
+      const hx = cx * SPACING - SPACING / 2;
+      for (let cy = 0; cy < rows; cy++) {
+        const hy = cy * SPACING - SPACING / 2;
+
+        const rad = (noise3d(hx / SCALE, hy / SCALE, t) - 0.5) * 2 * Math.PI;
+        const len = (noise3d(hx / SCALE, hy / SCALE, t * 2) + 0.5) * LENGTH;
+        const x = hx + Math.cos(rad) * len;
+        const y = hy + Math.sin(rad) * len;
+
+        const seed = seeds[cx * rows + cy] || 0.75;
+        const a = (Math.abs(Math.cos(rad)) * 0.8 + 0.2) * seed;
+
+        let near = 0;
+        if (lit) {
+          const d = Math.hypot(x - px, y - py);
+          if (d < GLOW_R) {
+            near = 1 - d / GLOW_R;
+            near *= near; // falls off faster than linear so the core reads
+          }
+        }
+
+        if (near > 0.02) {
+          const b = Math.min(BUCKETS - 1, Math.floor((0.3 + near * 0.7) * a * BUCKETS * 1.7));
+          green[b].push(x, y);
+        } else {
+          const b = Math.min(BUCKETS - 1, Math.floor(a * BUCKETS));
+          grey[b].push(x, y);
+        }
+      }
+    }
+
+    paintBucket(grey, '#ffffff', 0.14);
+    paintBucket(green, '#34d399', 0.95);
+    ctx.globalAlpha = 1;
+  };
+
+  const frame = (time: number) => {
+    if (!canvas || !ctx) {
       running = false;
       return;
     }
-    if (!settled) idle = 0;
+    if (tx > -5000) {
+      if (px < -5000) {
+        px = tx;
+        py = ty;
+      }
+      // Ease toward the pointer. That lag is the trail.
+      px += (tx - px) * 0.12;
+      py += (ty - py) * 0.12;
+      backdrop?.style.setProperty('--gx', `${px}px`);
+      backdrop?.style.setProperty('--gy', `${py}px`);
+    }
+    draw(still ? 0 : time);
+    if (still) {
+      // One static frame is enough when motion is not wanted.
+      running = false;
+      return;
+    }
     requestAnimationFrame(frame);
   };
 
   const kick = () => {
-    if (running || !enabled) return;
+    if (running || !ctx) return;
     running = true;
     requestAnimationFrame(frame);
   };
 
-  if (enabled) {
+  if (fine && !still) {
     window.addEventListener('pointermove', (e) => {
       tx = e.clientX;
       ty = e.clientY;
-      // First movement: start where the pointer is rather than sweeping in
-      // from off screen.
-      if (px < -500) {
-        px = tx;
-        py = ty;
-      }
       backdrop?.classList.add('on');
-      idle = 0;
       kick();
     }, { passive: true });
   }
 
+  window.addEventListener('resize', () => {
+    resize();
+    kick();
+  }, { passive: true });
+
   const bind = () => {
     backdrop = document.querySelector<HTMLElement>('.backdrop');
-    if (!backdrop || !enabled || px < -500) return;
-    // A fresh element carries none of the custom properties, so restore the
-    // last painted position before the browser gets a chance to show the
-    // default (off-screen) mask.
-    backdrop.classList.add('on');
-    paint();
+    canvas = backdrop?.querySelector<HTMLCanvasElement>('.field') ?? null;
+    ctx = canvas?.getContext('2d') ?? null;
+    if (!backdrop || !ctx) return;
+
+    backdrop.style.setProperty('--glow-r', `${GLOW_R}px`);
+    resize();
+    // Restore the trail straight away — the element is new and carries none of
+    // the previous state, so without this the effect stays dead until the
+    // pointer happens to move again.
+    if (px > -5000) {
+      backdrop.style.setProperty('--gx', `${px}px`);
+      backdrop.style.setProperty('--gy', `${py}px`);
+      backdrop.classList.add('on');
+    }
+    running = false;
     kick();
   };
 
-  // Fires on the first load and after every view transition.
   document.addEventListener('astro:page-load', bind);
   bind();
 </script>

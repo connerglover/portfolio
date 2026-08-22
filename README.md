@@ -191,11 +191,24 @@ JavaScript, and nothing to re-initialise after a view transition. Below 52rem it
 flattens into ordinary nav items, since there is no hover on a touchscreen.
 `/school/` redirects to the first course so old links do not 404.
 
-The backdrop (`Backdrop.astro`) is a dot grid with a green trail that lights the
-dots it passes over: three CSS layers, no canvas. All of its state lives at
-module scope and the element is re-resolved on `astro:page-load`, because Astro
-replaces it on every client-side navigation — binding to it once leaves the
-effect dead as soon as you navigate away and back.
+The backdrop (`Backdrop.astro`) is a drifting dot field on a 2D canvas, with a
+green trail that lights the dots it passes over. The dots are a simplex noise
+flow field — each has a home position on an 18px grid and is pushed off it by an
+angle and distance both read from 3D noise with time as the third dimension, so
+neighbouring dots move together and the field drifts like a current. The wash
+behind the pointer is CSS at a radius matched to the lit dots, so the two read
+as one light rather than two effects at different sizes.
+
+The field math costs about 1 ms per frame at 1080p and 1.5 ms at 1440p, well
+inside the 16.7 ms budget. All of its state lives at module scope and the
+elements are re-resolved on `astro:page-load`, because Astro replaces them on
+every client-side navigation — binding once leaves the effect dead as soon as
+you navigate away and back.
+
+One trap worth knowing about, since it has now caused three bugs: Astro scopes
+component styles by appending a data attribute to every selector, which raises
+the specificity of descendant selectors like `nav ul` above a bare class like
+`.menu`. Where a class needs to beat one, qualify it (`nav ul.menu`).
 
 ---
 

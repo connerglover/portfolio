@@ -43,6 +43,15 @@ export const gpa = {
   asOf: 'end of sophomore year, 2025-26',
 };
 
+/**
+ * AP exam results. Scored 1-5; 3 is generally the threshold for credit, and
+ * most colleges want 4 or 5.
+ */
+export const apExams = [
+  { exam: 'Computer Science Principles', score: 4, year: 'May 2025' },
+  { exam: 'Precalculus', score: 5, year: 'May 2026' },
+];
+
 export const courseLevelKey = [
   ['AP', 'Advanced Placement'],
   ['DC', 'Dual Credit'],
