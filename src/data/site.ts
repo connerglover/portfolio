@@ -1,12 +1,9 @@
 export const site = {
   name: 'Conner Glover',
   tagline: 'Engineering portfolio',
-  // TODO(conner): set these three before deploying. Left blank on purpose —
-  // the old site used cglover.2028@carmelhs.org, which dies at graduation,
-  // and I didn't want to publish a personal address without you choosing it.
-  email: '',
-  github: '',
-  linkedin: '',
+  email: 'cglover.2009@outlook.com',
+  github: 'https://github.com/connerglover',
+  linkedin: 'https://www.linkedin.com/',
   description:
     'Engineering coursework, personal projects, and achievements — Conner Glover.',
 };
