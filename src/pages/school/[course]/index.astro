@@ -1,54 +1,291 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import Deck from '../../../components/Deck.astro';
+import DriveFile from '../../../components/DriveFile.astro';
+import Gallery from '../../../components/Gallery.astro';
 import { courses, unitLabel } from '../../../data/site';
 
 export const getStaticPaths = (() =>
   courses.map((c) => ({ params: { course: c.slug }, props: { course: c } }))) satisfies GetStaticPaths;
 
 const { course } = Astro.props;
-const school = await getCollection('school', (a) => a.data.courseSlug === course.slug);
+const all = await getCollection('school', (a) => a.data.courseSlug === course.slug);
+
+// The whole course lives on one page — every unit, every assignment. Rows are
+// collapsed, so a 33-assignment course is still a page you can take in at a
+// glance, and splitting it across unit routes only ever added clicks.
+const units = await Promise.all(
+  course.units.map(async (u) => {
+    const items = all
+      .filter((a) => a.data.unit === u)
+      .sort((a, b) => a.data.order - b.data.order);
+    const rendered = await Promise.all(
+      items.map(async (item) => ({ item, Content: (await render(item)).Content })),
+    );
+    return {
+      slug: u,
+      label: unitLabel(u),
+      items,
+      rendered,
+      done: items.filter((a) => a.data.status === 'complete').length,
+      upcoming: items.filter((a) => a.data.status === 'not-started').length,
+    };
+  }),
+);
+
+const total = all.length;
+const done = all.filter((a) => a.data.status === 'complete').length;
+const anyUpcoming = all.some((a) => a.data.status === 'not-started');
+const withFiles = all.filter((a) => a.data.decks.length > 0 || a.data.files.length > 0).length;
+
+/** A short summary of what's attached, shown on the collapsed row. */
+const attachments = (item: (typeof all)[number]) => {
+  const bits: string[] = [];
+  const decks = item.data.decks.length;
+  const photos = item.data.images.length;
+  if (decks) bits.push(`${decks} file${decks > 1 ? 's' : ''}`);
+  if (photos) bits.push(`${photos} photo${photos > 1 ? 's' : ''}`);
+  if (item.data.files.length) bits.push('drive');
+  return bits.join(' · ');
+};
 ---
 
 <BaseLayout title={course.name} description={course.blurb}>
-  <div class="wrap stack">
-    <p class="eyebrow"><a href="/school/">School</a></p>
-    <section class="prose">
+  <div class="wrap">
+    <header class="course-head">
+      <p class="eyebrow">{course.short} &middot; {course.credit}</p>
       <h1>{course.name}</h1>
-      <p>{course.blurb}</p>
-      <p class="muted">{course.short} &middot; {course.credit} &middot; {school.length} assignments</p>
-    </section>
+      <p class="blurb">{course.blurb}</p>
+      <p class="stats">
+        <span>{total} assignments</span>
+        {anyUpcoming && <span>{done} done</span>}
+        <span>{withFiles} with work attached</span>
+      </p>
+    </header>
 
-    <div class="grid">
-      {course.units.map((u) => {
-        const items = school.filter((a) => a.data.unit === u);
-        const decks = items.filter((a) => a.data.decks.length > 0).length;
-        const upcoming = items.filter((a) => a.data.status === 'not-started').length;
-        const done = items.filter((a) => a.data.status === 'complete').length;
-        return (
-          <article class="card">
-            <h3><a href={`/school/${course.slug}/${u}/`}>{unitLabel(u)}</a></h3>
-            <p class="muted">
-              {upcoming > 0
-                ? <>{done} of {items.length} done</>
-                : <>{items.length} assignments{decks > 0 && <> &middot; {decks} with files</>}</>}
-            </p>
-          </article>
-        );
-      })}
-    </div>
+    {units.length > 1 && (
+      <nav class="unit-jump" aria-label="Units">
+        {units.map((u) => (
+          <a href={`#${u.slug}`}>
+            {u.label}
+            <span class="count">{u.items.length}</span>
+          </a>
+        ))}
+      </nav>
+    )}
+
+    {units.map((u) => (
+      <section class="unit" id={u.slug}>
+        <h2>
+          {u.label}
+          <span class="unit-meta">
+            {u.upcoming > 0 ? `${u.done} of ${u.items.length} done` : `${u.items.length} assignments`}
+          </span>
+        </h2>
+
+        {u.rendered.length === 0 ? (
+          <p class="muted empty">No assignments recorded for this unit.</p>
+        ) : (
+          <ol class="assignments">
+            {u.rendered.map(({ item, Content }) => {
+              const files = attachments(item);
+              return (
+                <li>
+                  <details>
+                    <summary>
+                      <span class="marker" aria-hidden="true"></span>
+                      <span class="title">{item.data.title}</span>
+                      <span class="chips">
+                        {item.data.status === 'in-progress' && <span class="chip warn">In progress</span>}
+                        {item.data.status === 'not-started' && <span class="chip">Not started</span>}
+                        {files && <span class="files">{files}</span>}
+                      </span>
+                    </summary>
+
+                    <div class="body">
+                      {item.data.partners.length > 0 && (
+                        <p class="byline">With {item.data.partners.join(', ')}</p>
+                      )}
+                      <div class="prose"><Content /></div>
+                      <Gallery images={item.data.images} />
+                      {item.data.decks.map((d) => <Deck pdf={d.pdf} title={d.title} />)}
+                      {item.data.files.map((f) => <DriveFile id={f.id} title={f.title} />)}
+                    </div>
+                  </details>
+                </li>
+              );
+            })}
+          </ol>
+        )}
+      </section>
+    ))}
   </div>
 </BaseLayout>
 
 <style>
-  h2 a, h3 a { color: var(--text); border: 0; }
-  h2 a:hover, h3 a:hover { color: var(--accent-bright); }
-  .card p.muted {
+  .course-head { margin-bottom: 2.5rem; }
+  .course-head h1 { margin-bottom: 0.5rem; }
+  .blurb {
+    color: var(--text-muted);
+    max-width: 60ch;
+    margin-bottom: 0.9rem;
+  }
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.4rem;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
+  }
+
+  /* ---------- unit jump nav ---------- */
+
+  .unit-jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .unit-jump a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--text-muted);
+  }
+  .unit-jump a:hover {
+    border-color: var(--accent);
+    color: var(--accent-bright);
+  }
+  .unit-jump .count {
+    font-size: 0.68rem;
+    color: var(--text-faint);
+  }
+
+  /* ---------- units ---------- */
+
+  .unit { scroll-margin-top: 5rem; }
+  .unit + .unit { margin-top: 3.5rem; }
+  .unit h2 {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin: 0 0 1rem;
+  }
+  .unit-meta {
     font-family: var(--font-mono);
     font-size: 0.72rem;
+    font-weight: 400;
     letter-spacing: 0.06em;
     color: var(--text-faint);
-    margin-bottom: 0;
+  }
+  .empty { font-size: 0.92rem; }
+
+  /* ---------- collapsible assignments ---------- */
+
+  /* Rows collapse by default. A course runs to thirty-odd assignments and each
+     can carry a PDF viewer, so expanded-by-default buries the list and loads a
+     lot of images nobody asked for. Built on <details>, so it works with no
+     JavaScript and the browser handles the semantics. Rows open independently
+     rather than as an exclusive accordion — closing something the reader
+     didn't ask to close is more surprising than a longer page. */
+  .assignments {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--border);
+  }
+  .assignments li { border-bottom: 1px solid var(--border); }
+
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.95rem 0.5rem;
+    cursor: pointer;
+    list-style: none;
+    transition: background var(--dur) var(--ease);
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary:hover { background: var(--bg-subtle); }
+  summary:focus-visible { outline-offset: -2px; }
+
+  .marker {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 1px solid var(--border-strong);
+    transition: all var(--dur) var(--ease);
+  }
+  details[open] .marker,
+  summary:hover .marker { border-color: var(--accent); background: var(--accent); }
+
+  .title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  details[open] .title { color: var(--accent-bright); }
+
+  .chips {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex: none;
+  }
+  .files {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 0.63rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.1rem 0.5rem;
+    white-space: nowrap;
+  }
+  .chip.warn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, transparent); }
+
+  .body {
+    padding: 0.25rem 0.5rem 1.75rem 1.9rem;
+    animation: reveal 240ms var(--ease);
+  }
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(-4px); }
+  }
+  .body > :first-child { margin-top: 0; }
+  .byline {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    margin: 0 0 0.75rem;
+  }
+
+  @media (max-width: 34rem) {
+    .chips { display: none; }
+    .body { padding-left: 0.5rem; }
   }
 </style>

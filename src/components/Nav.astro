@@ -1,30 +1,65 @@
 ---
-import { site } from '../data/site';
+/**
+ * Top nav for every page except home.
+ *
+ * There is no school index any more — the courses hang off a dropdown here
+ * instead. It opens on hover and on keyboard focus (`:focus-within`), so it
+ * needs no JavaScript and nothing to re-initialise after a view transition.
+ * The trigger is a real link to the first course, which is what a click or a
+ * tap gets you; below 52rem the dropdown flattens into ordinary nav items,
+ * since there is no hover on a touchscreen.
+ */
+import { site, courses } from '../data/site';
 
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
   href === '/' ? path === '/' : path.startsWith(href);
-
-const links = [
-  { href: '/', label: 'Home' },
-  { href: '/projects/', label: 'Projects' },
-  { href: '/school/', label: 'School' },
-  { href: '/about/', label: 'About' },
-];
+const inSchool = path.startsWith('/school/');
 ---
 
 <header class="site-header">
   <div class="wrap bar">
     <a class="brand" href="/">{site.name}</a>
+
     <nav aria-label="Primary">
-      <ul>
-        {links.map((l) => (
+      <ul class="top">
+        <li><a href="/projects/" aria-current={isActive('/projects/') ? 'page' : undefined}>Projects</a></li>
+
+        <li class="has-menu">
+          <a
+            href={`/school/${courses[0].slug}/`}
+            class="menu-trigger"
+            aria-current={inSchool ? 'page' : undefined}
+          >
+            School
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="caret"><path d="M6 9l6 6 6-6" /></svg>
+          </a>
+          <ul class="menu">
+            {courses.map((c) => (
+              <li>
+                <a href={`/school/${c.slug}/`} aria-current={path.startsWith(`/school/${c.slug}/`) ? 'page' : undefined}>
+                  <span class="abbr">{c.short}</span>
+                  <span class="full">{c.name}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </li>
+
+        <li><a href="/about/" aria-current={isActive('/about/') ? 'page' : undefined}>About</a></li>
+      </ul>
+
+      {/* Flattened equivalent for narrow screens, where hover does not exist. */}
+      <ul class="flat">
+        <li><a href="/projects/" aria-current={isActive('/projects/') ? 'page' : undefined}>Projects</a></li>
+        {courses.map((c) => (
           <li>
-            <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>
-              {l.label}
+            <a href={`/school/${c.slug}/`} aria-current={path.startsWith(`/school/${c.slug}/`) ? 'page' : undefined}>
+              {c.short}
             </a>
           </li>
         ))}
+        <li><a href="/about/" aria-current={isActive('/about/') ? 'page' : undefined}>About</a></li>
       </ul>
     </nav>
   </div>
@@ -60,11 +95,13 @@ const links = [
   nav ul {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 1.4rem;
     list-style: none;
     margin: 0;
     padding: 0;
   }
+
   nav a {
     position: relative;
     font-family: var(--font-mono);
@@ -74,7 +111,7 @@ const links = [
     color: var(--text-faint);
     border: 0;
   }
-  nav a::after {
+  .top > li > a::after {
     content: '';
     position: absolute;
     left: 0;
@@ -85,7 +122,98 @@ const links = [
     transition: right var(--dur) var(--ease);
   }
   nav a:hover { color: var(--text); }
-  nav a:hover::after { right: 0; }
+  .top > li > a:hover::after { right: 0; }
   nav a[aria-current='page'] { color: var(--accent-bright); }
-  nav a[aria-current='page']::after { right: 0; }
+  .top > li > a[aria-current='page']::after { right: 0; }
+
+  /* ---------- dropdown ---------- */
+
+  .has-menu { position: relative; }
+  .menu-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .caret {
+    width: 0.85rem;
+    height: 0.85rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform var(--dur) var(--ease);
+  }
+  .has-menu:hover .caret,
+  .has-menu:focus-within .caret { transform: rotate(180deg); }
+
+  .menu {
+    position: absolute;
+    top: calc(100% + 0.7rem);
+    left: -0.9rem;
+    display: block;
+    min-width: 15rem;
+    padding: 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-raised);
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition:
+      opacity var(--dur) var(--ease),
+      transform var(--dur) var(--ease),
+      visibility var(--dur);
+  }
+  .has-menu:hover .menu,
+  .has-menu:focus-within .menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  /* Keeps the pointer from falling through the gap between trigger and menu. */
+  .menu::before {
+    content: '';
+    position: absolute;
+    inset: -0.8rem 0 auto;
+    height: 0.8rem;
+  }
+
+  .menu li { width: 100%; }
+  .menu a {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: var(--radius-sm);
+    text-transform: none;
+    letter-spacing: 0;
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .menu a:hover { background: var(--bg-subtle); color: var(--text); }
+  .menu .abbr {
+    flex: none;
+    width: 2.4rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+  .menu .full {
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
+  }
+
+  /* ---------- narrow screens ---------- */
+
+  /* Qualified with `nav ul` deliberately: Astro scopes styles by appending a
+     data attribute to every selector, which lifts `nav ul` to two classes'
+     worth of specificity. A bare `.flat` loses to it and both navs render. */
+  nav ul.flat { display: none; }
+
+  @media (max-width: 52rem) {
+    nav ul.top { display: none; }
+    nav ul.flat { display: flex; gap: 1rem 1.1rem; }
+    nav ul.flat a { font-size: 0.7rem; letter-spacing: 0.08em; }
+  }
 </style>

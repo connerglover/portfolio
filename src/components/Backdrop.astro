@@ -1,0 +1,155 @@
+---
+/**
+ * The page backdrop: a dot grid, plus a green trail that lights the dots it
+ * passes over.
+ *
+ * Three stacked layers, all of them CSS — no canvas, no particle system:
+ *
+ *   1. the dot grid, faint and neutral
+ *   2. the same grid in emerald, masked to a circle at the pointer, so only
+ *      dots near the cursor are lit. This is where most of the effect lives.
+ *   3. a much weaker radial wash on the background itself, so the area around
+ *      the pointer lifts slightly rather than only the dots changing.
+ *
+ * The painted position eases toward the real pointer position instead of
+ * snapping to it, which is what makes it read as a trail rather than a
+ * spotlight glued to the cursor.
+ *
+ * Rendered on every page. The element is replaced on each client-side
+ * navigation, so the script re-resolves it on `astro:page-load` and paints
+ * the last known pointer position straight away — otherwise the effect stays
+ * dead until the pointer happens to move again.
+ */
+---
+
+<div class="backdrop" aria-hidden="true">
+  <div class="dots"></div>
+  <div class="dots lit"></div>
+  <div class="wash"></div>
+</div>
+
+<style>
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    contain: strict;
+  }
+  .backdrop > * { position: absolute; inset: 0; }
+
+  .dots {
+    background-image: radial-gradient(circle at center, var(--dot) 1px, transparent 1px);
+    background-size: 26px 26px;
+    --dot: rgb(255 255 255 / 0.05);
+  }
+
+  .dots.lit {
+    --dot: var(--accent-bright);
+    opacity: 0;
+    transition: opacity 700ms var(--ease);
+    -webkit-mask-image: radial-gradient(circle 190px at var(--gx, -100%) var(--gy, -100%), #000 0%, rgb(0 0 0 / 0.35) 45%, transparent 72%);
+    mask-image: radial-gradient(circle 190px at var(--gx, -100%) var(--gy, -100%), #000 0%, rgb(0 0 0 / 0.35) 45%, transparent 72%);
+  }
+  .backdrop.on .dots.lit { opacity: 0.85; }
+
+  /* The background itself lifts only slightly — the dots do the work. */
+  .wash {
+    opacity: 0;
+    transition: opacity 800ms var(--ease);
+    background: radial-gradient(
+      30rem 30rem at var(--gx, 50%) var(--gy, -20%),
+      rgb(16 185 129 / 0.05),
+      transparent 68%
+    );
+  }
+  .backdrop.on .wash { opacity: 1; }
+
+  /* Nothing to follow on a touchscreen, and the trail is motion. The dot grid
+     stays either way — it is the background, not the effect. */
+  @media (pointer: coarse), (prefers-reduced-motion: reduce) {
+    .dots.lit,
+    .wash { display: none; }
+  }
+</style>
+
+<script>
+  // All state lives at module scope so it survives client-side navigation.
+  // The element does not — Astro swaps it on every page load — so it is
+  // re-resolved in `bind()` and repainted immediately, rather than waiting for
+  // the pointer to move again. Getting that wrong is what left the trail dead
+  // after navigating away from home and back.
+  const fine = window.matchMedia('(pointer: fine)').matches;
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const enabled = fine && !still;
+
+  let backdrop: HTMLElement | null = null;
+  let tx = -1000;   // pointer
+  let ty = -1000;
+  let px = -1000;   // painted — trails behind the pointer
+  let py = -1000;
+  let running = false;
+  let idle = 0;
+
+  const paint = () => {
+    if (!backdrop) return;
+    backdrop.style.setProperty('--gx', `${px}px`);
+    backdrop.style.setProperty('--gy', `${py}px`);
+  };
+
+  const frame = () => {
+    if (!backdrop) {
+      running = false;
+      return;
+    }
+    // Ease toward the pointer. The gap between painted and target is the trail.
+    px += (tx - px) * 0.14;
+    py += (ty - py) * 0.14;
+    paint();
+
+    const settled = Math.hypot(tx - px, ty - py) < 0.4;
+    if (settled && ++idle > 30) {
+      running = false;
+      return;
+    }
+    if (!settled) idle = 0;
+    requestAnimationFrame(frame);
+  };
+
+  const kick = () => {
+    if (running || !enabled) return;
+    running = true;
+    requestAnimationFrame(frame);
+  };
+
+  if (enabled) {
+    window.addEventListener('pointermove', (e) => {
+      tx = e.clientX;
+      ty = e.clientY;
+      // First movement: start where the pointer is rather than sweeping in
+      // from off screen.
+      if (px < -500) {
+        px = tx;
+        py = ty;
+      }
+      backdrop?.classList.add('on');
+      idle = 0;
+      kick();
+    }, { passive: true });
+  }
+
+  const bind = () => {
+    backdrop = document.querySelector<HTMLElement>('.backdrop');
+    if (!backdrop || !enabled || px < -500) return;
+    // A fresh element carries none of the custom properties, so restore the
+    // last painted position before the browser gets a chance to show the
+    // default (off-screen) mask.
+    backdrop.classList.add('on');
+    paint();
+    kick();
+  };
+
+  // Fires on the first load and after every view transition.
+  document.addEventListener('astro:page-load', bind);
+  bind();
+</script>

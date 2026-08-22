@@ -49,8 +49,10 @@ root: `![alt](/images/projects/<slug>/shot.png)`.
 ### School engineering — `src/content/school/<course>/<unit>/`
 
 Short. One file per assignment — usually a paragraph and a slide deck. These do
-*not* get their own pages; they render stacked on their unit page at
-`/school/<course>/<unit>/`.
+*not* get their own pages: a whole course lives on one page at
+`/school/<course>/`, with its units as sections and every assignment as a
+collapsible row. The `unit` frontmatter field still groups them, it just no
+longer creates a route.
 
 ```yaml
 ---
@@ -177,11 +179,23 @@ on the left, content scrolling on the right. Pass `layout="split"` to
 `BaseLayout` for it. Every other page carries too much of its own structure to
 give up a third of the width, so they use the standard top nav.
 
-Unit pages collapse each assignment into a row that expands in place, built on
-`<details>` so it works with no JavaScript. They default to closed — a unit runs
-to sixteen assignments and each can carry a PDF viewer, so opening them all by
-default buries the list and loads a lot of images nobody asked for. Rows open
-independently rather than as an exclusive accordion.
+Course pages collapse each assignment into a row that expands in place, built on
+`<details>` so it works with no JavaScript. They default to closed — a course
+runs to thirty-odd assignments and each can carry a PDF viewer, so opening them
+all by default buries the list and loads a lot of images nobody asked for. Rows
+open independently rather than as an exclusive accordion.
+
+There is no school index page. The four courses hang off a dropdown in the nav,
+which opens on hover and on keyboard focus using `:focus-within` — no
+JavaScript, and nothing to re-initialise after a view transition. Below 52rem it
+flattens into ordinary nav items, since there is no hover on a touchscreen.
+`/school/` redirects to the first course so old links do not 404.
+
+The backdrop (`Backdrop.astro`) is a dot grid with a green trail that lights the
+dots it passes over: three CSS layers, no canvas. All of its state lives at
+module scope and the element is re-resolved on `astro:page-load`, because Astro
+replaces it on every client-side navigation — binding to it once leaves the
+effect dead as soon as you navigate away and back.
 
 ---
 

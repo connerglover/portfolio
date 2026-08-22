@@ -15,9 +15,11 @@ const sections = [
   { id: 'coursework', label: 'Coursework' },
 ];
 
+import { courses } from '../data/site';
+
 const elsewhere = [
   { href: '/projects/', label: 'All projects' },
-  { href: '/school/', label: 'All coursework' },
+  ...courses.map((c) => ({ href: `/school/${c.slug}/`, label: c.name })),
   { href: '/about/', label: 'Academic record' },
 ];
 ---
@@ -162,32 +164,40 @@ const elsewhere = [
 </style>
 
 <script>
-  // Highlight whichever section the reader is currently in.
-  const links = document.querySelectorAll<HTMLAnchorElement>('.sections a[data-section]');
-  const targets = Array.from(links)
-    .map((a) => document.getElementById(a.dataset.section!))
-    .filter((el): el is HTMLElement => el !== null);
+  // Re-resolved on every page load rather than bound once: with view
+  // transitions the module script does not run again, so anything captured on
+  // first load points at detached nodes after navigating away and back.
+  let links: HTMLAnchorElement[] = [];
+  let targets: HTMLElement[] = [];
+  let queued = false;
 
-  if (targets.length > 0) {
-    let queued = false;
+  const mark = () => {
+    queued = false;
+    if (targets.length === 0) return;
+    // The section whose top has most recently passed a line a third of the
+    // way down the viewport.
+    const line = window.innerHeight / 3;
+    let current = targets[0].id;
+    for (const el of targets) {
+      if (el.getBoundingClientRect().top <= line) current = el.id;
+    }
+    links.forEach((a) => a.classList.toggle('active', a.dataset.section === current));
+  };
 
-    const mark = () => {
-      queued = false;
-      // The section whose top has most recently passed a line a third of the
-      // way down the viewport.
-      const line = window.innerHeight / 3;
-      let current = targets[0].id;
-      for (const el of targets) {
-        if (el.getBoundingClientRect().top <= line) current = el.id;
-      }
-      links.forEach((a) => a.classList.toggle('active', a.dataset.section === current));
-    };
+  window.addEventListener('scroll', () => {
+    if (queued || targets.length === 0) return;
+    queued = true;
+    requestAnimationFrame(mark);
+  }, { passive: true });
 
-    window.addEventListener('scroll', () => {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(mark);
-    }, { passive: true });
+  const bind = () => {
+    links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.sections a[data-section]'));
+    targets = links
+      .map((a) => document.getElementById(a.dataset.section!))
+      .filter((el): el is HTMLElement => el !== null);
     mark();
-  }
+  };
+
+  document.addEventListener('astro:page-load', bind);
+  bind();
 </script>
