@@ -34,8 +34,6 @@ them meant starting over, so I rewrote it as CRT — same idea, built properly, 
 PySide6 instead. The repository is still up with a deprecation notice pointing at
 the replacement, since people had bookmarked it.
 
-The `pytime.xyz` site that used to host it is no longer online.
-
 ## Credits
 
 I did not build this alone, and the README has said so since 2023: rekkto helped
