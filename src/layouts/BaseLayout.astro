@@ -1,14 +1,23 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import CursorGlow from '../components/CursorGlow.astro';
 import { site } from '../data/site';
 
 interface Props {
   title?: string;
   description?: string;
+  /**
+   * `split` pins an identity column on the left while the content scrolls on
+   * the right. It is the home page only — inner pages carry too much of their
+   * own structure (unit lists, tables, viewers) to give up a third of the
+   * width to a sidebar.
+   */
+  layout?: 'standard' | 'split';
 }
-const { title, description = site.description } = Astro.props;
+const { title, description = site.description, layout = 'standard' } = Astro.props;
 const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -20,6 +29,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#0b0e0d" />
     <link rel="canonical" href={canonical} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
@@ -27,13 +37,47 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <ClientRouter />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
-    <Nav />
-    <main id="main">
-      <slot />
-    </main>
-    <Footer />
+
+    {layout === 'split' ? (
+      <>
+        <CursorGlow />
+        <main id="main" class="split">
+          <slot name="aside" />
+          <div class="split-content"><slot /></div>
+        </main>
+      </>
+    ) : (
+      <>
+        <Nav />
+        <main id="main"><slot /></main>
+        <Footer />
+      </>
+    )}
   </body>
 </html>
+
+<style>
+  .split {
+    width: 100%;
+    max-width: var(--page-max);
+    margin-inline: auto;
+    padding: 0 1.5rem;
+  }
+
+  @media (min-width: 62rem) {
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 21rem) minmax(0, 1fr);
+      gap: 4rem;
+      padding-block: 0;
+    }
+    .split-content {
+      padding-block: 6rem 6rem;
+      min-width: 0;
+    }
+  }
+</style>

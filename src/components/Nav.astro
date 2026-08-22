@@ -32,8 +32,12 @@ const links = [
 
 <style>
   .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
     border-bottom: 1px solid var(--border);
-    background: var(--bg);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(12px);
   }
   .bar {
     display: flex;
@@ -44,24 +48,44 @@ const links = [
     padding-block: 0.9rem;
   }
   .brand {
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.02rem;
+    letter-spacing: -0.02em;
     color: var(--text);
-    text-decoration: none;
-    letter-spacing: -0.01em;
+    border: 0;
   }
+  .brand:hover { color: var(--accent-bright); }
+
   nav ul {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.1rem;
+    gap: 1.4rem;
     list-style: none;
     margin: 0;
     padding: 0;
   }
   nav a {
-    color: var(--text-muted);
-    text-decoration: none;
-    font-size: 0.95rem;
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    border: 0;
+  }
+  nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 100%;
+    bottom: -0.35rem;
+    height: 1px;
+    background: var(--accent);
+    transition: right var(--dur) var(--ease);
   }
   nav a:hover { color: var(--text); }
-  nav a[aria-current='page'] { color: var(--text); font-weight: 600; }
+  nav a:hover::after { right: 0; }
+  nav a[aria-current='page'] { color: var(--accent-bright); }
+  nav a[aria-current='page']::after { right: 0; }
 </style>

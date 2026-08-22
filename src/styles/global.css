@@ -1,43 +1,69 @@
 /*
- * Intentionally plain. This is the structural baseline we agreed to build
- * first — readable defaults, sane spacing, light/dark support, and nothing
- * that will fight a real theme later. All of it is token-driven so the
- * theming pass can mostly swap the values in :root.
+ * Near-black and emerald. Dark only, on purpose — committing to one palette
+ * means it can be tuned properly instead of compromised to keep a second one
+ * working.
+ *
+ * Type: Space Grotesk for headings (squared grotesk, technical without
+ * costume), Inter for body, JetBrains Mono for data — grades, course numbers,
+ * dates, counts. Self-hosted, so nothing here depends on a font CDN.
  */
 
-:root {
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+@import '@fontsource-variable/space-grotesk';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
 
-  --bg: #ffffff;
-  --bg-subtle: #f6f7f9;
-  --border: #e3e6ea;
-  --text: #1b1f24;
-  --text-muted: #5c6773;
-  --accent: #1a56db;
-  --accent-contrast: #ffffff;
+:root {
+  --font-display: 'Space Grotesk Variable', system-ui, sans-serif;
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, Menlo, Consolas, monospace;
+
+  /* Ground. Not pure black — a hint of blue-green keeps it from feeling like
+     a hole, and gives the grain something to sit on. */
+  --bg: #0b0e0d;
+  --bg-subtle: #121614;
+  --bg-raised: #171d1a;
+  --border: #232b28;
+  --border-strong: #33403b;
+
+  --text: #e6ece9;
+  --text-muted: #8b9a94;
+  --text-faint: #5f6d67;
+
+  --accent: #10b981;
+  --accent-bright: #34d399;
+  --accent-dim: #0d8f65;
+  --accent-wash: rgb(16 185 129 / 0.12);
+  --accent-contrast: #04140e;
+
+  /* Status. Amber reads "in flight", so upcoming work stays visually quiet. */
+  --warn: #d9a441;
 
   --measure: 68ch;
   --page-max: 72rem;
-  --radius: 8px;
+  --radius: 10px;
+  --radius-sm: 6px;
   --space: 1rem;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0f1216;
-    --bg-subtle: #171b21;
-    --border: #262c35;
-    --text: #e7eaee;
-    --text-muted: #9aa5b1;
-    --accent: #7aa2f7;
-    --accent-contrast: #0f1216;
-  }
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur: 220ms;
+
+  color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 
 body {
   margin: 0;
@@ -46,34 +72,87 @@ body {
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.65;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-h1, h2, h3, h4 { line-height: 1.25; font-weight: 650; margin: 2rem 0 0.5rem; }
-h1 { font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem); margin-top: 0; }
-h2 { font-size: 1.5rem; }
-h3 { font-size: 1.175rem; }
+/* Film grain. An inline SVG so it costs no request, fixed so it does not
+   swim while scrolling, and inert to the pointer. Without it, large flat
+   dark areas look dead. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+body > * { position: relative; z-index: 1; }
+
+/* ---------- type ---------- */
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 2rem 0 0.5rem;
+  text-wrap: balance;
+}
+h1 { font-size: clamp(2rem, 1.3rem + 2.6vw, 3rem); margin-top: 0; }
+h2 { font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.75rem); }
+h3 { font-size: 1.15rem; }
 
 p, ul, ol { margin: 0 0 1rem; }
 ul, ol { padding-left: 1.25rem; }
+li::marker { color: var(--text-faint); }
 
-a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
-a:hover { text-decoration-thickness: 2px; }
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+a:hover {
+  color: var(--accent-bright);
+  border-bottom-color: currentColor;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
 
 img { max-width: 100%; height: auto; display: block; }
 
-code { font-family: var(--font-mono); font-size: 0.9em; }
+code { font-family: var(--font-mono); font-size: 0.88em; }
 :not(pre) > code {
-  background: var(--bg-subtle);
+  background: var(--bg-raised);
   border: 1px solid var(--border);
   border-radius: 4px;
-  padding: 0.1em 0.35em;
+  padding: 0.1em 0.38em;
+  color: var(--accent-bright);
 }
-pre { padding: 1rem; border-radius: var(--radius); overflow-x: auto; }
+pre {
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  background: var(--bg-subtle) !important;
+}
 
-hr { border: 0; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0.25rem 0 0.25rem 1.1rem;
+  border-left: 2px solid var(--accent-dim);
+  color: var(--text-muted);
+}
+
+hr { border: 0; border-top: 1px solid var(--border); margin: 3rem 0; }
 
 /* ---------- layout primitives ---------- */
 
@@ -81,62 +160,77 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 2.5rem 0; }
   width: 100%;
   max-width: var(--page-max);
   margin-inline: auto;
-  padding-inline: 1.25rem;
+  padding-inline: 1.5rem;
 }
 
 .prose { max-width: var(--measure); }
+.prose a { border-bottom-color: color-mix(in srgb, var(--accent) 35%, transparent); }
 
 .muted { color: var(--text-muted); }
-
 .stack > * + * { margin-top: var(--space); }
 
 .grid {
   display: grid;
-  gap: 1.25rem;
+  gap: 1rem;
   grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
 }
 
 .card {
+  position: relative;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1.1rem 1.2rem;
-  background: var(--bg);
+  padding: 1.15rem 1.25rem;
+  background: var(--bg-subtle);
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
 }
+.card:hover { border-color: var(--border-strong); background: var(--bg-raised); }
 .card h3 { margin-top: 0; }
 .card > :last-child { margin-bottom: 0; }
+.card a { color: var(--text); }
+.card a:hover { color: var(--accent-bright); border-bottom-color: transparent; }
 
-.tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; padding: 0; margin: 0.5rem 0 0; }
+/* Metadata is set in mono — course numbers, dates, counts, grades. */
+.tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; padding: 0; margin: 0.7rem 0 0; }
 .tag {
-  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
   color: var(--text-muted);
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 0.1rem 0.6rem;
-  background: var(--bg-subtle);
+  padding: 0.12rem 0.6rem;
+  background: var(--bg);
 }
 
 .eyebrow {
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-muted);
-  margin: 0 0 0.35rem;
+  color: var(--text-faint);
+  margin: 0 0 0.4rem;
 }
+.eyebrow a { color: var(--text-muted); }
 
-main { flex: 1 0 auto; padding-block: 2.5rem 4rem; }
+main { flex: 1 0 auto; padding-block: 3rem 5rem; }
 
 /* ---------- skip link ---------- */
 
-.skip {
-  position: absolute;
-  left: -9999px;
-}
+.skip { position: absolute; left: -9999px; }
 .skip:focus {
   left: 1rem;
   top: 1rem;
-  z-index: 10;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  z-index: 100;
+  background: var(--bg-raised);
+  border: 1px solid var(--accent);
+  color: var(--text);
   padding: 0.5rem 0.9rem;
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
 }
+
+/* ---------- view transitions ---------- */
+
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: fade-out 90ms ease forwards; }
+::view-transition-new(root) { animation: fade-in 180ms var(--ease) forwards; }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; transform: translateY(6px); } }

@@ -83,82 +83,108 @@ import { courseLevelKey, gpa, terms } from '../data/academics';
 
 <style>
   .gpa {
-    font-size: 1.15rem;
-    margin-bottom: 0.35rem;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
   }
   .gpa strong {
-    font-size: 1.5rem;
-    font-variant-numeric: tabular-nums;
+    font-family: var(--font-mono);
+    font-size: clamp(2.1rem, 1.6rem + 1.6vw, 2.75rem);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--accent-bright);
+    letter-spacing: -0.03em;
   }
-  .gpa span { font-size: 0.95rem; }
+  .gpa span { font-size: 0.88rem; }
 
   .scale,
   .note,
-  .key {
-    max-width: var(--measure);
-    font-size: 0.88rem;
-  }
+  .key { max-width: var(--measure); font-size: 0.86rem; }
 
-  .term { margin-top: 2rem; }
-  .term h3 { margin-bottom: 0.25rem; }
-  .note { margin: 0 0 0.75rem; }
+  .term { margin-top: 2.75rem; }
+  .term h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.3rem;
+  }
+  .note {
+    margin: 0 0 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.03em;
+    color: var(--text-faint);
+  }
 
   /* Tables scroll inside their own box rather than pushing the page wide. */
   .table-scroll {
     overflow-x: auto;
     border: 1px solid var(--border);
     border-radius: var(--radius);
+    background: var(--bg-subtle);
   }
 
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.94rem;
+    font-size: 0.92rem;
   }
-  th,
-  td {
+  th, td {
     text-align: left;
-    padding: 0.5rem 0.85rem;
+    padding: 0.6rem 0.95rem;
     border-bottom: 1px solid var(--border);
   }
   tbody tr:last-child th,
   tbody tr:last-child td { border-bottom: 0; }
+  tbody tr { transition: background var(--dur) var(--ease); }
+  tbody tr:hover { background: var(--bg-raised); }
 
   thead th {
-    font-size: 0.78rem;
-    letter-spacing: 0.04em;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--text-muted);
-    font-weight: 600;
-    background: var(--bg-subtle);
+    color: var(--text-faint);
+    font-weight: 500;
+    background: var(--bg);
     white-space: nowrap;
   }
   tbody th {
-    font-weight: 500;
+    font-weight: 450;
+    color: var(--text);
     min-width: 15rem;
   }
+  tbody th a { color: var(--text); border-bottom-color: color-mix(in srgb, var(--accent) 30%, transparent); }
+  tbody th a:hover { color: var(--accent-bright); }
 
   .lvl {
-    color: var(--text-muted);
-    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-faint);
     white-space: nowrap;
   }
   .g {
     width: 4.5rem;
     text-align: center;
+    font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
   }
-  tbody .g { font-weight: 600; }
+  tbody .g { font-weight: 600; color: var(--text); }
 
   .summer {
-    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
     font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-faint);
     white-space: nowrap;
   }
 
   .key abbr {
     text-decoration: none;
+    font-family: var(--font-mono);
     font-weight: 600;
-    color: var(--text);
+    color: var(--accent);
   }
 </style>

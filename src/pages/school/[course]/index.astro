@@ -40,3 +40,15 @@ const school = await getCollection('school', (a) => a.data.courseSlug === course
     </div>
   </div>
 </BaseLayout>
+
+<style>
+  h2 a, h3 a { color: var(--text); border: 0; }
+  h2 a:hover, h3 a:hover { color: var(--accent-bright); }
+  .card p.muted {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    margin-bottom: 0;
+  }
+</style>

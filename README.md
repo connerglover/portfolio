@@ -151,9 +151,37 @@ public/deck-pages/                generated slide images, one folder per PDF
 scripts/render_decks.py           generates the two lines above
 ```
 
-Styling is deliberately plain for now — everything is driven by CSS custom
-properties in `:root` at the top of `global.css`, so a real theme can mostly be
-a token swap plus per-component polish.
+## The theme
+
+Near-black and emerald, dark only. Committing to one palette means it can be
+tuned properly rather than compromised to keep a second one working — every
+colour, spacing and motion value is a custom property at the top of
+`src/styles/global.css`.
+
+Type is Space Grotesk for headings, Inter for body, and JetBrains Mono for data
+— grades, course numbers, dates, counts. All three are self-hosted through
+Fontsource, so the site does not depend on a font CDN.
+
+Three deliberate moments, on an otherwise quiet base:
+
+- **Cursor glow** (`CursorGlow.astro`) — a soft emerald light tracks the pointer
+  on the home page. Off for coarse pointers and under reduced-motion.
+- **Spotlight list** (`SpotlightList.astro`) — hovering one row dims its
+  siblings. Pure CSS, using `:has()` on the list; on touch every row stays at
+  full strength.
+- **View transitions** — pages cross-fade rather than hard-cutting, via Astro's
+  `<ClientRouter />`.
+
+The home page is the only one using the split layout — a pinned identity column
+on the left, content scrolling on the right. Pass `layout="split"` to
+`BaseLayout` for it. Every other page carries too much of its own structure to
+give up a third of the width, so they use the standard top nav.
+
+Unit pages collapse each assignment into a row that expands in place, built on
+`<details>` so it works with no JavaScript. They default to closed — a unit runs
+to sixteen assignments and each can carry a PDF viewer, so opening them all by
+default buries the list and loads a lot of images nobody asked for. Rows open
+independently rather than as an exclusive accordion.
 
 ---
 

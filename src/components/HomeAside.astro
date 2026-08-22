@@ -1,0 +1,193 @@
+---
+/**
+ * The pinned left column on the home page: who you are, where to go, and the
+ * links out. On wide screens it sticks and never scrolls; below 62rem it
+ * unpins and becomes a normal header above the content.
+ *
+ * Section links track the reader's scroll position, so the column doubles as
+ * a progress indicator for the page.
+ */
+import { site } from '../data/site';
+
+const sections = [
+  { id: 'about', label: 'About' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'coursework', label: 'Coursework' },
+];
+
+const elsewhere = [
+  { href: '/projects/', label: 'All projects' },
+  { href: '/school/', label: 'All coursework' },
+  { href: '/about/', label: 'Academic record' },
+];
+---
+
+<aside class="aside" slot="aside">
+  <div class="inner">
+    <div class="identity">
+      <h1>{site.name}</h1>
+      <p class="role">Engineering student</p>
+      <p class="blurb">
+        Carmel Catholic High School, working through the Project Lead The Way
+        engineering sequence.
+      </p>
+    </div>
+
+    <nav class="sections" aria-label="Sections">
+      <ul>
+        {sections.map((s) => (
+          <li>
+            <a href={`#${s.id}`} data-section={s.id}>
+              <span class="rule"></span>
+              <span class="label">{s.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <nav class="elsewhere" aria-label="Pages">
+      <ul>
+        {elsewhere.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <ul class="social">
+      {site.github && <li><a href={site.github} target="_blank" rel="noopener noreferrer">GitHub</a></li>}
+      {site.linkedin && <li><a href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>}
+      {site.email && <li><a href={`mailto:${site.email}`}>Email</a></li>}
+    </ul>
+  </div>
+</aside>
+
+<style>
+  .aside { padding-block: 3rem 1rem; }
+
+  @media (min-width: 62rem) {
+    .aside {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding-block: 6rem 3rem;
+      display: flex;
+    }
+    .inner {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+    }
+    .elsewhere { margin-top: auto; }
+  }
+
+  h1 {
+    font-size: clamp(2.1rem, 1.4rem + 2vw, 2.9rem);
+    margin: 0;
+    letter-spacing: -0.035em;
+  }
+  .role {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    color: var(--text);
+    margin: 0.3rem 0 0.9rem;
+  }
+  .blurb {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    max-width: 26ch;
+    margin: 0;
+  }
+
+  /* ---------- section links ---------- */
+
+  .sections { margin-top: 2.5rem; }
+  .sections ul,
+  .elsewhere ul,
+  .social { list-style: none; margin: 0; padding: 0; }
+
+  .sections a {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.45rem 0;
+    color: var(--text-faint);
+    border: 0;
+  }
+  .sections .rule {
+    display: block;
+    width: 1.75rem;
+    height: 1px;
+    background: currentColor;
+    transition: width var(--dur) var(--ease), background var(--dur) var(--ease);
+  }
+  .sections .label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color var(--dur) var(--ease);
+  }
+  .sections a:hover,
+  .sections a.active { color: var(--text); }
+  .sections a:hover .rule,
+  .sections a.active .rule { width: 3.5rem; background: var(--accent); }
+  .sections a.active .label { color: var(--accent-bright); }
+
+  /* ---------- other pages + social ---------- */
+
+  .elsewhere { margin-top: 2.5rem; }
+  .elsewhere a {
+    display: block;
+    padding: 0.2rem 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    border: 0;
+  }
+  .elsewhere a:hover { color: var(--accent-bright); }
+
+  .social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.1rem;
+    margin-top: 1.75rem;
+  }
+  .social a {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    border: 0;
+  }
+  .social a:hover { color: var(--accent-bright); }
+</style>
+
+<script>
+  // Highlight whichever section the reader is currently in.
+  const links = document.querySelectorAll<HTMLAnchorElement>('.sections a[data-section]');
+  const targets = Array.from(links)
+    .map((a) => document.getElementById(a.dataset.section!))
+    .filter((el): el is HTMLElement => el !== null);
+
+  if (targets.length > 0) {
+    let queued = false;
+
+    const mark = () => {
+      queued = false;
+      // The section whose top has most recently passed a line a third of the
+      // way down the viewport.
+      const line = window.innerHeight / 3;
+      let current = targets[0].id;
+      for (const el of targets) {
+        if (el.getBoundingClientRect().top <= line) current = el.id;
+      }
+      links.forEach((a) => a.classList.toggle('active', a.dataset.section === current));
+    };
+
+    window.addEventListener('scroll', () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(mark);
+    }, { passive: true });
+    mark();
+  }
+</script>

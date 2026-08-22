@@ -1,80 +1,100 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HomeAside from '../components/HomeAside.astro';
+import SpotlightList from '../components/SpotlightList.astro';
 import { getCollection } from 'astro:content';
-import { courses, courseTimeline, site } from '../data/site';
+import { courses, courseTimeline } from '../data/site';
 
 const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
-const featured = projects.filter((p) => p.data.featured).slice(0, 3);
-const shown = featured.length ? featured : projects.slice(0, 3);
 
 const school = await getCollection('school');
 const assignmentCount = school.length;
-const deckCount = school.filter((a) => a.data.decks.length > 0).length;
+const withWork = school.filter((a) => a.data.decks.length > 0).length;
+
+const courseRows = courses.map((c) => {
+  const items = school.filter((a) => a.data.courseSlug === c.slug);
+  const done = items.filter((a) => a.data.status === 'complete').length;
+  const upcoming = items.filter((a) => a.data.status === 'not-started').length;
+  return { ...c, total: items.length, done, upcoming };
+});
+
+const alsoTaken = courseTimeline.filter((c) => !('slug' in c));
 ---
 
-<BaseLayout>
-  <div class="wrap stack">
-    <section class="prose">
-      <p class="eyebrow">{site.tagline}</p>
-      <h1>{site.name}</h1>
-      <p>
-        Engineering student at Carmel Catholic High School. This site collects my
-        PLTW coursework, personal software and hardware projects, and the things
-        I&rsquo;ve picked up along the way.
-      </p>
-    </section>
+<BaseLayout layout="split">
+  <HomeAside slot="aside" />
 
-    <hr />
+  <section id="about" class="lede">
+    <p>
+      I build things in and out of class — a speedrun retiming tool used by
+      moderators, a Chrome extension that fixes a tedious workflow, a tiny house
+      designed in Revit, and a brownfield renovated into a mixed-use building.
+    </p>
+    <p class="muted">
+      This site collects all of it: {assignmentCount} assignments across{' '}
+      {courses.length} PLTW engineering courses, {withWork} of them with the
+      submitted work attached, plus the projects I&rsquo;ve built on my own time.
+    </p>
+  </section>
 
-    <section>
-      <h2>Projects</h2>
-      <p class="muted">Personal work — built outside of class.</p>
-      {shown.length ? (
-        <div class="grid">
-          {shown.map((p) => (
-            <article class="card">
-              <h3><a href={`/projects/${p.id}/`}>{p.data.title}</a></h3>
-              <p class="muted">{p.data.summary}</p>
-              {p.data.tech.length > 0 && (
-                <ul class="tag-row">
-                  {p.data.tech.slice(0, 4).map((t) => <li class="tag">{t}</li>)}
-                </ul>
-              )}
-            </article>
-          ))}
-        </div>
-      ) : (
-        <p class="muted">
-          Nothing here yet — add a Markdown file to{' '}
-          <code>src/content/projects/</code> to publish your first one.
-        </p>
-      )}
-      <p><a href="/projects/">All projects &rarr;</a></p>
-    </section>
+  <section id="projects">
+    <h2 class="section-head"><span class="num">01</span> Projects</h2>
+    <SpotlightList
+      items={projects.map((p) => ({
+        href: `/projects/${p.id}/`,
+        title: p.data.title,
+        summary: p.data.summary,
+        meta: p.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' }),
+        tags: p.data.tech.slice(0, 4),
+      }))}
+    />
+    <p class="more"><a href="/projects/">All projects &rarr;</a></p>
+  </section>
 
-    <hr />
-
-    <section>
-      <h2>Engineering coursework</h2>
-      <p class="muted">
-        {assignmentCount} assignments across {courses.length} PLTW courses, {deckCount} with
-        the submitted work attached.
-      </p>
-      <div class="grid">
-        {courses.map((c) => (
-          <article class="card">
-            <p class="eyebrow">{c.short} &middot; {c.credit}</p>
-            <h3><a href={`/school/${c.slug}/`}>{c.name}</a></h3>
-            <p class="muted">{c.blurb}</p>
-          </article>
-        ))}
-      </div>
-      <p class="muted" style="margin-top:1rem">
-        Also taken:{' '}
-        {courseTimeline.filter((c) => !('slug' in c)).map((c) => `${c.name} (${c.credit})`).join(', ')}.
-      </p>
-    </section>
-  </div>
+  <section id="coursework">
+    <h2 class="section-head"><span class="num">02</span> Coursework</h2>
+    <SpotlightList
+      items={courseRows.map((c) => ({
+        href: `/school/${c.slug}/`,
+        title: c.name,
+        summary: c.blurb,
+        meta: c.short,
+        tags: [
+          c.credit,
+          c.upcoming > 0 ? `${c.done}/${c.total} done` : `${c.total} assignments`,
+        ],
+      }))}
+    />
+    <p class="more muted">
+      Also taken: {alsoTaken.map((c) => `${c.name} (${c.credit})`).join(', ')}.
+    </p>
+    <p class="more"><a href="/school/">All coursework &rarr;</a></p>
+  </section>
 </BaseLayout>
+
+<style>
+  section + section { margin-top: 4.5rem; }
+
+  .lede p { font-size: 1.08rem; max-width: 54ch; }
+  .lede p:first-child { color: var(--text); }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin: 0 0 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-head .num { color: var(--accent); }
+
+  .more { margin: 1.25rem 0 0; font-size: 0.92rem; }
+</style>

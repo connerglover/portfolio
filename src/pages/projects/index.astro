@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SpotlightList from '../../components/SpotlightList.astro';
 import { getCollection } from 'astro:content';
 
 const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
@@ -29,20 +30,16 @@ const fmt = (d: Date) =>
         <code>_template.md</code> for the frontmatter.
       </p>
     ) : (
-      <div class="grid">
-        {projects.map((p) => (
-          <article class="card">
-            <p class="eyebrow">{fmt(p.data.date)}</p>
-            <h3><a href={`/projects/${p.id}/`}>{p.data.title}</a></h3>
-            <p class="muted">{p.data.summary}</p>
-            {p.data.tech.length > 0 && (
-              <ul class="tag-row">
-                {p.data.tech.map((t) => <li class="tag">{t}</li>)}
-              </ul>
-            )}
-          </article>
-        ))}
-      </div>
+      <SpotlightList
+        items={projects.map((p) => ({
+          href: `/projects/${p.id}/`,
+          title: p.data.title,
+          summary: p.data.summary,
+          meta: fmt(p.data.date),
+          tags: p.data.tech,
+        }))}
+      />
     )}
+
   </div>
 </BaseLayout>

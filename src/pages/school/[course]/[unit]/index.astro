@@ -25,14 +25,11 @@ export const getStaticPaths = (async () => {
 
 const { course, unit, items } = Astro.props;
 
-// Render each assignment's Markdown body up front — Astro components can't
-// call render() inside a template expression.
+// Astro components can't call render() inside a template expression.
 const rendered = await Promise.all(
   items.map(async (item) => ({ item, Content: (await render(item)).Content })),
 );
 
-// `courses` is `as const`, so each course's `units` is a narrow tuple.
-// Widen it so indexOf accepts any unit slug.
 const done = items.filter((a) => a.data.status === 'complete').length;
 const upcoming = items.filter((a) => a.data.status === 'not-started').length;
 
@@ -40,45 +37,72 @@ const units: readonly string[] = course.units;
 const idx = units.indexOf(unit);
 const prev = idx > 0 ? units[idx - 1] : null;
 const next = idx < units.length - 1 ? units[idx + 1] : null;
+
+/** A short summary of what's attached, shown on the collapsed row. */
+const attachments = (item: (typeof items)[number]) => {
+  const bits: string[] = [];
+  const decks = item.data.decks.length;
+  const photos = item.data.images.length;
+  if (decks) bits.push(`${decks} file${decks > 1 ? 's' : ''}`);
+  if (photos) bits.push(`${photos} photo${photos > 1 ? 's' : ''}`);
+  if (item.data.files.length) bits.push('drive');
+  return bits.join(' · ');
+};
 ---
 
 <BaseLayout
   title={`${course.short} ${unitLabel(unit)}`}
   description={`${course.name} — ${unitLabel(unit)} coursework.`}
 >
-  <div class="wrap stack">
+  <div class="wrap">
     <p class="eyebrow">
       <a href="/school/">School</a> / <a href={`/school/${course.slug}/`}>{course.short}</a>
     </p>
 
-    <section class="prose">
+    <header class="unit-head">
       <h1>{unitLabel(unit)}</h1>
       <p class="muted">
         {course.name}
-        {upcoming > 0 && <> &middot; {done} of {items.length} done</>}
+        <span class="sep">·</span>
+        {upcoming > 0 ? `${done} of ${items.length} done` : `${items.length} assignments`}
       </p>
-    </section>
+    </header>
 
-    {rendered.length === 0 && (
-      <p class="muted">No assignments recorded for this unit.</p>
-    )}
+    {rendered.length === 0 && <p class="muted">No assignments recorded for this unit.</p>}
 
-    {rendered.map(({ item, Content }) => (
-      <article class:list={['assignment', { upcoming: item.data.status === 'not-started' }]}>
-        <h2 id={item.id}>
-          {item.data.title}
-          {item.data.status === 'in-progress' && <span class="chip">In progress</span>}
-          {item.data.status === 'not-started' && <span class="chip">Not started</span>}
-        </h2>
-        {item.data.partners.length > 0 && (
-          <p class="muted byline">With {item.data.partners.join(', ')}</p>
-        )}
-        <div class="prose"><Content /></div>
-        <Gallery images={item.data.images} />
-        {item.data.decks.map((d) => <Deck pdf={d.pdf} title={d.title} />)}
-        {item.data.files.map((f) => <DriveFile id={f.id} title={f.title} />)}
-      </article>
-    ))}
+    <ol class="assignments">
+      {rendered.map(({ item, Content }) => {
+        const hasBody = item.data.status !== 'not-started';
+        const files = attachments(item);
+        return (
+          <li>
+            <details>
+              <summary>
+                <span class="marker" aria-hidden="true"></span>
+                <span class="title">{item.data.title}</span>
+                <span class="chips">
+                  {item.data.status === 'in-progress' && <span class="chip warn">In progress</span>}
+                  {item.data.status === 'not-started' && <span class="chip">Not started</span>}
+                  {files && <span class="files">{files}</span>}
+                </span>
+              </summary>
+
+              <div class="body">
+                {item.data.partners.length > 0 && (
+                  <p class="byline">With {item.data.partners.join(', ')}</p>
+                )}
+                {hasBody || item.body?.trim() ? (
+                  <div class="prose"><Content /></div>
+                ) : null}
+                <Gallery images={item.data.images} />
+                {item.data.decks.map((d) => <Deck pdf={d.pdf} title={d.title} />)}
+                {item.data.files.map((f) => <DriveFile id={f.id} title={f.title} />)}
+              </div>
+            </details>
+          </li>
+        );
+      })}
+    </ol>
 
     <nav class="unit-nav">
       {prev && <a href={`/school/${course.slug}/${prev}/`}>&larr; {unitLabel(prev)}</a>}
@@ -88,46 +112,117 @@ const next = idx < units.length - 1 ? units[idx + 1] : null;
 </BaseLayout>
 
 <style>
-  .assignment {
+  .unit-head { margin-bottom: 2.25rem; }
+  .unit-head h1 { margin-bottom: 0.35rem; }
+  .unit-head p { margin: 0; font-size: 0.95rem; }
+  .sep { color: var(--text-faint); margin-inline: 0.4rem; }
+
+  /* ---------- collapsible assignments ---------- */
+
+  /* Rows collapse by default. A unit runs to sixteen assignments and each can
+     carry a PDF viewer, so expanded-by-default buries the list and loads a lot
+     of images nobody asked for. Built on <details>, so it works with no
+     JavaScript and the browser handles the semantics. Rows open independently
+     rather than as an exclusive accordion — closing something the reader
+     didn't ask to close is more surprising than a longer page. */
+  .assignments {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     border-top: 1px solid var(--border);
-    padding-top: 1.5rem;
   }
-  .assignment h2 { margin-top: 0; scroll-margin-top: 1rem; }
+  .assignments li { border-bottom: 1px solid var(--border); }
 
-  /* Work that is still ahead on the schedule is listed so the unit reads as a
-     roadmap, but kept quiet so it does not compete with what is finished. */
-  .assignment.upcoming { padding-top: 1rem; }
-  .assignment.upcoming h2 {
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: var(--text-muted);
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.95rem 0.5rem;
+    cursor: pointer;
+    list-style: none;
+    transition: background var(--dur) var(--ease);
   }
-  .assignment.upcoming :global(p) {
-    color: var(--text-muted);
-    font-size: 0.92rem;
-  }
+  summary::-webkit-details-marker { display: none; }
+  summary:hover { background: var(--bg-subtle); }
+  summary:focus-visible { outline-offset: -2px; }
 
-  .chip {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 0.6rem;
+  .marker {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 1px solid var(--border-strong);
+    transition: all var(--dur) var(--ease);
+  }
+  details[open] .marker,
+  summary:hover .marker { border-color: var(--accent); background: var(--accent); }
+
+  .title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  details[open] .title { color: var(--accent-bright); }
+
+  .chips {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex: none;
+  }
+  .files {
+    font-family: var(--font-mono);
     font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 0.63rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-muted);
     border: 1px solid var(--border);
-    background: var(--bg-subtle);
     border-radius: 999px;
-    padding: 0.1rem 0.55rem;
+    padding: 0.1rem 0.5rem;
+    white-space: nowrap;
   }
-  .byline { font-size: 0.9rem; margin-top: -0.25rem; }
+  .chip.warn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, transparent); }
+
+  .body {
+    padding: 0.25rem 0.5rem 1.75rem 1.9rem;
+    animation: reveal 240ms var(--ease);
+  }
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(-4px); }
+  }
+  .body > :first-child { margin-top: 0; }
+  .byline {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    margin: 0 0 0.75rem;
+  }
+
+  @media (max-width: 34rem) {
+    .chips { display: none; }
+    .body { padding-left: 0.5rem; }
+  }
+
+  /* ---------- unit nav ---------- */
+
   .unit-nav {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
     border-top: 1px solid var(--border);
-    padding-top: 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
   }
   .unit-nav .next { margin-left: auto; }
 </style>

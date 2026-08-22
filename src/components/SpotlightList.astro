@@ -1,0 +1,111 @@
+---
+/**
+ * A list where hovering one row dims its siblings.
+ *
+ * Micah Lindley's project list does this and it is the single most memorable
+ * thing on his site. It works because the effect is on the *group*, not the
+ * row: the whole list recedes and one item comes forward, which reads as
+ * focus rather than as a hover style.
+ *
+ * Pure CSS — `:has()` on the list plus a sibling selector. No JavaScript, and
+ * on touch, where there is no hover, every row simply stays at full strength.
+ */
+interface Item {
+  href: string;
+  title: string;
+  summary: string;
+  /** Short right-aligned label — a date, a course code. */
+  meta?: string;
+  tags?: string[];
+}
+interface Props {
+  items: Item[];
+}
+const { items } = Astro.props;
+---
+
+<ul class="spotlight">
+  {items.map((item) => (
+    <li>
+      <a href={item.href}>
+        <div class="head">
+          <h3>{item.title}</h3>
+          {item.meta && <span class="meta">{item.meta}</span>}
+        </div>
+        <p class="summary">{item.summary}</p>
+        {item.tags && item.tags.length > 0 && (
+          <ul class="tag-row">
+            {item.tags.map((t) => <li class="tag">{t}</li>)}
+          </ul>
+        )}
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .spotlight {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .spotlight a {
+    display: block;
+    padding: 1.15rem 1.25rem;
+    margin-inline: -1.25rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    color: inherit;
+    transition:
+      opacity var(--dur) var(--ease),
+      background var(--dur) var(--ease),
+      border-color var(--dur) var(--ease),
+      transform var(--dur) var(--ease);
+  }
+
+  /* The group recedes, the hovered row comes forward. */
+  @media (hover: hover) {
+    .spotlight:has(a:hover) a { opacity: 0.42; }
+    .spotlight:has(a:hover) a:hover { opacity: 1; }
+  }
+  .spotlight a:hover,
+  .spotlight a:focus-visible {
+    background: var(--bg-subtle);
+    border-color: var(--border);
+    transform: translateX(3px);
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  h3 {
+    font-size: 1.08rem;
+    margin: 0;
+    color: var(--text);
+    transition: color var(--dur) var(--ease);
+  }
+  .spotlight a:hover h3,
+  .spotlight a:focus-visible h3 { color: var(--accent-bright); }
+
+  .meta {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  .summary {
+    margin: 0.4rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.94rem;
+    max-width: 62ch;
+  }
+</style>
