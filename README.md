@@ -27,6 +27,7 @@ Then open <http://localhost:4321>. Edits to content and components hot-reload.
 | `npm run build` | Production build into `dist/` |
 | `npm run preview` | Serve the built `dist/` locally |
 | `npm run check` | Type-check `.astro` files and content frontmatter |
+| `npm run decks` | Re-render deck PDFs into slide images (needs Python) |
 
 ---
 
@@ -83,6 +84,8 @@ and the unit ordering.
 worksheets and quizzes all render through the same viewer. `images:` renders as
 a single full-width photo, or as a thumbnail grid once there is more than one.
 
+**After adding or replacing a PDF, run `npm run decks`.** See below.
+
 ---
 
 ## Before the first deploy
@@ -134,15 +137,48 @@ src/
   data/site.ts                    name, contact, course list and ordering
   layouts/BaseLayout.astro        <head>, nav, footer, skip link
   components/                     Nav, Footer, Deck, DriveFile, Gallery
+  data/decks.json                 generated deck manifest — do not hand-edit
   pages/                          routes (file-based)
   styles/global.css               design tokens + base styles
 public/images/                    self-hosted images
 public/decks/                     PDF attachments — decks, reports, worksheets
+public/deck-pages/                generated slide images, one folder per PDF
+scripts/render_decks.py           generates the two lines above
 ```
 
 Styling is deliberately plain for now — everything is driven by CSS custom
 properties in `:root` at the top of `global.css`, so a real theme can mostly be
 a token swap plus per-component polish.
+
+---
+
+## How decks are displayed
+
+Decks render as a slideshow — one slide in view, arrows, a counter, fullscreen,
+keyboard and swipe — rather than in a browser PDF frame. A PDF in an `<iframe>`
+comes wrapped in the browser's own toolbar, sidebar and print controls, which
+reads as a document viewer rather than an embedded deck, and most mobile
+browsers refuse to render one inline at all.
+
+To make that work, `scripts/render_decks.py` rasterises every page of every PDF
+in `public/decks/` to a WebP image in `public/deck-pages/`, and writes
+`src/data/decks.json` so the component knows the page count and aspect ratio.
+All 46 decks come to 275 pages and about 18 MB.
+
+```bash
+npm run decks
+```
+
+It only re-renders PDFs whose contents changed, so it is quick to re-run. Add
+`--force` to redo everything.
+
+**The rendered pages are committed on purpose.** Production builds only run
+`npm run build`, with no Python available, so this cannot run at deploy time.
+If you add a PDF and forget to run it, that one deck quietly falls back to the
+old browser PDF frame — it will still work, it just won't match the others.
+
+The PDFs stay where they are and are still linked from each viewer, so the
+original file is always one click away.
 
 ---
 
