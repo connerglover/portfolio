@@ -2,7 +2,7 @@
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
-import Slides from '../../../../components/Slides.astro';
+import Deck from '../../../../components/Deck.astro';
 import DriveFile from '../../../../components/DriveFile.astro';
 import { courses, unitLabel } from '../../../../data/site';
 
@@ -69,7 +69,7 @@ const next = idx < units.length - 1 ? units[idx + 1] : null;
             <img src={img.src} alt={img.alt} loading="lazy" />
           </figure>
         ))}
-        {item.data.decks.map((d) => <Slides id={d.id} title={d.title} />)}
+        {item.data.decks.map((d) => <Deck pdf={d.pdf} title={d.title} />)}
         {item.data.files.map((f) => <DriveFile id={f.id} title={f.title} />)}
       </article>
     ))}

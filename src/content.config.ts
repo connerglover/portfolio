@@ -19,10 +19,17 @@ const school = defineCollection({
     unit: z.string(),
     // Sorts assignments within a unit. Mirrors the PLTW numbering.
     order: z.number(),
-    // Surviving Google Slides decks. Decks the school deleted were dropped
-    // during the migration, so anything listed here is known to still load.
+    // Slide decks, self-hosted as PDFs under public/decks/. Exported out of
+    // Google Slides during the migration; `id` is the original Slides file id,
+    // kept for provenance only (those links are not publicly readable).
     decks: z
-      .array(z.object({ id: z.string(), title: z.string().optional() }))
+      .array(
+        z.object({
+          pdf: z.string(),
+          title: z.string().optional(),
+          id: z.string().optional(),
+        }),
+      )
       .default([]),
     // Surviving Google Drive attachments (PDFs, docs, archives).
     files: z

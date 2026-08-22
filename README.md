@@ -58,8 +58,9 @@ courseSlug: ied          # ied | poe | cea
 unit: unit-1
 order: 140               # sorts within the unit; mirrors PLTW numbering
 decks:                   # optional, repeatable
-  - id: 110TTO-lxx8_hgibizfYrAfJu1Zv_wuQ58MS64lHrUwQ
+  - pdf: '/decks/ied/unit-1/140-1-4-product-improvement.pdf'
     title: 'Product Improvement - Coffee cup'
+    id: 110TTO-lxx8...   # original Slides id, provenance only
 files:                   # optional — Google Drive attachments
   - id: 1_PFGPlEQvse1tr8Sd_fe-z6exlm39tCudKqEVkSst-I
     title: 'Machine Control Deliverables'
@@ -128,10 +129,11 @@ src/
   content.config.ts               frontmatter schemas for both collections
   data/site.ts                    name, contact, course list and ordering
   layouts/BaseLayout.astro        <head>, nav, footer, skip link
-  components/                     Nav, Footer, Slides, DriveFile
+  components/                     Nav, Footer, Deck, DriveFile
   pages/                          routes (file-based)
   styles/global.css               design tokens + base styles
 public/images/                    self-hosted images
+public/decks/                     slide decks exported to PDF (~40 MB)
 ```
 
 Styling is deliberately plain for now — everything is driven by CSS custom
@@ -150,12 +152,20 @@ gone from the content rather than left as broken frames. The 20 that still
 resolve are preserved. Assignments whose only content was a deleted deck are
 kept, with a note that no write-up was recorded.
 
-**The surviving decks are not publicly shared.** They currently return 401 to
-anyone who isn't signed into your school account, so visitors will see a
-permission error. They also disappear when the account does. Fixing this means
-either re-sharing each deck as "Anyone with the link — Viewer", or exporting
-them to PDF/images and self-hosting them here. The second option is the one
-that survives graduation.
+**The surviving decks are self-hosted now.** The Google Slides originals are
+locked to the school account — they return 401 to anyone not signed into it,
+and they vanish when the account does. All 19 were exported to PDF and live in
+`public/decks/`, so nothing on this site depends on Google any more. The
+original Slides file id is kept in each entry's frontmatter as `id:`, for
+provenance only; nothing links to it.
+
+The one exception is a single surviving Google Drive attachment on PoE 3.1.1,
+which is still linked out rather than mirrored.
 
 Assignment write-ups are reproduced as written, typos included. The "About me"
 text is from freshman year and is out of date.
+
+The exported filenames credited several collaborators the old site never
+listed — those were folded into `partners:`. A few decks name others on their
+title slide (4.1.1 credits Claire Susanto, for example) that aren't captured
+in frontmatter yet.
