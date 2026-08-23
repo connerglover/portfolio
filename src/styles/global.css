@@ -62,9 +62,19 @@
    * darken. The shadow is kept anyway, at a higher alpha than usual, for the
    * little it picks up against the dot field. */
   --glass-blur: 12px;
-  --glass-tint: rgb(255 255 255 / 0.05);
-  --glass-tint-lit: rgb(255 255 255 / 0.09);
-  --glass-rim: rgb(255 255 255 / 0.1);
+
+  /* The film is tinted, not neutral. A white film reads as grey against a
+     green-tinted palette and disagrees with the emerald border a hovered row
+     gets — which is the whole reason the panes looked off. Weakening it alone
+     would not have fixed that; it had to join the palette.
+     The alphas are set so the film composites over --bg to very close to the
+     surface colours the theme already uses: the resting pane lands on
+     --bg-subtle and the lit one on --bg-raised, reached by catching light
+     rather than by painting a lighter box. */
+  --glass-light: 214 255 240;
+  --glass-tint: rgb(var(--glass-light) / 0.035);
+  --glass-tint-lit: rgb(var(--glass-light) / 0.065);
+  --glass-rim: rgb(var(--glass-light) / 0.09);
   --glass-shadow: 0 4px 30px rgb(0 0 0 / 0.35);
   --glass-shadow-lit: 0 10px 40px rgb(0 0 0 / 0.5);
 
