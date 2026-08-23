@@ -27,7 +27,7 @@ const { items } = Astro.props;
 <ul class="spotlight">
   {items.map((item) => (
     <li>
-      <a href={item.href} class="glass-row">
+      <a href={item.href} class="glass-row tilt">
         <div class="head">
           <h3>{item.title}</h3>
           {item.meta && <span class="meta">{item.meta}</span>}
@@ -50,6 +50,9 @@ const { items } = Astro.props;
     padding: 0;
     display: flex;
     flex-direction: column;
+    /* The rows carry a fill now, so flush against each other they read as one
+       long panel rather than three rows. */
+    gap: 0.5rem;
   }
 
   .spotlight a {
@@ -57,14 +60,18 @@ const { items } = Astro.props;
     padding: 1.15rem 1.25rem;
     margin-inline: -1.25rem;
     color: inherit;
-    /* The pane itself is .glass-row in global.css. Only the nudge is local.
-       Same whisper of resting fill as the index rows — no tilt, though: these
-       sit inside running prose, where a row leaning out of the page would
-       pull focus off the writing around it. */
+    /* The pane and the tilt are both shared, from global.css. Same whisper of
+       resting fill as the index rows. */
     --glass-rest: var(--glass-tint);
-    transition:
-      var(--glass-transition),
-      transform var(--dur) var(--ease);
+
+    /* Larger angles than the index rows for the same apparent depth, not more
+       of it: these sit in the split layout's content column at roughly 744px
+       where the index rows run about 1264px, and a narrower row swings its far
+       edge through less depth for the same rotation. */
+    --tilt-x: 4.5deg;
+    --tilt-y: 2.5deg;
+
+    transition: var(--glass-transition);
   }
 
   /* The group recedes, the hovered row comes forward. */
@@ -72,9 +79,11 @@ const { items } = Astro.props;
     .spotlight:has(a:hover) a { opacity: 0.42; }
     .spotlight:has(a:hover) a:hover { opacity: 1; }
   }
+  /* A variable, not a `transform` — a second transform declaration would
+     replace the shared tilt outright and flatten the row. */
   .spotlight a:hover,
   .spotlight a:focus-visible {
-    transform: translateX(3px);
+    --nudge: 3px;
   }
 
   .head {

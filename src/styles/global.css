@@ -84,7 +84,11 @@
     backdrop-filter var(--dur) var(--ease),
     -webkit-backdrop-filter var(--dur) var(--ease),
     box-shadow var(--dur) var(--ease),
-    border-color var(--dur) var(--ease);
+    border-color var(--dur) var(--ease),
+    /* Shorter than the rest, because this one tracks the pointer rather than
+       responding to a state change: long enough to smooth the arrival, short
+       enough that the pane does not lag behind the cursor. */
+    transform 130ms ease-out;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dur: 220ms;
@@ -342,6 +346,28 @@ main { flex: 1 0 auto; padding-block: 3rem 5rem; }
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
   mask-composite: exclude;
+}
+
+/*
+ * Turns toward the cursor. --tx/--ty come from the pointer script as numbers
+ * from -1 to 1; the angles are the list's own, because the right angle depends
+ * on the shape being turned — a wide row swings its far edge through a lot of
+ * depth for very little rotation, a narrow one through much less.
+ *
+ * The nudge rides in the same declaration rather than a separate `transform`
+ * on hover, since transform is one property and a second declaration would
+ * simply replace this one and take the tilt with it.
+ *
+ * There is no mounted/unmounted state: a pane is transformed at all times and
+ * rests at zero, so arriving and leaving are ordinary eased changes and there
+ * is no seam. Without the script nothing sets --tx/--ty and this stays flat.
+ */
+.tilt {
+  transform:
+    perspective(1200px)
+    translateX(var(--nudge, 0px))
+    rotateX(calc(var(--ty, 0) * var(--tilt-x, 4deg) * -1))
+    rotateY(calc(var(--tx, 0) * var(--tilt-y, 1.5deg)));
 }
 
 /* An element inside a pane that wants the light placed against its own box
