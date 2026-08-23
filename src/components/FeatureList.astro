@@ -34,7 +34,7 @@ const { items, numbered = true } = Astro.props;
 <ul class="feature">
   {items.map((item, i) => (
     <li>
-      <a href={item.href}>
+      <a href={item.href} class="glass-row">
         {numbered && <span class="index">{String(i + 1).padStart(2, '0')}</span>}
         <div class="text">
           {item.meta && <p class="meta">{item.meta}</p>}
@@ -69,39 +69,23 @@ const { items, numbered = true } = Astro.props;
     align-items: flex-start;
     gap: 1.5rem;
     padding: 1.6rem 1.75rem;
-    /* Frosted rather than a solid fill: the dot field and the cursor trail
-       read through the row muted instead of stopping dead at its edge. The
-       material is the glass token set in global.css. */
-    border: 1px solid var(--glass-rim);
-    border-radius: var(--radius);
-    background: var(--glass-tint);
-    box-shadow: var(--glass-shadow);
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    backdrop-filter: blur(var(--glass-blur));
     color: inherit;
+    /* The pane itself is .glass-row in global.css — the same one the home
+       page uses. Only the growth is local. */
     transition:
       padding var(--dur) var(--ease),
-      opacity var(--dur) var(--ease),
-      background var(--dur) var(--ease),
-      box-shadow var(--dur) var(--ease),
-      border-color var(--dur) var(--ease);
+      var(--glass-transition);
   }
 
   /* The group recedes so the hovered row can come forward. */
   @media (hover: hover) {
-    .feature:has(a:hover) > li > a { opacity: 0.32; }
+    .feature:has(a:hover) > li > a { opacity: 0.42; }
     .feature:has(a:hover) > li > a:hover { opacity: 1; }
   }
 
   .feature > li > a:hover,
   .feature > li > a:focus-visible {
     padding-block: 2.4rem;
-    /* Brighter film and a longer shadow, so the hovered row lifts off the
-       group rather than only growing. Still nowhere near opaque — the light
-       under the cursor has to survive exactly where you are looking. */
-    background: var(--glass-tint-lit);
-    box-shadow: var(--glass-shadow-lit);
-    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
   }
 
   /* ---------- number rail ---------- */

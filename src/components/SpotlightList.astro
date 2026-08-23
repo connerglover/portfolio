@@ -27,7 +27,7 @@ const { items } = Astro.props;
 <ul class="spotlight">
   {items.map((item) => (
     <li>
-      <a href={item.href}>
+      <a href={item.href} class="glass-row">
         <div class="head">
           <h3>{item.title}</h3>
           {item.meta && <span class="meta">{item.meta}</span>}
@@ -56,21 +56,10 @@ const { items } = Astro.props;
     display: block;
     padding: 1.15rem 1.25rem;
     margin-inline: -1.25rem;
-    border: 1px solid transparent;
-    border-radius: var(--radius);
     color: inherit;
-    /* Blurs nothing at rest — a row here is meant to be invisible until you
-       reach it. Written as 0px rather than left off so the blur has a value to
-       animate from when the row frosts over on hover. */
-    -webkit-backdrop-filter: blur(0px);
-    backdrop-filter: blur(0px);
+    /* The pane itself is .glass-row in global.css. Only the nudge is local. */
     transition:
-      opacity var(--dur) var(--ease),
-      background var(--dur) var(--ease),
-      backdrop-filter var(--dur) var(--ease),
-      -webkit-backdrop-filter var(--dur) var(--ease),
-      box-shadow var(--dur) var(--ease),
-      border-color var(--dur) var(--ease),
+      var(--glass-transition),
       transform var(--dur) var(--ease);
   }
 
@@ -81,15 +70,6 @@ const { items } = Astro.props;
   }
   .spotlight a:hover,
   .spotlight a:focus-visible {
-    /* Frosted rather than the flat fill this used to be — the row lifts off
-       the dot field instead of covering a patch of it. Same glass as the
-       index rows, one step brighter because there is nothing else here
-       marking the row out. */
-    background: var(--glass-tint-lit);
-    box-shadow: var(--glass-shadow);
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    backdrop-filter: blur(var(--glass-blur));
-    border-color: var(--glass-rim);
     transform: translateX(3px);
   }
 

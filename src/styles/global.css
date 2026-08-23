@@ -63,20 +63,25 @@
    * little it picks up against the dot field. */
   --glass-blur: 12px;
 
-  /* The film is tinted, not neutral. A white film reads as grey against a
-     green-tinted palette and disagrees with the emerald border a hovered row
-     gets — which is the whole reason the panes looked off. Weakening it alone
-     would not have fixed that; it had to join the palette.
-     The alphas are set so the film composites over --bg to very close to the
-     surface colours the theme already uses: the resting pane lands on
-     --bg-subtle and the lit one on --bg-raised, reached by catching light
-     rather than by painting a lighter box. */
+  /* The film is tinted, not neutral: a white film reads as grey against a
+     green-tinted palette. The alphas are set so it composites over --bg to
+     within a channel or two of the surface colours the theme already uses —
+     a lit pane lands on --bg-raised and its rim on --border — reached by
+     catching light rather than by painting a lighter box. */
   --glass-light: 214 255 240;
-  --glass-tint: rgb(var(--glass-light) / 0.035);
   --glass-tint-lit: rgb(var(--glass-light) / 0.065);
   --glass-rim: rgb(var(--glass-light) / 0.09);
   --glass-shadow: 0 4px 30px rgb(0 0 0 / 0.35);
-  --glass-shadow-lit: 0 10px 40px rgb(0 0 0 / 0.5);
+  /* Composed into each list's own transition rather than set on .glass-row
+     directly: `transition` is a single property, so a component declaring its
+     own would replace this list wholesale and silently kill the glass. */
+  --glass-transition:
+    opacity var(--dur) var(--ease),
+    background var(--dur) var(--ease),
+    backdrop-filter var(--dur) var(--ease),
+    -webkit-backdrop-filter var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dur: 220ms;
@@ -250,6 +255,37 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 3rem 0; }
 .eyebrow a { color: var(--text-muted); }
 
 main { flex: 1 0 auto; padding-block: 3rem 5rem; }
+
+/* ---------- glass row ---------- */
+
+/*
+ * A row that is bare until you reach it and frosts over when you do.
+ *
+ * This started on the home page and is shared rather than reimplemented,
+ * because two lookalike copies drifted apart once already: the index rows
+ * became always-on cards with an emerald outline while the home rows stayed
+ * bare, and the two stopped reading as the same site. Both lists wear this
+ * class now, so there is one answer to what a row looks like.
+ *
+ * The border is transparent rather than absent so nothing shifts by a pixel
+ * when it lights up, and the blur is 0px rather than omitted so it has a
+ * value to animate from.
+ */
+.glass-row {
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  -webkit-backdrop-filter: blur(0px);
+  backdrop-filter: blur(0px);
+}
+
+.glass-row:hover,
+.glass-row:focus-visible {
+  background: var(--glass-tint-lit);
+  border-color: var(--glass-rim);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
 
 /* ---------- skip link ---------- */
 
