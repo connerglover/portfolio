@@ -5,9 +5,12 @@ import SpotlightList from '../components/SpotlightList.astro';
 import { getCollection } from 'astro:content';
 import { courses, courseTimeline } from '../data/site';
 
-const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
+const all = (await getCollection('projects', (p) => !p.data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
+// `featured` pins a project here; without any, fall back to the newest few.
+const pinned = all.filter((p) => p.data.featured);
+const projects = (pinned.length ? pinned : all).slice(0, 3);
 
 const school = await getCollection('school');
 const assignmentCount = school.length;
@@ -28,9 +31,10 @@ const alsoTaken = courseTimeline.filter((c) => !('slug' in c));
 
   <section id="about" class="lede">
     <p>
-      I build things in and out of class — a speedrun retiming tool used by
-      moderators, a Chrome extension that fixes a tedious workflow, a tiny house
-      designed in Revit, and a brownfield renovated into a mixed-use building.
+      I build things in and out of class — a tool that turns a clinic&rsquo;s daily
+      EMR export into printable patient labels, a speedrun retiming app used by
+      moderators, a tiny house designed in Revit, and a brownfield renovated
+      into a mixed-use building.
     </p>
     <p class="muted">
       This site collects all of it: {assignmentCount} assignments across{' '}
