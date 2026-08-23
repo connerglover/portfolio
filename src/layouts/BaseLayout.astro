@@ -16,10 +16,33 @@ interface Props {
    * width to a sidebar.
    */
   layout?: 'standard' | 'split';
+  /** Keep the page out of search results, and out of the canonical graph. */
+  noindex?: boolean;
 }
-const { title, description = site.description, layout = 'standard' } = Astro.props;
+const {
+  title,
+  description = site.description,
+  layout = 'standard',
+  noindex = false,
+} = Astro.props;
+/**
+ * Project summaries and course blurbs double as page copy, where running long
+ * is fine — but a description over about 160 characters is cut off mid-word in
+ * search results. Trim to the last sentence that fits, or failing that the last
+ * word, so what does get shown reads as finished rather than truncated.
+ */
+function forSearch(text: string, limit = 160): string {
+  if (text.length <= limit) return text;
+  const head = text.slice(0, limit);
+  const sentence = Math.max(head.lastIndexOf('. '), head.lastIndexOf('? '), head.lastIndexOf('! '));
+  if (sentence > limit * 0.55) return head.slice(0, sentence + 1);
+  return head.slice(0, head.lastIndexOf(' ')).replace(/[,;:—-]$/, '') + '…';
+}
+const metaDescription = forSearch(description);
+
 const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og.png', Astro.site);
 ---
 
 <!doctype html>
@@ -28,17 +51,26 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={metaDescription} />
     <meta name="theme-color" content="#0b0e0d" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="canonical" href={canonical} />
+    {/* An error page has no canonical URL of its own — it is whatever address
+        failed to resolve, so claiming one would point search engines at a page
+        that does not exist. */}
+    {noindex ? <meta name="robots" content="noindex, follow" /> : <link rel="canonical" href={canonical} />}
+    <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={metaDescription} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name} — ${site.tagline}`} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <ClientRouter />
   </head>

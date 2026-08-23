@@ -150,6 +150,84 @@ def main():
 
     for name in ("favicon.svg", "favicon.ico", "apple-touch-icon.png"):
         print("%-22s %6d bytes" % (name, os.path.getsize(os.path.join(PUB, name))))
+    og_card()
+
+
+
+def og_card():
+    """public/og.png — the 1200x630 card link previews show.
+
+    The head already declared twitter:card=summary_large_image, which promises
+    an image; without one a shared link falls back to a bare row of text. Same
+    material as the site: the C mark, the dot field, the emerald glow.
+
+    The two gradients are built small and scaled up. They are smooth by
+    definition, so resampling costs nothing visually and avoids running a
+    three-million-pixel Python loop twice.
+    """
+    W, H, S = 1200, 630, 2
+    CW, CH = W * S, H * S
+    # Centred, and the card carries no text. og:title and og:description
+    # already supply the name and tagline as real text in every preview UI, and
+    # the site's own faces ship as woff2 only — setting the name in whatever
+    # substitute happened to be available would misrepresent the typography.
+    cx, cy = W / 2.0, H / 2.0        # the mark's centre, in card units
+    R, STROKE = 140, 50
+
+    def rect_svg(body):
+        svg = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" '
+               'width="%d" height="%d">%s</svg>' % (W, H, W, H, body))
+        tmp = os.path.join(PUB, "_og.svg")
+        with io.open(tmp, "w", encoding="utf-8") as fh:
+            fh.write(svg)
+        try:
+            page = pymupdf.open(tmp)[0]
+            pm = page.get_pixmap(matrix=pymupdf.Matrix(CW / W, CW / W), alpha=True)
+            return Image.open(io.BytesIO(pm.tobytes("png"))).convert("RGBA")
+        finally:
+            os.remove(tmp)
+
+    im = Image.new("RGBA", (CW, CH), BG + (255,))
+
+    # Emerald wash centred on the mark, fading out across the card.
+    gw, gh = 160, 84
+    glow = Image.new("RGBA", (gw, gh))
+    reach = 620.0
+    glow.putdata([
+        ACCENT + (int(round(255 * 0.20 * max(0.0, 1.0 - math.hypot(
+            (x + 0.5) * W / gw - cx, (y + 0.5) * H / gh - cy) / reach))),)
+        for y in range(gh) for x in range(gw)
+    ])
+    im.alpha_composite(glow.resize((CW, CH), Image.BICUBIC))
+
+    # The backdrop's dot field, densest near the mark.
+    dots = []
+    for iy in range(int(H / 26) + 2):
+        for ix in range(int(W / 26) + 2):
+            x, y = ix * 26.0 + 13, iy * 26.0 + 13
+            d = math.hypot(x - cx, y - cy)
+            dots.append('<circle cx="%.1f" cy="%.1f" r="1.7" fill="#10b981" '
+                        'opacity="%.3f"/>' % (x, y, 0.04 + 0.26 * max(0.0, 1 - d / 900.0)))
+    im.alpha_composite(rect_svg("<g>%s</g>" % "".join(dots)))
+
+    # The C, same 100-degree aperture as the favicon.
+    mark = 'M %.2f %.2f A %d %d 0 1 0 %.2f %.2f' % (
+        cx + R * 0.6428, cy - R * 0.766, R, R, cx + R * 0.6428, cy + R * 0.766)
+    m = rect_svg('<path d="%s" fill="none" stroke="#fff" stroke-width="%d" '
+                 'stroke-linecap="round"/>' % (mark, STROKE)).getchannel("A")
+
+    gw, gh = 64, 34
+    ramp = Image.new("RGBA", (gw, gh))
+    ramp.putdata([
+        tuple(int(round(a + (b - a) * ((x / (gw - 1) + y / (gh - 1)) / 2)))
+              for a, b in zip(BRIGHT, ACCENT)) + (255,)
+        for y in range(gh) for x in range(gw)
+    ])
+    im.paste(ramp.resize((CW, CH), Image.BICUBIC), (0, 0), m)
+
+    im.resize((W, H), Image.LANCZOS).convert("RGB").save(
+        os.path.join(PUB, "og.png"), optimize=True)
+    print("%-22s %6d bytes" % ("og.png", os.path.getsize(os.path.join(PUB, "og.png"))))
 
 
 if __name__ == "__main__":

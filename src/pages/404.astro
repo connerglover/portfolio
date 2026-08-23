@@ -1,9 +1,51 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { courses } from '../data/site';
+
+/**
+ * Most 404s here will be old Google Sites URLs or a renamed project slug, so
+ * the page offers the three places the content actually moved to rather than
+ * only a link home.
+ */
 ---
-<BaseLayout title="Not found">
-  <div class="wrap prose">
-    <h1>Page not found</h1>
-    <p>That page doesn&rsquo;t exist. Try <a href="/">the home page</a>.</p>
+
+<BaseLayout
+  title="Page not found"
+  description="That page does not exist. Links to the projects, coursework and academic record on connerglover.com."
+  noindex
+>
+  <div class="wrap">
+    <p class="code">404</p>
+    <h1>That page doesn&rsquo;t exist</h1>
+    <p class="lede muted">
+      The address may be out of date &mdash; this site replaced an older one, and
+      a few projects have been renamed since. Everything is still here:
+    </p>
+
+    <ul class="routes">
+      <li><a href="/projects/">Projects</a> &mdash; software built outside of class</li>
+      <li><a href="/school/">Coursework</a> &mdash; {courses.length} PLTW engineering courses</li>
+      <li><a href="/about/">Academic record</a> &mdash; courses, grades and AP scores</li>
+      <li><a href="/">Home</a></li>
+    </ul>
   </div>
 </BaseLayout>
+
+<style>
+  .code {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    margin: 0 0 0.5rem;
+  }
+  .lede { max-width: 52ch; }
+  .routes {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 0;
+    max-width: 52ch;
+  }
+  .routes li + li { margin-top: 0.6rem; }
+  .routes li { color: var(--text-muted); font-size: 0.96rem; }
+</style>

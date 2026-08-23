@@ -4,7 +4,11 @@ import { site } from '../data/site';
 import { apExams, courseLevelKey, gpa, terms } from '../data/academics';
 ---
 
-<BaseLayout title="About" description={`About ${site.name}`}>
+<BaseLayout
+  title="About"
+  description={`Academic record for ${site.name}: every course taken at Carmel Catholic with `
+    + `letter grades by semester, a weighted cumulative GPA of ${gpa.cumulative}, and AP exam scores.`}
+>
   <div class="wrap stack">
     <section class="prose">
       <h1>About me</h1>
