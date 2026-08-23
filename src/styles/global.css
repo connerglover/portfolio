@@ -69,6 +69,9 @@
      a lit pane lands on --bg-raised and its rim on --border — reached by
      catching light rather than by painting a lighter box. */
   --glass-light: 214 255 240;
+  /* Barely there — enough to tell a pane from the page, not enough to be a
+     card. Opted into per list via --glass-rest, not set on .glass-row. */
+  --glass-tint: rgb(var(--glass-light) / 0.018);
   --glass-tint-lit: rgb(var(--glass-light) / 0.065);
   --glass-rim: rgb(var(--glass-light) / 0.09);
   --glass-shadow: 0 4px 30px rgb(0 0 0 / 0.35);
@@ -271,13 +274,26 @@ main { flex: 1 0 auto; padding-block: 3rem 5rem; }
  * when it lights up, and the blur is 0px rather than omitted so it has a
  * value to animate from.
  */
-.glass-row {
+.glass-row,
+.glass-pane {
+  position: relative;
   border: 1px solid transparent;
   border-radius: var(--radius);
+  /* Resting fill is opted into by the list rather than set here, through a
+     variable rather than a `background` declaration. A component rule would
+     out-specify `.glass-row:hover` — Astro adds its scoping attribute to both
+     halves of `.feature > li > a`, which lifts it past a bare class plus a
+     pseudo-class — and the lit state would silently never arrive. Setting the
+     variable leaves the cascade on `background` alone. */
+  background: var(--glass-rest, transparent);
   -webkit-backdrop-filter: blur(0px);
   backdrop-filter: blur(0px);
 }
 
+/* .glass-pane is the lit state, held. Same material, no pointer required —
+   for panes that are furniture rather than targets, like a page's contents
+   list. */
+.glass-pane,
 .glass-row:hover,
 .glass-row:focus-visible {
   background: var(--glass-tint-lit);
@@ -285,6 +301,63 @@ main { flex: 1 0 auto; padding-block: 3rem 5rem; }
   box-shadow: var(--glass-shadow);
   -webkit-backdrop-filter: blur(var(--glass-blur));
   backdrop-filter: blur(var(--glass-blur));
+}
+
+/*
+ * The rim picks up the cursor.
+ *
+ * A 1px ring of emerald that is brightest nearest the pointer and falls away
+ * around the edge, over the flat rim underneath. It reads as the light on the
+ * backdrop catching the edge of the pane — glass shows an edge before it shows
+ * a face, which is what stops a pane reading as a rectangle.
+ *
+ * Inset by -1px so it lands on the border box rather than inside it; the
+ * radius is grown to match, or the corners would cut a pixel short. Position
+ * comes from src/scripts/rim-light.ts as --mx/--my; without it the ring simply
+ * never fades in, and the flat rim is still there.
+ */
+.glass-row::after,
+.glass-pane::after,
+.rim-follow::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: calc(var(--radius) + 1px);
+  padding: 1px;
+  pointer-events: none;
+  opacity: var(--rim-lit, 0);
+  transition: opacity var(--dur) var(--ease);
+  background: radial-gradient(
+    var(--rim-reach, 300px) circle at var(--mx, 50%) var(--my, 50%),
+    var(--accent-bright),
+    color-mix(in srgb, var(--accent) 35%, transparent) 45%,
+    transparent 78%
+  );
+  /* The two masks cancel everywhere but the padding box, leaving the ring. */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+/* An element inside a pane that wants the light placed against its own box
+   rather than the pane's — the arrow on a project row. It wears the same ring
+   in the same colours, over a shorter reach because it is a fraction of the
+   size, and takes its own shape rather than the pane's corner radius. */
+.rim-follow {
+  position: relative;
+  --rim-reach: 70px;
+}
+.rim-follow::after { border-radius: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-row::after,
+  .glass-pane::after,
+  .rim-follow::after { display: none; }
 }
 
 /* ---------- skip link ---------- */

@@ -47,7 +47,7 @@ const toc = headings.filter((h) => h.depth === 2);
     )}
 
     {toc.length > 2 && (
-      <nav class="toc" aria-label="On this page">
+      <nav class="toc glass-pane" aria-label="On this page">
         <p class="eyebrow">On this page</p>
         <ul>
           {toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
@@ -67,11 +67,10 @@ const toc = headings.filter((h) => h.depth === 2);
     gap: 0.5rem 1.25rem;
     font-size: 0.9rem;
   }
+  /* Frame, fill and blur come from .glass-pane in global.css — held lit,
+     since this is furniture rather than something you aim at. */
   .toc {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
     padding: 1rem 1.2rem;
-    background: var(--bg-subtle);
     max-width: var(--measure);
   }
   .toc ul { margin: 0; padding-left: 1.1rem; }

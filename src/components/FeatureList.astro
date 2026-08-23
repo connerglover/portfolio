@@ -46,7 +46,7 @@ const { items, numbered = true } = Astro.props;
             </ul>
           )}
         </div>
-        <span class="arrow" aria-hidden="true">
+        <span class="arrow rim-follow" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M5 12h13M12 5l7 7-7 7" /></svg>
         </span>
       </a>
@@ -71,7 +71,11 @@ const { items, numbered = true } = Astro.props;
     padding: 1.6rem 1.75rem;
     color: inherit;
     /* The pane itself is .glass-row in global.css — the same one the home
-       page uses. Only the growth is local. */
+       page uses. Only the growth and the resting fill are local.
+       An index row carries a whisper of fill at rest where a home row carries
+       none: these pages are nothing but rows, so they need an edge to sit on,
+       while the home list is punctuation between paragraphs and does not. */
+    --glass-rest: var(--glass-tint);
     transition:
       padding var(--dur) var(--ease),
       var(--glass-transition);
@@ -144,7 +148,11 @@ const { items, numbered = true } = Astro.props;
     width: 2.1rem;
     height: 2.1rem;
     border-radius: 50%;
-    border: 1px solid var(--border);
+    /* The same rim the pane wears, so the two agree — over the resting fill
+       this composites to within a channel of --border, which is what it used
+       to be set to. The emerald comes from the cursor ring, as it does on the
+       pane, rather than from a flat colour swap on hover. */
+    border: 1px solid var(--glass-rim);
     color: var(--text-faint);
     transition: all var(--dur) var(--ease);
   }
@@ -159,7 +167,6 @@ const { items, numbered = true } = Astro.props;
   }
   .feature > li > a:hover .arrow,
   .feature > li > a:focus-visible .arrow {
-    border-color: var(--accent);
     color: var(--accent-bright);
     transform: translateX(4px);
   }
