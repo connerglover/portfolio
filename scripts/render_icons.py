@@ -32,9 +32,10 @@ BORDER = (35, 43, 40)    # --border
 ACCENT = (16, 185, 129)  # --accent
 BRIGHT = (52, 211, 153)  # --accent-bright
 
-# The monogram: one arc that is the C, closed by the stem and bar of the G.
-# Kept in sync with the path in public/favicon.svg by hand -- it is one line.
-MARK = "M 67.24 27.94 A 28 28 0 1 0 67.24 72.06 V 50 H 51"
+# The mark: a single arc forming a C. Kept in sync with the path in
+# public/favicon.svg by hand -- it is one line.
+MARK = "M 68 28.55 A 28 28 0 1 0 68 71.45"
+STROKE = 12
 
 
 def raster(body, px=R):
@@ -113,17 +114,28 @@ def main():
     m_tile = mask('<rect width="100" height="100" rx="22" fill="#fff"/>')
     m_edge = mask('<rect x="0.75" y="0.75" width="98.5" height="98.5" rx="21.25" '
                   'fill="none" stroke="#fff" stroke-width="1.5"/>')
-    m_mark = mask('<path d="%s" fill="none" stroke="#fff" stroke-width="11" '
-                  'stroke-linecap="round" stroke-linejoin="round"/>' % MARK)
+    m_mark = mask('<path d="%s" fill="none" stroke="#fff" stroke-width="%s" '
+                  'stroke-linecap="round" stroke-linejoin="round"/>'
+                  % (MARK, STROKE))
     l_dots = dot_field()
 
-    def compose(with_dots):
+    square = Image.new("L", (R, R), 255)
+
+    def compose(full_bleed):
+        """full_bleed drops the rounded tile and its border.
+
+        iOS masks the corners of apple-touch-icon.png itself, so drawing our
+        own rounded tile inside the square would leave a stray outline inset
+        from the real edge once iOS is done with it.
+        """
+        clip = square if full_bleed else m_tile
         im = Image.new("RGBA", (R, R), (0, 0, 0, 0))
-        im.paste(solid(BG), (0, 0), m_tile)          # opaque, safe to paste
-        over(im, radial_glow(ACCENT, 0.22), m_tile)
-        if with_dots:
-            over(im, l_dots, m_tile)
-        im.paste(solid(BORDER), (0, 0), m_edge)
+        im.paste(solid(BG), (0, 0), clip)            # opaque, safe to paste
+        over(im, radial_glow(ACCENT, 0.22), clip)
+        if full_bleed:
+            over(im, l_dots, clip)
+        else:
+            im.paste(solid(BORDER), (0, 0), m_edge)
         im.paste(linear_gradient(BRIGHT, ACCENT), (0, 0), m_mark)
         return im
 

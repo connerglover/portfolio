@@ -1,8 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="CG">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="C">
   <!--
-    One stroke doing double duty: the arc is the C, and the stem and bar that
-    close it turn the same arc into a G. Two letters, one continuous path —
-    which is also the only way a two-letter monogram survives 16px.
+    A single geometric arc: r=28, stroke 12, a 100-degree aperture with round
+    terminals. One letter is the only thing that stays legible at 16px, and it
+    is the shape the rest of the site is already built from - the same circle
+    and the same emerald as the cursor glow.
   -->
   <defs>
     <linearGradient id="ink" x1="0" y1="0" x2="1" y2="1">
@@ -20,7 +21,7 @@
   <rect x="0.75" y="0.75" width="98.5" height="98.5" rx="21.25"
         fill="none" stroke="#232b28" stroke-width="1.5"/>
 
-  <path d="M 67.24 27.94 A 28 28 0 1 0 67.24 72.06 V 50 H 51"
-        fill="none" stroke="url(#ink)" stroke-width="11"
+  <path d="M 68 28.55 A 28 28 0 1 0 68 71.45"
+        fill="none" stroke="url(#ink)" stroke-width="12"
         stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

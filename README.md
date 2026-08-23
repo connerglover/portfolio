@@ -152,7 +152,7 @@ public/images/                    self-hosted images
 public/decks/                     PDF attachments — decks, reports, worksheets
 public/deck-pages/                generated slide images, one folder per PDF
 scripts/render_decks.py           generates the two lines above
-public/favicon.svg                the CG monogram — source of truth for every icon
+public/favicon.svg                the C mark — source of truth for every icon
 scripts/render_icons.py           generates favicon.ico and apple-touch-icon.png
 ```
 
