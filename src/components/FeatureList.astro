@@ -76,8 +76,29 @@ const { items, numbered = true } = Astro.props;
        none: these pages are nothing but rows, so they need an edge to sit on,
        while the home list is punctuation between paragraphs and does not. */
     --glass-rest: var(--glass-tint);
+
+    /* Turns to face the cursor. --tx/--ty come from the pointer script as
+       numbers from -1 to 1; the angles live here.
+       They are small on purpose. The idea is yasio.dev's, but those are 410px
+       cards where 20 degrees reads as a card being picked up. These rows are
+       three times as wide, and the far edge of a wide row swings through a lot
+       of depth for very little angle — at 1.5 degrees it already moves about
+       16px in z, which is the whole effect. The vertical figure is larger
+       because a short row has almost no lever arm to swing on.
+       rotateX is negated: a positive rotateX tips the top edge toward the
+       viewer, which is the wrong way round for facing the cursor. */
+    transform:
+      perspective(1200px)
+      rotateX(calc(var(--ty, 0) * -4deg))
+      rotateY(calc(var(--tx, 0) * 1.5deg));
+
     transition:
       padding var(--dur) var(--ease),
+      /* Short and always on. This is the whole reason there is no mounting
+         and unmounting here: the row is transformed at all times, resting at
+         zero, so arriving and leaving are the same eased change as any other
+         and there is no seam to smooth over. */
+      transform 130ms ease-out,
       var(--glass-transition);
   }
 

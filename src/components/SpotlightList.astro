@@ -57,7 +57,11 @@ const { items } = Astro.props;
     padding: 1.15rem 1.25rem;
     margin-inline: -1.25rem;
     color: inherit;
-    /* The pane itself is .glass-row in global.css. Only the nudge is local. */
+    /* The pane itself is .glass-row in global.css. Only the nudge is local.
+       Same whisper of resting fill as the index rows — no tilt, though: these
+       sit inside running prose, where a row leaning out of the page would
+       pull focus off the writing around it. */
+    --glass-rest: var(--glass-tint);
     transition:
       var(--glass-transition),
       transform var(--dur) var(--ease);

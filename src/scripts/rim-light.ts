@@ -6,7 +6,12 @@
  * Two custom properties per pane:
  *
  *   --mx / --my   the pointer, in the pane's own coordinates
+ *   --tx / --ty   the pointer from the pane's centre, -1 to 1
  *   --rim-lit     0 or 1, which the ring uses as its opacity so it fades
+ *
+ * --tx/--ty are plain numbers, not angles: a list that wants to tilt multiplies
+ * them by an angle of its own choosing, and a list that does not simply never
+ * reads them. Nothing here knows which is which.
  *
  * Only the pane under the cursor is written to, so the cost is one rect and
  * two property writes per frame regardless of how long the list is. Anything
@@ -31,18 +36,34 @@ const place = (el: HTMLElement) => {
   const r = el.getBoundingClientRect();
   el.style.setProperty('--mx', `${(px - r.left).toFixed(1)}px`);
   el.style.setProperty('--my', `${(py - r.top).toFixed(1)}px`);
+  return r;
 };
+
+const clamp = (n: number) => (n < -1 ? -1 : n > 1 ? 1 : n);
 
 const paint = () => {
   queued = 0;
   if (!pane) return;
-  place(pane);
+
+  const r = place(pane);
+
+  // Where the pointer sits in the pane, -1 to 1 from its centre. Written as
+  // plain numbers rather than angles so the size of the tilt stays in CSS,
+  // where it can differ per list — the project rows use it, the home rows
+  // simply never read it.
+  pane.style.setProperty('--tx', clamp((px - (r.left + r.width / 2)) / (r.width / 2)).toFixed(3));
+  pane.style.setProperty('--ty', clamp((py - (r.top + r.height / 2)) / (r.height / 2)).toFixed(3));
+
   for (const child of pane.querySelectorAll<HTMLElement>('.rim-follow')) place(child);
 };
 
 const release = () => {
   if (!pane) return;
   pane.style.removeProperty('--rim-lit');
+  // Back to flat. --mx/--my are left where they were so the rim fades out from
+  // where it was lit rather than jumping to the centre on its way down.
+  pane.style.setProperty('--tx', '0');
+  pane.style.setProperty('--ty', '0');
   pane = null;
 };
 
