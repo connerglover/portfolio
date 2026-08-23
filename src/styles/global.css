@@ -45,6 +45,12 @@
   --radius-sm: 6px;
   --space: 1rem;
 
+  /* Frosted glass. One number, so the header and the index rows stay the same
+     material — the panels are translucent and blur what is behind them, which
+     on the rows means the dot field and the cursor trail carry through
+     softened instead of being hidden under an opaque slab. */
+  --glass-blur: 12px;
+
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dur: 220ms;
 

@@ -85,7 +85,8 @@ const groups = [
     z-index: 20;
     border-bottom: 1px solid var(--border);
     background: color-mix(in srgb, var(--bg) 82%, transparent);
-    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
   }
   .bar {
     display: flex;

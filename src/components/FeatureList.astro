@@ -71,7 +71,13 @@ const { items, numbered = true } = Astro.props;
     padding: 1.6rem 1.75rem;
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    background: var(--bg-subtle);
+    /* Frosted rather than a solid fill, the same material as the site header.
+       The row keeps its colour; it just stops being opaque, so the dot field
+       and the cursor trail read through it muted instead of stopping dead at
+       its edge. */
+    background: color-mix(in srgb, var(--bg-subtle) 68%, transparent);
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
     color: inherit;
     transition:
       padding var(--dur) var(--ease),
@@ -89,7 +95,10 @@ const { items, numbered = true } = Astro.props;
   .feature > li > a:hover,
   .feature > li > a:focus-visible {
     padding-block: 2.4rem;
-    background: var(--bg-raised);
+    /* Firmer than at rest, so the hovered row still steps forward out of the
+       group — but not solid, or the light under the cursor would vanish
+       exactly where you are looking. */
+    background: color-mix(in srgb, var(--bg-raised) 80%, transparent);
     border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
   }
 

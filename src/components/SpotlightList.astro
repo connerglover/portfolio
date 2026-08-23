@@ -59,9 +59,16 @@ const { items } = Astro.props;
     border: 1px solid transparent;
     border-radius: var(--radius);
     color: inherit;
+    /* Blurs nothing at rest — a row here is meant to be invisible until you
+       reach it. Written as 0px rather than left off so the blur has a value to
+       animate from when the row frosts over on hover. */
+    -webkit-backdrop-filter: blur(0px);
+    backdrop-filter: blur(0px);
     transition:
       opacity var(--dur) var(--ease),
       background var(--dur) var(--ease),
+      backdrop-filter var(--dur) var(--ease),
+      -webkit-backdrop-filter var(--dur) var(--ease),
       border-color var(--dur) var(--ease),
       transform var(--dur) var(--ease);
   }
@@ -73,7 +80,12 @@ const { items } = Astro.props;
   }
   .spotlight a:hover,
   .spotlight a:focus-visible {
-    background: var(--bg-subtle);
+    /* Frosted, the same material as the site header, rather than the flat fill
+       this used to be — the row lifts off the dot field instead of covering
+       a patch of it. */
+    background: color-mix(in srgb, var(--bg-subtle) 72%, transparent);
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
     border-color: var(--border);
     transform: translateX(3px);
   }
