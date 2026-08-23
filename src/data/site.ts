@@ -71,17 +71,3 @@ export const courseTimeline = [
   { name: 'Civil Engineering and Architecture', credit: 'Dual credit', slug: 'cea' },
   { name: 'Digital Electronics', credit: 'Dual credit', slug: 'de' },
 ] as const;
-
-/**
- * List order for projects: pinned first, then newest.
- *
- * Used by both the projects index and the home page so the two can never
- * disagree about what comes first.
- */
-export function projectOrder<T extends { data: { pinned: boolean; date: Date } }>(
-  a: T,
-  b: T,
-): number {
-  if (a.data.pinned !== b.data.pinned) return a.data.pinned ? -1 : 1;
-  return b.data.date.valueOf() - a.data.date.valueOf();
-}

@@ -9,7 +9,6 @@ cover:
   src: '/images/projects/crt/screenshot.png'
   alt: 'CRT running on Windows, showing a run timed at 1:57.000 without loads and 2:00.000 with loads, alongside frame inputs and a list of individual loads'
 featured: true
-pinned: true
 draft: false
 ---
 

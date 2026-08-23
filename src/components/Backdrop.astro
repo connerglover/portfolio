@@ -20,13 +20,7 @@
  */
 ---
 
-<!--
-  Persisted across navigation: the canvas node itself survives the swap, so the
-  flow field carries on mid-drift instead of restarting from t=0 on every page.
-  That continuity is the page transition's whole premise — the content moves,
-  the space behind it does not.
--->
-<div class="backdrop" aria-hidden="true" transition:persist="backdrop">
+<div class="backdrop" aria-hidden="true">
   <canvas class="field"></canvas>
   <div class="wash"></div>
 </div>
@@ -55,12 +49,8 @@
     /* Slower than the dim below would feel like lag, faster than this loses the
        gentle first appearance. */
     transition: opacity 420ms var(--ease);
-    /* --glow-scale is written by the script, which uses the same number for the
-       lit dots. One source, so the wash and the dots flare together. */
     background: radial-gradient(
-      calc(var(--glow-r, 200px) * var(--glow-scale, 1))
-        calc(var(--glow-r, 200px) * var(--glow-scale, 1))
-        at var(--gx, 50%) var(--gy, -20%),
+      var(--glow-r, 200px) var(--glow-r, 200px) at var(--gx, 50%) var(--gy, -20%),
       rgb(16 185 129 / 0.07),
       transparent 70%
     );
@@ -126,33 +116,11 @@
   let ty = -9999;
   let px = -9999;
   let py = -9999;
-
-  // The pending frame, or 0. Held as an id rather than a boolean so bind() can
-  // cancel it: the canvas is persisted now, so a chain started on the previous
-  // page stays alive across the swap, and starting a second one beside it would
-  // double the draw loop on every navigation.
-  let rafId = 0;
-
-  // Navigation flare: the light swells as a page is swapped, blooming from
-  // wherever the cursor is — which, since you just clicked a link, is the link.
-  //
-  // Timed from the moment navigation starts rather than eased toward a target
-  // the lifecycle resets. A swap on localhost finishes in about 35 milliseconds
-  // (before-preparation to page-load, measured), so anything keyed to "while
-  // the page is loading" is over in two frames and nobody ever sees it. This
-  // shape is fixed, and outlasts the 400ms content animation slightly.
-  const FLARE_PEAK = 2.2;
-  const FLARE_UP = 150; // ms to full
-  const FLARE_DOWN = 430; // ms back to rest
-  let flareAt = -1;
-  let flare = 1;
+  let running = false;
 
   const resize = () => {
     if (!canvas || !ctx) return;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    // Re-seeding at the same size would re-randomise every dot's opacity and
-    // pop the texture — visible on navigation now that the canvas survives it.
-    if (window.innerWidth === w && window.innerHeight === h && seeds.length) return;
     w = window.innerWidth;
     h = window.innerHeight;
     canvas.width = Math.round(w * dpr);
@@ -184,7 +152,6 @@
     ctx.clearRect(0, 0, w, h);
 
     const lit = fine && !still && px > -5000;
-    const glowR = GLOW_R * flare;
 
     // Two passes. The grey field is bucketed by alpha so the whole thing costs
     // a handful of canvas state changes rather than one per dot; the emerald
@@ -212,8 +179,8 @@
         let near = 0;
         if (lit) {
           const d = Math.hypot(x - px, y - py);
-          if (d < glowR) {
-            near = 1 - d / glowR;
+          if (d < GLOW_R) {
+            near = 1 - d / GLOW_R;
             near *= near; // falls off faster than linear so the core reads
           }
         }
@@ -234,23 +201,10 @@
   };
 
   const frame = (time: number) => {
-    rafId = 0;
-    if (!canvas || !ctx) return;
-
-    if (flareAt >= 0) {
-      const e = time - flareAt;
-      const smooth = (t: number) => t * t * (3 - 2 * t);
-      if (e < FLARE_UP) {
-        flare = 1 + (FLARE_PEAK - 1) * smooth(e / FLARE_UP);
-      } else if (e < FLARE_UP + FLARE_DOWN) {
-        flare = 1 + (FLARE_PEAK - 1) * smooth(1 - (e - FLARE_UP) / FLARE_DOWN);
-      } else {
-        flare = 1;
-        flareAt = -1;
-      }
-      backdrop?.style.setProperty('--glow-scale', flare.toFixed(3));
+    if (!canvas || !ctx) {
+      running = false;
+      return;
     }
-
     if (tx > -5000) {
       if (px < -5000) {
         px = tx;
@@ -263,14 +217,18 @@
       backdrop?.style.setProperty('--gy', `${py}px`);
     }
     draw(still ? 0 : time);
-    // One static frame is enough when motion is not wanted.
-    if (still) return;
-    rafId = requestAnimationFrame(frame);
+    if (still) {
+      // One static frame is enough when motion is not wanted.
+      running = false;
+      return;
+    }
+    requestAnimationFrame(frame);
   };
 
   const kick = () => {
-    if (rafId || !ctx) return;
-    rafId = requestAnimationFrame(frame);
+    if (running || !ctx) return;
+    running = true;
+    requestAnimationFrame(frame);
   };
 
   if (fine && !still) {
@@ -295,10 +253,6 @@
 
     backdrop.style.setProperty('--glow-r', `${GLOW_R}px`);
     resize();
-    // A chain from the previous page is still alive — the node it draws to is
-    // this same persisted canvas — so retire it before starting another.
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = 0;
     // Restore the trail straight away — the element is new and carries none of
     // the previous state, so without this the effect stays dead until the
     // pointer happens to move again.
@@ -307,18 +261,9 @@
       backdrop.style.setProperty('--gy', `${py}px`);
       backdrop.classList.add('on');
     }
+    running = false;
     kick();
   };
-
-  // Lighting the transition with the thing that already lights the site, rather
-  // than with an effect bolted on for the occasion. The pulse ends on its own,
-  // so there is nothing to reset when the page lands.
-  if (!still) {
-    document.addEventListener('astro:before-preparation', () => {
-      flareAt = performance.now();
-      kick();
-    });
-  }
 
   document.addEventListener('astro:page-load', bind);
   bind();

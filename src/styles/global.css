@@ -235,29 +235,7 @@ main { flex: 1 0 auto; padding-block: 3rem 5rem; }
 /* ---------- view transitions ---------- */
 
 @view-transition { navigation: auto; }
-
-/* Only <main> animates — the pairing lives in src/data/transitions.ts.
- *
- * `root` is everything main is not: the nav, the footer and the dot field.
- * Animating it used to drag the backdrop along with the content, which is the
- * one thing that should hold still, so it is turned off and the backdrop is
- * additionally persisted across the swap. */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-}
-
-@keyframes page-lift-out { to { opacity: 0; transform: translateY(-1.25rem); } }
-@keyframes page-rise-in { from { opacity: 0; transform: translateY(2rem); } }
-@keyframes page-sink-out { to { opacity: 0; transform: translateY(1.25rem); } }
-@keyframes page-drop-in { from { opacity: 0; transform: translateY(-2rem); } }
-
-/* Redefining the keyframes is how this reaches the pseudo-elements: Astro
- * generates their view-transition-name, so there is no selector to target.
- * The crossfade stays — it is the travel that is unwelcome, not the change. */
-@media (prefers-reduced-motion: reduce) {
-  @keyframes page-lift-out { to { opacity: 0; } }
-  @keyframes page-rise-in { from { opacity: 0; } }
-  @keyframes page-sink-out { to { opacity: 0; } }
-  @keyframes page-drop-in { from { opacity: 0; } }
-}
+::view-transition-old(root) { animation: fade-out 90ms ease forwards; }
+::view-transition-new(root) { animation: fade-in 180ms var(--ease) forwards; }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; transform: translateY(6px); } }
