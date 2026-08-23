@@ -12,4 +12,4 @@ partners:
 
 ---
 
-In this assignment, Ryan Frels and I had to learn how to calculate gear ratios and answer questions on a pre-existing system such as gear ratio, calculating how many ft-lbs of force will output if there's 10 input on a system with a gear ratio of 7:3.
+Ryan Frels and I worked through gear ratio calculations on an existing system — including finding the output in ft-lbs given a 10 ft-lb input through a 7:3 ratio.

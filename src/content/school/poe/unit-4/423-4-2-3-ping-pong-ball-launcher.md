@@ -7,4 +7,4 @@ partners:
   - 'Ryan Frels'
 ---
 
-In this assignment, Ryan Frels and I were tasked with making a launcher for a ping pong ball and recording 10 trials and then, using Google Sheets, find various statistics that come in handy. After we had to make a slide presentation on what we did including pictures.
+Ryan Frels and I built a launcher for a ping pong ball, ran ten trials, and used Google Sheets to work out the statistics describing its performance. We presented the build and the results with photographs.

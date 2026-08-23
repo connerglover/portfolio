@@ -10,4 +10,4 @@ decks:
 
 ---
 
-In this assignment, we had to record the amount of candy in a pack of peanut M&Ms.
+We counted the contents of packs of peanut M&Ms and worked the statistics up from the results.

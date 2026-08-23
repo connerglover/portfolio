@@ -5,4 +5,4 @@ unit: unit-2
 order: 221
 ---
 
-In this assignment, I had to research an element of my choice. I used a random element picker to find Molybdenum. This was a bit challenging considering lack of information due to the scarcity of this element, but I managed to use the information I found.
+I researched an element chosen at random, which gave me Molybdenum. Its scarcity meant there was noticeably less written about it than for most elements, so most of the work was finding usable sources and getting what I could out of them.

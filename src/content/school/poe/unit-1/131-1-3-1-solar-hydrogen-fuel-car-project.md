@@ -10,4 +10,4 @@ decks:
 
 ---
 
-In this assignment, I had to assemble a car from a list of instructions. This car used a hydrogen fuel cell and a solar cell to power it and it also used a 2 wire motor to use the power. We were very successful.
+I assembled a car from a set of instructions, powered by a hydrogen fuel cell and a solar cell driving a two-wire motor. It ran as intended.

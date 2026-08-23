@@ -13,4 +13,4 @@ partners:
 
 ---
 
-In this assignment, Ryan Frels, Angelo Hilario, and I had to stress test "dog bones". We did this with a stress testing machine and a fitting. We've yet to come up with a conclusion for each material. I was tasked with doing the math.
+Ryan Frels, Angelo Hilario and I tensile-tested dog bone specimens on a stress testing machine with a fitting. I handled the calculations. We had not yet reached a conclusion for each material at the time this was written up.

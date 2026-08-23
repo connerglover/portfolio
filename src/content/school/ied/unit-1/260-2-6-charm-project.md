@@ -5,4 +5,4 @@ unit: unit-1
 order: 260
 ---
 
-In this assignment, I practiced making complex objects in OnShape. This was very fun and I made something cool. I also learned how to emboss my initials in my parts.
+Practice building more complex geometry in OnShape, and the first part where I embossed my initials into the model rather than leaving the surface plain.

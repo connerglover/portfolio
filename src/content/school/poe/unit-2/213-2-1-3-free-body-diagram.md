@@ -5,4 +5,4 @@ unit: unit-2
 order: 213
 ---
 
-In this assignment, I had to learn about some of the laws of physics, namely for every action there's an equal and opposite reaction.
+Free body diagrams and the physics underneath them, principally that every force has an equal and opposite reaction.

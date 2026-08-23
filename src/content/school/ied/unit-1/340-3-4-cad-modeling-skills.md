@@ -8,4 +8,4 @@ images:
     alt: 'CAD model of a real-world object rebuilt in OnShape'
 ---
 
-In this assignment, I learned how to take an object from the real world and convert it into an object in CAD. I also learned how to use the Loft feature, which is cool.
+Taking an object from the real world and rebuilding it in CAD, including my first use of the Loft feature.

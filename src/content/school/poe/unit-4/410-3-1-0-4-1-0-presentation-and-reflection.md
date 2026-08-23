@@ -5,4 +5,4 @@ unit: unit-4
 order: 410
 ---
 
-In this assignment, I was tasked with choosing a field of engineering (I picked Manufacturing Engineering) and reasearching it. Then, you were to reporting on some basic information in a slide presentation. I was also tasked with making a more in-depth report which I have linked.
+I picked a field of engineering — manufacturing — researched it, and presented the essentials in a slide deck, with a longer written report alongside it.

@@ -7,4 +7,4 @@ partners:
   - 'Ryan Frels'
 ---
 
-In this Challenge, Ryan Frels and I had to make a machine out of sprockets and answer questions on it accordingly.
+Ryan Frels and I built a machine driven by sprockets and answered a set of questions on how it behaved.

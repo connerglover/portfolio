@@ -11,4 +11,4 @@ partners:
   - 'Camden Everett'
 ---
 
-In this challenge we remade a coffee cup. We made a French press, a heater, a pressure activated lid, and a laser pointer all in a coffee cup. This is probably not very easily to make today, but hopefully i the future they will be able to.
+We redesigned a coffee cup, working in a French press, a heater, a pressure-activated lid and a laser pointer. Most of it is beyond what could actually be manufactured now — the exercise was to push the concept rather than stay inside what is currently buildable.

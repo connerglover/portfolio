@@ -10,4 +10,4 @@ decks:
 
 ---
 
-In this assignment I insulate a box with a light in it to maintain heat for as long as possible. We were successful. We used project foam, aluminum foil, and t-shirts. We unfortunately had logger pro stop logging after a bit of time.
+We insulated a box with a light inside it and tried to hold the heat as long as possible, using project foam, aluminium foil and t-shirts. The insulation worked. The data collection did not entirely — Logger Pro stopped recording partway through the run, so we lost the tail of the curve.

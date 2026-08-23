@@ -5,10 +5,10 @@ unit: unit-1
 order: 120
 ---
 
-In this challenge I watched a set of video about the team at IDEO. They reengineered a shopping cart to be better and more effective. During this I learned:
+A study of the IDEO team's shopping cart redesign, watched as a series of videos. What I took from it:
 
-- The differences between a designer and an engineer
-- How to work together in a group when designing/engineering something without getting frustrated
-- And how to reengineer something for all problems to be solved.
+- Where a designer's job ends and an engineer's begins
+- How to work through a disagreement in a design group without it stalling
+- That redesigning something means solving all of its problems, not the convenient ones
 
-This definitely helped me understand more about engineering.
+It gave me a clearer picture of how engineering teams actually work.

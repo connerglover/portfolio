@@ -12,4 +12,4 @@ partners:
   - 'Ozzy Cline'
 ---
 
-In this challenge we had to make a roller coaster out of tape and pool noodle. We made a small roller coaster that take advantage of the rubric to get the highest score. We ended up winning, but it's not much of a competition.
+A marble roller coaster built from tape and pool noodle. We designed ours around the rubric rather than around spectacle, concentrating on the criteria that actually carried weight. It won, though the field was small.

@@ -10,4 +10,4 @@ decks:
 
 ---
 
-In this assignment we had to flip a coin 50 times and roll 2 dices 50 times and record out results to find our odds. Our coin was mostly even but our dice couldn't have been farther from even.
+We flipped a coin 50 times and rolled two dice 50 times, recording the results to compare observed frequencies against expected ones. The coin came out close to even; the dice were nowhere near it.

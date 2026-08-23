@@ -8,4 +8,4 @@ images:
     alt: 'CAD drawing of a part produced with the OnShape hole tool'
 ---
 
-In this assignment, I learned how to use the hole tool in OnShape. This is extremely important because this is the best way to make a lot of the holes easily.
+The hole tool in OnShape, which is far and away the quickest way to place holes properly rather than cutting each one by hand.

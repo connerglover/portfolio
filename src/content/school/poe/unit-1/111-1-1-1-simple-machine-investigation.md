@@ -12,4 +12,4 @@ partners:
 
 ---
 
-In this assignment, we had to make various different types of eningeering systems and test them. We were successful.
+We built several different engineering systems and tested each one. All of them worked.

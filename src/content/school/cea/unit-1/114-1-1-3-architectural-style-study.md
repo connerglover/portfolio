@@ -10,4 +10,4 @@ decks:
 
 ---
 
-In this assignment, we chose an art style to create a slideshow presentation about. I chose the Art Deco style because of guidance from Mr. T. I researched the history, design elements, materials, and examples of the style.
+Each of us took an architectural style and presented on it. On Mr. T's suggestion I took Art Deco, and researched its history, design elements, materials and surviving examples.

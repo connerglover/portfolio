@@ -5,4 +5,4 @@ unit: unit-1
 order: 124
 ---
 
-In this assignment we had to use "V=IR" to solve a couple equations, all related to circuits. We also had to use a couple other equations and some logic.
+A set of circuit problems solved with Ohm's law (V = IR), along with a few other relationships and some reasoning to reach the values that were not given directly.

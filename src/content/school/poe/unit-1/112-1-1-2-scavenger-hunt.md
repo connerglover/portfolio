@@ -12,4 +12,4 @@ partners:
 
 ---
 
-In this assignment, Ryan Frels and I were tasked with finding 2 of each engineering structure presented by Mr. T throughout the Carmel Catholic building. We had to make a slide presentation showing our findings with pictures.
+Ryan Frels and I had to find two examples of every engineering structure Mr. T had covered, somewhere in the Carmel Catholic building, and present our findings with photographs.

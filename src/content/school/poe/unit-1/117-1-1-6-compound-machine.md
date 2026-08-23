@@ -13,4 +13,4 @@ partners:
 
 ---
 
-In this assignment, Saanj Garg, Paul Ott, and I had to make a compound machine. We made a machine with a gear, pulley, and ramp. We also turned this into a game where you had to fight against someone acting as a resistance and you had to be an effort. It was a bit of an unfair game.
+Saanj Garg, Paul Ott and I built a compound machine combining a gear, a pulley and a ramp. We turned it into a two-player game — one person as the effort, the other as the resistance — though the balance was heavily in one side's favour.

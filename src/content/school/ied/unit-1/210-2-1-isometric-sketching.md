@@ -5,4 +5,4 @@ unit: unit-1
 order: 210
 ---
 
-In this challenge, I learned how to use the isometric sketching paper. I believe I did a great job, but it doesn't really matter. What you have to do is use the diagonal lines for your third dimension instead of hopes and prayers.
+Isometric paper and how to use it properly. The diagonals give you the third dimension, so depth gets measured rather than estimated — the grid does the work that guesswork was doing before.

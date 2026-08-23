@@ -5,4 +5,4 @@ unit: unit-1
 order: 240
 ---
 
-In this assignment we had to CAD Parts from sketches and then turn them into drawings. This helped me learn how to do drawing and how to dimension things.
+CAD parts modelled from sketches and then turned into dimensioned drawings. This is where I learned how a drawing is assembled, and how to dimension one so that somebody else could build from it.

@@ -11,4 +11,4 @@ partners:
   - 'Colin Bauer'
 ---
 
-This was a pretty simple and straight forward assignment. We had to look at a drawing, make the drawing in real life, take a picture of the drawing, and boom. We did that a couple times, and we came out with this at the end. This helped me with perspective and I even think my sketching is better now.
+We worked from a drawing to a physical build and back: read the drawing, make the object, photograph it, compare. Repeating that a few times sharpened both my sense of perspective and my sketching.

@@ -8,4 +8,4 @@ decks:
     title: '1.1.1 History of Architecture & Civil Engineering'
 ---
 
-In this assignment, I had to write notes on a slideshow that followed the history of civil engineering and architecture. I learned a lot about my class from the slideshow
+Notes taken from a presentation tracing the history of civil engineering and architecture. A useful orientation to what the course was actually going to cover.

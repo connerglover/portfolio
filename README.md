@@ -281,8 +281,16 @@ provenance only; nothing links to it.
 The one exception is a single surviving Google Drive attachment on PoE 3.1.1,
 which is still linked out rather than mirrored.
 
-Assignment write-ups are reproduced as written, typos included. The "About me"
-text is from freshman year and is out of date.
+The IED, PoE and early CEA write-ups were originally reproduced from the Google
+Site verbatim, typos and all. They have since been rewritten: every fact is
+preserved, including the ones where something went wrong, but the prose is no
+longer the first draft a freshman typed into a text box. Three titles were
+tidied at the same time — `2.1.7 Truss MD Solids Stuff` became
+`2.1.7 Truss Analysis in MDSolids`, and CEA's `1.1.2 Part 1` / `Part 2` became
+`Building Analysis` and `Garden Walk`. Eight assignments never had a write-up on
+the old site and still say so.
+
+The "About me" text is from freshman year and is out of date.
 
 The exported filenames credited several collaborators the old site never
 listed — those were folded into `partners:`. A few decks name others on their

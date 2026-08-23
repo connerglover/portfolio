@@ -8,4 +8,4 @@ decks:
     title: '2.1.1 Wood Frame Systems Handout'
 ---
 
-In this assignment, I identified different elements of the construction of a wood frame with a word bank and an image. This taught me many different important elements when building a house and how different elements fit in with each other.
+Labelling the elements of a wood frame from a diagram and a word bank. A direct way to pick up the vocabulary of house construction and see how the pieces fit together.

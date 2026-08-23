@@ -5,4 +5,4 @@ unit: unit-2
 order: 241
 ---
 
-In this project, I had to make a bridge in Westpoint Bridge Designer under $200,000 and one in real life. I wasn't successful at either, but I learned which is just as important.
+A bridge designed in West Point Bridge Designer under a $200,000 budget, and built physically alongside it. Neither one succeeded. What I took away was the process rather than the result.

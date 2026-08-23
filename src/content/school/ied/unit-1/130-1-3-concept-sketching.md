@@ -8,4 +8,4 @@ images:
     alt: 'Pencil concept sketch of a desk lamp on gridded drafting paper'
 ---
 
-In this challenge I learned how to sketch objects for the desigfn process. I learned what angle to sketch it from, I learned how to shade it better and I learned how to make it proportional. This will help me in illustrating my ideas on physical peices of paper.
+Sketching objects for the design process: choosing the angle to draw from, shading to suggest form, and keeping the proportions honest. This is the skill I use whenever an idea needs to get onto paper quickly.

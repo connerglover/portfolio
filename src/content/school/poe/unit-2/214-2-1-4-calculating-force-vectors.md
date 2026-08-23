@@ -5,4 +5,4 @@ unit: unit-2
 order: 214
 ---
 
-In this assignment, I learned many ways to calculate force vectors. And had to do it in practice.
+Several methods for resolving force vectors, and practice applying each of them.

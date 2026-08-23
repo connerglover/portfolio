@@ -5,4 +5,4 @@ unit: unit-1
 order: 121
 ---
 
-In this assignment, I had to research hydroelectricity and make a report on it. It was successful, and it was fun.
+I researched hydroelectricity and presented on how it generates power.

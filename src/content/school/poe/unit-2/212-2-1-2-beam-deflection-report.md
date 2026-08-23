@@ -8,4 +8,4 @@ partners:
   - 'Angelo Hilario'
 ---
 
-In this assignment, Ryan Frels, Angelo Hilario and I had to learn how to learn how to calculate E, I, and Delta Max. I also learned how to calculate the weight on the plank from E.
+Ryan Frels, Angelo Hilario and I worked out E, I and maximum deflection for a loaded beam, then reversed the calculation to find the load on the plank from E.

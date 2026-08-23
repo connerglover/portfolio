@@ -11,4 +11,4 @@ partners:
   - 'Francesco Caringella'
 ---
 
-In this assignment, I made a bridge out of paper. I originally had a really good idea which was approved by Mr. T because I misspoke and was waaay ahead of everyone. But because I made the mistake when Mr. T came back and said I can't do that, I didn't have enough development and ended up with a not satisfactory score.
+A bridge built out of paper. I had a strong initial concept and Mr. T approved it — but I had misdescribed what I was building, and I was well ahead of the rest of the class. When he came back and told me the design was not allowed, there was not enough time left to develop the replacement properly, and the score reflected that.

@@ -5,4 +5,4 @@ unit: unit-1
 order: 116
 ---
 
-In this assignment, I had to figure out statistics and information relating to different gear systems with some context.
+A problem set on gear systems, working ratios and related figures out of a given setup.

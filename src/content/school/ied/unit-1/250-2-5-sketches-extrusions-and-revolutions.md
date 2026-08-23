@@ -5,4 +5,4 @@ unit: unit-1
 order: 250
 ---
 
-In this assignment, I learned how to use the revolve tool in OnShape. This is a useful skill, but I don't see myself using it too often tur to my general dislike for the tool.
+The revolve tool in OnShape. It is genuinely useful for anything with rotational symmetry, though I still reach for other approaches first — I have never got on well with it.

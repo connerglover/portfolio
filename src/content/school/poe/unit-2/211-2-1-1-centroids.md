@@ -5,4 +5,4 @@ unit: unit-2
 order: 211
 ---
 
-In this assignment, I had to learn about and understand Centroids. I also had to learn how to find centroids with both math, and with physics in a real world example.
+Finding centroids, both by calculation and by locating one physically on a real object.

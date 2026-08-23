@@ -10,4 +10,4 @@ decks:
 
 ---
 
-In this assignment, I leanred to calculate moments by measuring someone's weight on using the displacement of a beam.
+Calculating moments by working out a person's weight from the displacement of a beam.

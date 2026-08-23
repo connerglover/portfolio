@@ -5,4 +5,4 @@ unit: unit-1
 order: 133
 ---
 
-In this assignment I had to learn about thermodynamics and terms related to thermodynamics to answer questions on a quiz and understand how it works.
+Notes on thermodynamics and its vocabulary, worked up to the point of being able to answer a quiz on how it behaves.

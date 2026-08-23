@@ -10,4 +10,4 @@ decks:
 
 ---
 
-In this assignment, we had to build a robot that would sort marbles into different cups. We made ours with an optical sensor and a wheel that turned to reveal 3 different holes. We were ultimately successful but we always ran into an error with the colors not being different enough.
+We built a robot to sort marbles into separate cups, using an optical sensor and a rotating wheel with three holes in it. It worked, but the sensor struggled whenever two colours sat too close together, and that stayed a persistent source of errors.

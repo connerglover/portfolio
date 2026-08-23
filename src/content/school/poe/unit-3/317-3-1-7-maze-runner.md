@@ -12,4 +12,4 @@ partners:
 
 ---
 
-In this assignment, we had to build our own robot that was a car and teach it to follow a line and go through a maze with sensors and code.
+We designed and built our own robot — a car — and programmed it to follow a line and work its way through a maze using sensors.

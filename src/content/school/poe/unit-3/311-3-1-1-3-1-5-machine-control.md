@@ -8,4 +8,4 @@ files:
     title: 'POE 3.1.1 to 3.1.5 Machine Control Deliverables'
 ---
 
-In this assignment, we had to build a robot out of vex parts and code it to do different things. A lot of it was copying code, but for some of it you had to make the cod yourself.
+We built a robot from VEX parts and programmed it to carry out a series of tasks. A good deal of the code was supplied to adapt, but parts of it had to be written from scratch.

@@ -5,4 +5,4 @@ unit: unit-3
 order: 321
 ---
 
-In this assignment, I had to make a presentation on a pre-existing hydraulic system. I chose the chair. This was fun because I experimented with using Canva instead of google slides and then importing it.
+A presentation on an existing hydraulic system; I chose the hydraulic chair. I built the deck in Canva rather than Google Slides and imported it, which was the first time I had tried that.
