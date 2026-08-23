@@ -1,8 +1,8 @@
 ---
-title: '2.5 Sketches, Extrusions and Revolutions'
+title: '1.2.5 Sketches, Extrusions and Revolutions'
 courseSlug: ied
 unit: unit-1
-order: 250
+order: 125
 ---
 
 The revolve tool in OnShape. It is genuinely useful for anything with rotational symmetry, though I still reach for other approaches first — I have never got on well with it.

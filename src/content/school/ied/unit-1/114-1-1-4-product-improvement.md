@@ -1,11 +1,11 @@
 ---
-title: '1.4 Product Improvement'
+title: '1.1.4 Product Improvement'
 courseSlug: ied
 unit: unit-1
-order: 140
+order: 114
 decks:
   - id: 110TTO-lxx8_hgibizfYrAfJu1Zv_wuQ58MS64lHrUwQ
-    pdf: '/decks/ied/unit-1/140-1-4-product-improvement.pdf'
+    pdf: '/decks/ied/unit-1/114-1-1-4-product-improvement.pdf'
     title: 'Product Improvement - Coffee cup'
 partners:
   - 'Camden Everett'

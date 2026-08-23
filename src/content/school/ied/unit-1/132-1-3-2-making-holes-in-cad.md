@@ -1,8 +1,8 @@
 ---
-title: '3.2 Making Holes in CAD'
+title: '1.3.2 Making Holes in CAD'
 courseSlug: ied
 unit: unit-1
-order: 320
+order: 132
 images:
   - src: '/images/school/ied-unit-1/3-2-making-holes-in-cad.jpg'
     alt: 'CAD drawing of a part produced with the OnShape hole tool'

@@ -1,8 +1,8 @@
 ---
-title: '3.3 Constraining a Sketch'
+title: '1.3.3 Constraining a Sketch'
 courseSlug: ied
 unit: unit-1
-order: 330
+order: 133
 images:
   - src: '/images/school/ied-unit-1/3-3-constraining-a-sketch.jpg'
     alt: 'Fully constrained OnShape sketch with dimensions applied'

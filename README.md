@@ -287,8 +287,18 @@ preserved, including the ones where something went wrong, but the prose is no
 longer the first draft a freshman typed into a text box. Three titles were
 tidied at the same time — `2.1.7 Truss MD Solids Stuff` became
 `2.1.7 Truss Analysis in MDSolids`, and CEA's `1.1.2 Part 1` / `Part 2` became
-`Building Analysis` and `Garden Walk`. Eight assignments never had a write-up on
+`Building Analysis` and `Garden Walk`. Six assignments never had a write-up on
 the old site and still say so.
+
+IED was renumbered to X.X.X to match the other courses. The old site wrote its
+assignments as `1.4`, `2.3`, `3.7`, with the unit living in the page heading
+rather than in the number. The full numbers were recoverable from the deck and
+file titles captured during the migration — `IED 1.1.4 - Coffee Cup Product
+Improvement`, `IED 1.2.3 - Multiview Drawings`, `1.3.7 Paper Bridge` — all of
+which confirm the same rule: prefix with the unit.
+
+Two PoE assignments that were still marked in progress have been dropped. Both
+were empty placeholders, and the course finished two years ago.
 
 The "About me" text is from freshman year and is out of date.
 

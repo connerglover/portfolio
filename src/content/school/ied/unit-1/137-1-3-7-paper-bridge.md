@@ -1,11 +1,11 @@
 ---
-title: '3.7 Paper Bridge'
+title: '1.3.7 Paper Bridge'
 courseSlug: ied
 unit: unit-1
-order: 370
+order: 137
 decks:
   - id: 1VDmGBot8F3QvDx5cGlRwu7PTKP53vqxpNnRYuyX-Zcw
-    pdf: '/decks/ied/unit-1/370-3-7-paper-bridge.pdf'
+    pdf: '/decks/ied/unit-1/137-1-3-7-paper-bridge.pdf'
     title: '1.3.7 Paper Bridge'
 partners:
   - 'Francesco Caringella'

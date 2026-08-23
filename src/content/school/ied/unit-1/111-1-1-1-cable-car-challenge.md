@@ -1,8 +1,8 @@
 ---
-title: '1.1 Cable Car Challenge'
+title: '1.1.1 Cable Car Challenge'
 courseSlug: ied
 unit: unit-1
-order: 110
+order: 111
 partners:
   - 'Sam Vortherms'
 ---

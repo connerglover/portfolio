@@ -1,9 +1,8 @@
 ---
-title: '2.3.1 Stress/Strain Calculations'
-courseSlug: poe
+title: '2.4.1 Gingerbread House'
+courseSlug: ied
 unit: unit-2
-order: 231
-status: in-progress
+order: 241
 ---
 
 _No write-up was recorded for this assignment on the original site._

@@ -1,8 +1,8 @@
 ---
-title: '1.2 Iterate and Redesign'
+title: '1.1.2 Iterate and Redesign'
 courseSlug: ied
 unit: unit-1
-order: 120
+order: 112
 ---
 
 A study of the IDEO team's shopping cart redesign, watched as a series of videos. What I took from it:

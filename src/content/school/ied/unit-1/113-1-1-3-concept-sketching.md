@@ -1,8 +1,8 @@
 ---
-title: '1.3 Concept Sketching'
+title: '1.1.3 Concept Sketching'
 courseSlug: ied
 unit: unit-1
-order: 130
+order: 113
 images:
   - src: '/images/school/ied-unit-1/1-3-concept-sketching.jpg'
     alt: 'Pencil concept sketch of a desk lamp on gridded drafting paper'

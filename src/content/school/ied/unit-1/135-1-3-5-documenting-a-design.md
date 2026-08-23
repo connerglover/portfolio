@@ -1,8 +1,8 @@
 ---
-title: '3.5 Documenting a Design'
+title: '1.3.5 Documenting a Design'
 courseSlug: ied
 unit: unit-1
-order: 350
+order: 135
 images:
   - src: '/images/school/ied-unit-1/3-5-documenting-a-design.jpg'
     alt: 'Custom technical drawing template with title block'
