@@ -42,7 +42,7 @@ const { items, numbered = true } = Astro.props;
           <p class="summary">{item.summary}</p>
           {item.tags && item.tags.length > 0 && (
             <ul class="tag-row">
-              {item.tags.map((t) => <li class="tag">{t}</li>)}
+              {item.tags.map((t) => <li class="tag rim-follow">{t}</li>)}
             </ul>
           )}
         </div>

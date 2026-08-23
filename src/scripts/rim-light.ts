@@ -13,11 +13,12 @@
  * them by an angle of its own choosing, and a list that does not simply never
  * reads them. Nothing here knows which is which.
  *
- * Only the pane under the cursor is written to, so the cost is one rect and
- * two property writes per frame regardless of how long the list is. Anything
- * inside the pane marked `.rim-follow` — the arrow on a project row — gets its
- * own local coordinates too, since it needs the light placed against its own
- * box rather than the row's.
+ * Only the pane under the cursor is written to, so the cost stays flat however
+ * long the list is. Anything inside it marked `.rim-follow` — the arrow and
+ * the tags on a project row — gets its own local coordinates too, since each
+ * needs the light placed against its own box rather than the row's. That is
+ * what makes a row of tags light by proximity: a tag away from the cursor is
+ * handed a gradient centred outside itself, and stays dark.
  *
  * --rim-lit is set on the pane and inherits, so descendants share its fade
  * without being written to individually.
@@ -28,6 +29,10 @@ const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Module scope: this outlives client-side navigation, the elements do not.
 let pane: HTMLElement | null = null;
+// Collected when the pane changes, not per frame: a row carries an arrow and
+// half a dozen tags, and re-running the query every frame to find the same
+// elements would be the most expensive thing here by a distance.
+let followers: HTMLElement[] = [];
 let px = 0;
 let py = 0;
 let queued = 0;
@@ -54,11 +59,12 @@ const paint = () => {
   pane.style.setProperty('--tx', clamp((px - (r.left + r.width / 2)) / (r.width / 2)).toFixed(3));
   pane.style.setProperty('--ty', clamp((py - (r.top + r.height / 2)) / (r.height / 2)).toFixed(3));
 
-  for (const child of pane.querySelectorAll<HTMLElement>('.rim-follow')) place(child);
+  for (const child of followers) place(child);
 };
 
 const release = () => {
   if (!pane) return;
+  followers = [];
   pane.style.removeProperty('--rim-lit');
   // Back to flat. --mx/--my are left where they were so the rim fades out from
   // where it was lit rather than jumping to the centre on its way down.
@@ -76,7 +82,10 @@ const onMove = (e: PointerEvent) => {
   if (found !== pane) {
     release();
     pane = found;
-    if (pane) pane.style.setProperty('--rim-lit', '1');
+    if (pane) {
+      followers = Array.from(pane.querySelectorAll<HTMLElement>('.rim-follow'));
+      pane.style.setProperty('--rim-lit', '1');
+    }
   }
 
   if (pane && !queued) queued = requestAnimationFrame(paint);
@@ -95,5 +104,6 @@ if (fine && !still) {
     if (queued) cancelAnimationFrame(queued);
     queued = 0;
     pane = null;
+    followers = [];
   });
 }

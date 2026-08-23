@@ -245,11 +245,21 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 3rem 0; }
   font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--text-muted);
-  border: 1px solid var(--border);
+  /* Glass, like the pane it sits on. This was filled with --bg, which is
+     darker than the pane beneath it, so a tag read as a hole punched through
+     the frosted panel rather than a chip resting on it. */
+  border: 1px solid var(--glass-rim);
   border-radius: 999px;
   padding: 0.12rem 0.6rem;
-  background: var(--bg);
+  background: var(--glass-tint-lit);
 }
+
+/* Inside a pane, a tag catches the cursor the way the pane's own rim does.
+   The reach is much shorter than the default: a tag is a fraction of the size
+   of the arrow, let alone the row, and at 70px a whole row of them would light
+   together instead of one at a time as the cursor passes.
+   Written to out-specify .rim-follow rather than to rely on source order. */
+.tag.rim-follow { --rim-reach: 52px; }
 
 .eyebrow {
   font-family: var(--font-mono);
