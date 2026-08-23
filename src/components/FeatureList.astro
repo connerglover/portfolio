@@ -1,7 +1,6 @@
 ---
 /**
- * A list of large rows where hovering one enlarges it and dims the rest, lit by
- * a light source that sits at the cursor.
+ * A list of large rows where hovering one enlarges it and dims the rest.
  *
  * The idea is Micah Lindley's project list, adapted: his rows sit flush edge to
  * edge and bloom into full-bleed bands, which is striking but leaves nowhere
@@ -13,27 +12,8 @@
  * A scaled row rasterises at its old size and the text goes soft while it
  * animates, which on a page this typographic is not worth the free GPU ride.
  *
- * The tilt is yasio.dev's, which turns out to be vanilla-tilt at perspective
- * 700 / scale 1.05 / glare 0.2. Two things are deliberately not copied. Its
- * cards are 410x230, where 20 degrees reads as a playing card being turned
- * over; these rows are five times as wide, and past about 3 degrees the far
- * edge swings far enough to look broken, so the maximum is small. And its 1.05
- * scale is dropped, because the padding growth above already does that job
- * without softening the text.
- *
- * Three things follow the pointer:
- *
- *   tilt    the hovered row turns to face the cursor
- *   glare   a highlight inside the hovered row, under the cursor
- *   shadow  every row throws a shadow directly away from the cursor
- *
- * The shadow is the reason the pointer reads as a light rather than as a hover
- * effect: rows the cursor is nowhere near still respond to it, so the light is
- * a property of the page instead of a property of the row.
- *
- * Dimming siblings uses `:has()` on the list, so it costs no JavaScript, and
- * Backdrop.astro dims the dot field off the same selector. With no hover
- * available every row simply stays at full strength and flat.
+ * Dimming siblings uses `:has()` on the list, so it costs no JavaScript. With
+ * no hover available every row simply stays at full strength.
  */
 interface Item {
   href: string;
@@ -55,7 +35,6 @@ const { items, numbered = true } = Astro.props;
   {items.map((item, i) => (
     <li>
       <a href={item.href}>
-        <span class="glare" aria-hidden="true"></span>
         {numbered && <span class="index">{String(i + 1).padStart(2, '0')}</span>}
         <div class="text">
           {item.meta && <p class="meta">{item.meta}</p>}
@@ -86,17 +65,6 @@ const { items, numbered = true } = Astro.props;
   }
 
   .feature > li > a {
-    /* Written by the pointer script. The defaults are the rest state, so the
-       list is correct before any script runs and stays correct without one. */
-    --rx: 0deg;
-    --ry: 0deg;
-    --sx: 0;
-    --sy: 5;
-    --mx: 50%;
-    --my: 50%;
-    --glare-r: 300px;
-
-    position: relative;
     display: flex;
     align-items: flex-start;
     gap: 1.5rem;
@@ -105,80 +73,11 @@ const { items, numbered = true } = Astro.props;
     border-radius: var(--radius);
     background: var(--bg-subtle);
     color: inherit;
-    box-shadow: calc(var(--sx) * 1px) calc(var(--sy) * 1px) 20px -8px rgb(0 0 0 / 0.5);
     transition:
       padding var(--dur) var(--ease),
       opacity var(--dur) var(--ease),
       background var(--dur) var(--ease),
-      border-color var(--dur) var(--ease),
-      box-shadow var(--dur) var(--ease);
-  }
-
-  /* The tilt is only mounted on the row being tracked.
-   *
-   * A transform other than `none` puts the row in its own 3D layer, and a
-   * layer's text loses subpixel antialiasing — the same softening the padding
-   * growth above exists to avoid. Carrying it on all five rows permanently to
-   * animate one of them is a bad trade, so the class goes on at the pointer and
-   * comes off once the row has settled back to flat.
-   *
-   * The perspective is a transform function rather than a `perspective`
-   * property on the list, so each row vanishes toward its own centre. Shared on
-   * the list, rows far from its middle would be seen off-axis and shear as they
-   * turned. yasio.dev does the same thing. */
-  .feature > li > a.lit {
-    transform: perspective(1200px) rotateX(var(--rx)) rotateY(var(--ry));
-  }
-
-  /* Only while settling in or out. Transitioning the transform during tracking
-     would make the row chase the cursor a frame behind and feel like syrup —
-     vanilla-tilt suspends its own transition during a move for the same
-     reason. */
-  .feature > li > a.settling {
-    transition:
-      padding var(--dur) var(--ease),
-      opacity var(--dur) var(--ease),
-      background var(--dur) var(--ease),
-      border-color var(--dur) var(--ease),
-      box-shadow var(--dur) var(--ease),
-      transform 200ms cubic-bezier(0.03, 0.98, 0.52, 0.99);
-  }
-
-  /* ---------- the light under the cursor ---------- */
-
-  .glare {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity var(--dur) var(--ease);
-    /* A near-white core inside a wider emerald falloff. The white is what makes
-       it read as a light rather than as a coloured wash; the emerald is what
-       ties it to the cursor trail on the backdrop. */
-    background:
-      radial-gradient(
-        var(--glare-r) circle at var(--mx) var(--my),
-        rgb(255 255 255 / 0.06),
-        transparent 55%
-      ),
-      radial-gradient(
-        calc(var(--glare-r) * 1.5) circle at var(--mx) var(--my),
-        rgb(52 211 153 / 0.11),
-        transparent 68%
-      );
-  }
-  .feature > li > a:hover .glare { opacity: 1; }
-
-  /* The glare is positioned, so it would otherwise paint over the row's own
-     content. Lifting the real children above it is cheaper than fighting the
-     stacking context the transform already created. */
-  .index,
-  .text,
-  .arrow {
-    position: relative;
-    z-index: 1;
+      border-color var(--dur) var(--ease);
   }
 
   /* The group recedes so the hovered row can come forward. */
@@ -192,9 +91,6 @@ const { items, numbered = true } = Astro.props;
     padding-block: 2.4rem;
     background: var(--bg-raised);
     border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
-    box-shadow:
-      calc(var(--sx) * 1.7px) calc(var(--sy) * 1.7px) 44px -12px rgb(0 0 0 / 0.65),
-      0 0 46px -16px color-mix(in srgb, var(--accent) 70%, transparent);
   }
 
   /* ---------- number rail ---------- */
@@ -281,146 +177,4 @@ const { items, numbered = true } = Astro.props;
     h3 { font-size: 1.2rem; }
     .feature > li > a:hover h3 { font-size: 1.35rem; }
   }
-
-  @media (prefers-reduced-motion: reduce) {
-    .feature > li > a.lit { transform: none; }
-    .glare { display: none; }
-  }
 </style>
-
-<script>
-  // Maximums, all reached at the edge of a row / at LIGHT_REACH away from it.
-  const MAX_TILT = 2.6; // deg — see the note at the top of this file
-  const THROW = 20; // px the shadow travels away from the cursor
-  const LIGHT_REACH = 620; // px over which the throw ramps to its maximum
-
-  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-  // Module scope, so this survives client-side navigation. The elements do not.
-  let rows: HTMLElement[] = [];
-  let rects: DOMRect[] = [];
-  let mx = -99999;
-  let my = -99999;
-  let queued = 0;
-  let stale = true;
-
-  const measure = () => {
-    rects = rows.map((a) => a.getBoundingClientRect());
-    stale = false;
-  };
-
-  const apply = () => {
-    queued = 0;
-    if (stale) measure();
-
-    const vh = window.innerHeight;
-    for (let i = 0; i < rows.length; i++) {
-      const a = rows[i];
-      const r = rects[i];
-      if (!r || r.bottom < -120 || r.top > vh + 120) continue;
-
-      const cx = r.left + r.width / 2;
-      const cy = r.top + r.height / 2;
-
-      // Light at the cursor: the shadow runs along the vector from the light to
-      // the row, and lengthens with distance the way a shadow does as a lamp
-      // moves away.
-      const dx = cx - mx;
-      const dy = cy - my;
-      const d = Math.hypot(dx, dy) || 1;
-      const reach = Math.min(1, d / LIGHT_REACH);
-      a.style.setProperty('--sx', ((dx / d) * THROW * reach).toFixed(2));
-      a.style.setProperty('--sy', ((dy / d) * THROW * reach + 4).toFixed(2));
-
-      if (mx >= r.left && mx <= r.right && my >= r.top && my <= r.bottom) {
-        a.style.setProperty('--mx', (mx - r.left).toFixed(1) + 'px');
-        a.style.setProperty('--my', (my - r.top).toFixed(1) + 'px');
-        // -1..1 from the centre. rotateY follows x so the row turns to face the
-        // cursor; rotateX is negated because a positive rotateX tips the top
-        // edge toward the viewer, which is the wrong way round.
-        const nx = (mx - cx) / (r.width / 2);
-        const ny = (my - cy) / (r.height / 2);
-        a.style.setProperty('--ry', (nx * MAX_TILT).toFixed(3) + 'deg');
-        a.style.setProperty('--rx', (-ny * MAX_TILT).toFixed(3) + 'deg');
-      }
-    }
-  };
-
-  const queue = () => {
-    if (queued) return;
-    queued = requestAnimationFrame(apply);
-  };
-
-  // Pending unmount per row, so a re-entry before the row has finished settling
-  // does not strip the tilt out from under itself mid-animation.
-  const settling = new WeakMap<HTMLElement, number>();
-
-  const onMove = (e: PointerEvent) => {
-    mx = e.clientX;
-    my = e.clientY;
-    queue();
-  };
-
-  const onEnter = (e: Event) => {
-    const a = e.currentTarget as HTMLElement;
-    const pending = settling.get(a);
-    if (pending) {
-      clearTimeout(pending);
-      settling.delete(a);
-    }
-    a.classList.add('lit', 'settling');
-    window.setTimeout(() => a.classList.remove('settling'), 220);
-  };
-
-  const onLeave = (e: Event) => {
-    const a = e.currentTarget as HTMLElement;
-    // Return to flat under the transition, then drop the transform entirely so
-    // the row goes back to being plain painted text.
-    a.classList.add('settling');
-    a.style.setProperty('--rx', '0deg');
-    a.style.setProperty('--ry', '0deg');
-    settling.set(
-      a,
-      window.setTimeout(() => {
-        a.classList.remove('settling', 'lit');
-        settling.delete(a);
-      }, 220),
-    );
-  };
-
-  const invalidate = () => {
-    stale = true;
-    queue();
-  };
-
-  if (fine && !still) {
-    window.addEventListener('pointermove', onMove, { passive: true });
-    window.addEventListener('scroll', invalidate, { passive: true });
-    window.addEventListener('resize', invalidate, { passive: true });
-  }
-
-  const bind = () => {
-    if (!fine || still) return;
-    // A frame queued against the previous page is holding a list of elements
-    // that no longer exist. Drop it, and clear the latch with it — otherwise a
-    // frame that never ran (a page loaded in a background tab queues one that
-    // waits for the tab to be shown) leaves `queued` set forever and every
-    // later pointer move is swallowed.
-    if (queued) cancelAnimationFrame(queued);
-    queued = 0;
-    rows = Array.from(document.querySelectorAll<HTMLElement>('.feature > li > a'));
-    stale = true;
-    for (const a of rows) {
-      a.addEventListener('pointerenter', onEnter);
-      a.addEventListener('pointerleave', onLeave);
-    }
-    // The rows are new elements carrying none of the previous state, so paint
-    // the current light position onto them straight away rather than waiting
-    // for the pointer to happen to move again.
-    if (rows.length) queue();
-  };
-
-  document.addEventListener('astro:page-load', bind);
-  bind();
-</script>
