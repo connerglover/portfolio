@@ -28,6 +28,7 @@ Then open <http://localhost:4321>. Edits to content and components hot-reload.
 | `npm run preview` | Serve the built `dist/` locally |
 | `npm run check` | Type-check `.astro` files and content frontmatter |
 | `npm run decks` | Re-render deck PDFs into slide images (needs Python) |
+| `npm run icons` | Re-render the favicon rasters from `public/favicon.svg` (needs Python) |
 
 ---
 
@@ -151,6 +152,8 @@ public/images/                    self-hosted images
 public/decks/                     PDF attachments — decks, reports, worksheets
 public/deck-pages/                generated slide images, one folder per PDF
 scripts/render_decks.py           generates the two lines above
+public/favicon.svg                the CG monogram — source of truth for every icon
+scripts/render_icons.py           generates favicon.ico and apple-touch-icon.png
 ```
 
 ## The theme

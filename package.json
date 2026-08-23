@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "decks": "python scripts/render_decks.py"
+    "decks": "python scripts/render_decks.py",
+    "icons": "python scripts/render_icons.py"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
