@@ -55,6 +55,15 @@ const projects = defineCollection({
     demo: z.string().url().optional(),
     cover: z.object({ src: z.string(), alt: z.string() }).optional(),
     featured: z.boolean().default(false),
+    /**
+     * Holds a project at the top of every list, ahead of newer work.
+     *
+     * `featured` decides whether a project appears on the home page; this
+     * decides the order once it is there. Separate flags because "worth
+     * showing" and "the first thing anyone should read" are different
+     * questions, and date order answers neither.
+     */
+    pinned: z.boolean().default(false),
     draft: z.boolean().default(false),
   }),
 });

@@ -2,10 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FeatureList from '../../components/FeatureList.astro';
 import { getCollection } from 'astro:content';
+import { projectOrder } from '../../data/site';
 
-const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-);
+const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(projectOrder);
 const fmt = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
 ---

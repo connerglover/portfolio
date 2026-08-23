@@ -5,6 +5,7 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Backdrop from '../components/Backdrop.astro';
 import { site } from '../data/site';
+import { pageLift } from '../data/transitions';
 
 interface Props {
   title?: string;
@@ -49,7 +50,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 
     {layout === 'split' ? (
       <>
-        <main id="main" class="split">
+        <main id="main" class="split" transition:animate={pageLift}>
           <slot name="aside" />
           <div class="split-content"><slot /></div>
         </main>
@@ -57,7 +58,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     ) : (
       <>
         <Nav />
-        <main id="main"><slot /></main>
+        <main id="main" transition:animate={pageLift}><slot /></main>
         <Footer />
       </>
     )}

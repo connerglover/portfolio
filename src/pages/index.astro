@@ -3,14 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import HomeAside from '../components/HomeAside.astro';
 import SpotlightList from '../components/SpotlightList.astro';
 import { getCollection } from 'astro:content';
-import { courses, courseTimeline } from '../data/site';
+import { courses, courseTimeline, projectOrder } from '../data/site';
 
-const all = (await getCollection('projects', (p) => !p.data.draft)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-);
-// `featured` pins a project here; without any, fall back to the newest few.
-const pinned = all.filter((p) => p.data.featured);
-const projects = (pinned.length ? pinned : all).slice(0, 3);
+const all = (await getCollection('projects', (p) => !p.data.draft)).sort(projectOrder);
+// `featured` decides which projects reach the home page; `pinned`, inside
+// projectOrder, decides which of them leads. Without any featured, fall back to
+// the newest few.
+const chosen = all.filter((p) => p.data.featured);
+const projects = (chosen.length ? chosen : all).slice(0, 3);
 
 const school = await getCollection('school');
 const assignmentCount = school.length;
