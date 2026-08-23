@@ -69,13 +69,13 @@ const { items, numbered = true } = Astro.props;
     align-items: flex-start;
     gap: 1.5rem;
     padding: 1.6rem 1.75rem;
-    border: 1px solid var(--border);
+    /* Frosted rather than a solid fill: the dot field and the cursor trail
+       read through the row muted instead of stopping dead at its edge. The
+       material is the glass token set in global.css. */
+    border: 1px solid var(--glass-rim);
     border-radius: var(--radius);
-    /* Frosted rather than a solid fill, the same material as the site header.
-       The row keeps its colour; it just stops being opaque, so the dot field
-       and the cursor trail read through it muted instead of stopping dead at
-       its edge. */
-    background: color-mix(in srgb, var(--bg-subtle) 68%, transparent);
+    background: var(--glass-tint);
+    box-shadow: var(--glass-shadow);
     -webkit-backdrop-filter: blur(var(--glass-blur));
     backdrop-filter: blur(var(--glass-blur));
     color: inherit;
@@ -83,6 +83,7 @@ const { items, numbered = true } = Astro.props;
       padding var(--dur) var(--ease),
       opacity var(--dur) var(--ease),
       background var(--dur) var(--ease),
+      box-shadow var(--dur) var(--ease),
       border-color var(--dur) var(--ease);
   }
 
@@ -95,10 +96,11 @@ const { items, numbered = true } = Astro.props;
   .feature > li > a:hover,
   .feature > li > a:focus-visible {
     padding-block: 2.4rem;
-    /* Firmer than at rest, so the hovered row still steps forward out of the
-       group — but not solid, or the light under the cursor would vanish
-       exactly where you are looking. */
-    background: color-mix(in srgb, var(--bg-raised) 80%, transparent);
+    /* Brighter film and a longer shadow, so the hovered row lifts off the
+       group rather than only growing. Still nowhere near opaque — the light
+       under the cursor has to survive exactly where you are looking. */
+    background: var(--glass-tint-lit);
+    box-shadow: var(--glass-shadow-lit);
     border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
   }
 

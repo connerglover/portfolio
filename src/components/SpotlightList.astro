@@ -69,6 +69,7 @@ const { items } = Astro.props;
       background var(--dur) var(--ease),
       backdrop-filter var(--dur) var(--ease),
       -webkit-backdrop-filter var(--dur) var(--ease),
+      box-shadow var(--dur) var(--ease),
       border-color var(--dur) var(--ease),
       transform var(--dur) var(--ease);
   }
@@ -80,13 +81,15 @@ const { items } = Astro.props;
   }
   .spotlight a:hover,
   .spotlight a:focus-visible {
-    /* Frosted, the same material as the site header, rather than the flat fill
-       this used to be — the row lifts off the dot field instead of covering
-       a patch of it. */
-    background: color-mix(in srgb, var(--bg-subtle) 72%, transparent);
+    /* Frosted rather than the flat fill this used to be — the row lifts off
+       the dot field instead of covering a patch of it. Same glass as the
+       index rows, one step brighter because there is nothing else here
+       marking the row out. */
+    background: var(--glass-tint-lit);
+    box-shadow: var(--glass-shadow);
     -webkit-backdrop-filter: blur(var(--glass-blur));
     backdrop-filter: blur(var(--glass-blur));
-    border-color: var(--border);
+    border-color: var(--glass-rim);
     transform: translateX(3px);
   }
 

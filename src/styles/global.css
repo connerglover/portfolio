@@ -45,11 +45,28 @@
   --radius-sm: 6px;
   --space: 1rem;
 
-  /* Frosted glass. One number, so the header and the index rows stay the same
-     material — the panels are translucent and blur what is behind them, which
-     on the rows means the dot field and the cursor trail carry through
-     softened instead of being hidden under an opaque slab. */
+  /* ---------- frosted glass ----------
+   *
+   * One definition of the material, so every pane made of it agrees.
+   *
+   * The tint is a *light* film, not a dark one. That is the part that inverts
+   * on a near-black theme: glass reads as glass because it catches light, so a
+   * white film at low alpha looks like a pane, where a dark film at high alpha
+   * just looks like a darker box — which is what these rows were. The alpha is
+   * a twentieth of the usual glassmorphism 0.2, because that figure assumes a
+   * bright photo behind it, not #0b0e0d.
+   *
+   * The rim does most of the work. A lit top edge is what separates a pane
+   * from a rectangle, and on a page this dark it reads far better than the
+   * shadow does — a black shadow on a near-black page has almost nothing to
+   * darken. The shadow is kept anyway, at a higher alpha than usual, for the
+   * little it picks up against the dot field. */
   --glass-blur: 12px;
+  --glass-tint: rgb(255 255 255 / 0.05);
+  --glass-tint-lit: rgb(255 255 255 / 0.09);
+  --glass-rim: rgb(255 255 255 / 0.1);
+  --glass-shadow: 0 4px 30px rgb(0 0 0 / 0.35);
+  --glass-shadow-lit: 0 10px 40px rgb(0 0 0 / 0.5);
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dur: 220ms;
