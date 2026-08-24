@@ -380,6 +380,11 @@ main { flex: 1 0 auto; padding-block: 3rem 5rem; }
     rotateY(calc(var(--tx, 0) * var(--tilt-y, 1.5deg)));
 }
 
+/* A region the pointer script tracks but nothing paints. It exists so a group
+   of .rim-follow children can be lit without the group itself becoming glass —
+   the tag row in a project's header, which sits in prose rather than inside a
+   row. No declarations belong here; the class is behaviour only. */
+
 /* An element inside a pane that wants the light placed against its own box
    rather than the pane's — the arrow on a project row. It wears the same ring
    in the same colours, over a shorter reach because it is a fraction of the

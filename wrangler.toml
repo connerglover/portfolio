@@ -1,0 +1,24 @@
+# Cloudflare Workers Static Assets configuration.
+#
+# This repo had no config file at all, which is exactly why /404 loaded but a
+# genuine unknown path did not. With no [assets] block, `not_found_handling`
+# defaults to "none": Cloudflare answers an unmatched request with a bare 404
+# and a zero-byte body, so the browser falls back to its own error page and
+# dist/404.html is never reached. Confirmed against the live site — GET
+# /does-not-exist returned 404 with Content-Length 0 and no content type.
+#
+# `name` must match the Worker this repo already deploys to. It follows the
+# repository name, as it does in bluebook and patient-label-printer.
+
+name = "portfolio"
+compatibility_date = "2026-08-24"
+
+[assets]
+directory = "./dist"
+
+# Serve dist/404.html, with a real 404 status, for anything that does not match
+# a built page. This is the opposite choice from patient-label-printer, and for
+# the opposite reason: that app is a single route where an unknown path is a
+# typo and should fail hard, while this site has a 404 page that points
+# somewhere useful and most misses will be dead Google Sites URLs.
+not_found_handling = "404-page"

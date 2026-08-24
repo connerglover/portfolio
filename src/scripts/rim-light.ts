@@ -24,6 +24,17 @@
  * without being written to individually.
  */
 
+/**
+ * What counts as a pane. `.glass-row` and `.glass-pane` are the two painted
+ * materials; `.rim-host` is painted by nothing and exists only to give a group
+ * of `.rim-follow` children something to be lit from — the tag row in a
+ * project's header, which sits in prose rather than inside a row.
+ *
+ * Order does not matter: closest() returns the nearest ancestor matching any
+ * of them, so a tag inside a glass row still resolves to the row.
+ */
+const TRACKED = '.glass-row, .glass-pane, .rim-host';
+
 const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -78,7 +89,7 @@ const onMove = (e: PointerEvent) => {
   py = e.clientY;
 
   const target = e.target as Element | null;
-  const found = target?.closest?.('.glass-row, .glass-pane') as HTMLElement | null;
+  const found = target?.closest?.(TRACKED) as HTMLElement | null;
   if (found !== pane) {
     release();
     pane = found;
