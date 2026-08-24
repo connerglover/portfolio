@@ -1,0 +1,16 @@
+# Old project URLs, kept alive.
+#
+# The label tool has been renamed twice — greenway-label-automator, then
+# patient-label-printer, now greenway-label-printer — and the page slug follows
+# the project each time. Without these, anything that linked to an earlier name
+# lands on the 404 page instead of the thing it was pointing at.
+#
+# Every rule here names an exact path, and none of them is a catch-all. That is
+# deliberate: Cloudflare follows redirect rules "regardless of whether or not an
+# asset matches the incoming request", so a /* rule in this file would shadow
+# every real page on the site rather than only the missing ones.
+
+/projects/greenway-label-automator   /projects/greenway-label-printer/   301
+/projects/greenway-label-automator/  /projects/greenway-label-printer/   301
+/projects/patient-label-printer      /projects/greenway-label-printer/   301
+/projects/patient-label-printer/     /projects/greenway-label-printer/   301

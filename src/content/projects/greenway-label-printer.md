@@ -1,10 +1,10 @@
 ---
-title: 'PatientLabelPrinter'
+title: 'Greenway Label Printer'
 summary: 'A browser tool that turns a Greenway EMR daily summary export into a print-ready PDF of patient ID labels — replacing an afternoon of hand-transcribing names, record numbers and dates of birth, without any patient data leaving the machine.'
 date: 2025-07-29
-updated: 2026-08-23
+updated: 2026-08-24
 tech: ['React', 'Vite', 'Tailwind CSS', 'SheetJS', 'jsPDF', 'Cloudflare Workers']
-repo: 'https://github.com/connerglover/patient-label-printer'
+repo: 'https://github.com/connerglover/greenway-label-printer'
 demo: 'https://labels.connerglover.com'
 featured: true
 draft: false
