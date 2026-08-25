@@ -68,7 +68,9 @@ const toc = headings.filter((h) => h.depth === 2);
     font-size: 0.9rem;
   }
   /* Frame, fill and blur come from .glass-pane in global.css — held lit,
-     since this is furniture rather than something you aim at. */
+     since this is furniture rather than something you aim at. Its rim tracks
+     the cursor from anywhere on the page for the same reason: the glass never
+     goes away, so neither does the light in it. */
   .toc {
     padding: 1rem 1.2rem;
     max-width: var(--measure);

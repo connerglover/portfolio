@@ -306,7 +306,9 @@ main { flex: 1 0 auto; padding-block: 3rem 5rem; }
 
 /* .glass-pane is the lit state, held. Same material, no pointer required —
    for panes that are furniture rather than targets, like a page's contents
-   list. */
+   list. The rim below is held live on these too: the pointer script feeds them
+   whether or not the cursor is on them, since glass that is always there but
+   only answers when touched reads as a pane that has stopped working. */
 .glass-pane,
 .glass-row:hover,
 .glass-row:focus-visible {
@@ -383,7 +385,9 @@ main { flex: 1 0 auto; padding-block: 3rem 5rem; }
 /* A region the pointer script tracks but nothing paints. It exists so a group
    of .rim-follow children can be lit without the group itself becoming glass —
    the tag row in a project's header, which sits in prose rather than inside a
-   row. No declarations belong here; the class is behaviour only. */
+   row. Held live like .glass-pane, and for the same reason: the tags carry
+   their fill and rim at rest, so they answer the cursor at rest too.
+   No declarations belong here; the class is behaviour only. */
 
 /* An element inside a pane that wants the light placed against its own box
    rather than the pane's — the arrow on a project row. It wears the same ring
