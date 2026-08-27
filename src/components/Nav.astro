@@ -83,8 +83,27 @@ const groups = [
     position: sticky;
     top: 0;
     z-index: 20;
-    border-bottom: 1px solid var(--border);
-    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    border-bottom: 1px solid var(--glass-rim);
+  }
+
+  /* The glass is a layer behind the bar rather than a property of it.
+     An element with backdrop-filter becomes a backdrop root for everything
+     inside it, so putting the blur on .site-header would leave the dropdown
+     menus unable to blur the page — they would only ever see the header. As a
+     sibling of the content in paint order it blurs the page normally and
+     leaves the menus a backdrop of their own.
+     The --bg layer under the tint is what the inline panes do not need: the
+     page scrolls under this one, and a heading passing beneath 6.5% white
+     would show straight through. With nothing scrolled under it the two
+     composite to the same colour, so the bar and the contents box match. */
+  .site-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(var(--glass-tint-lit), var(--glass-tint-lit)),
+      color-mix(in srgb, var(--bg) 70%, transparent);
     -webkit-backdrop-filter: blur(var(--glass-blur));
     backdrop-filter: blur(var(--glass-blur));
   }
@@ -175,9 +194,17 @@ const groups = [
     gap: 0;
     min-width: max-content;
     padding: 0.35rem;
-    border: 1px solid var(--border);
+    border: 1px solid var(--glass-rim);
     border-radius: var(--radius);
-    background: var(--bg-raised);
+    /* Same material as the header above it and the contents box below, with
+       the same --bg layer for the same reason: a menu floats over whatever
+       happens to be on the page. The shadow stays heavier than --glass-shadow
+       because this one is genuinely off the page rather than set into it. */
+    background:
+      linear-gradient(var(--glass-tint-lit), var(--glass-tint-lit)),
+      color-mix(in srgb, var(--bg) 74%, transparent);
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
     box-shadow: 0 12px 32px rgb(0 0 0 / 0.45);
     opacity: 0;
     visibility: hidden;
@@ -213,7 +240,7 @@ const groups = [
     white-space: nowrap;
     transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
   }
-  .menu a:hover { background: var(--bg-subtle); color: var(--text); }
+  .menu a:hover { background: var(--glass-tint-lit); color: var(--text); }
   .menu .hint {
     flex: none;
     width: 2.6rem;

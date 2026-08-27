@@ -44,6 +44,10 @@ let pane: HTMLElement | null = null;
 // half a dozen tags, and re-running the query every frame to find the same
 // elements would be the most expensive thing here by a distance.
 let followers: HTMLElement[] = [];
+// Panes that are glass whether or not the pointer is on them. They are fed
+// coordinates on every move, so their rim catches the light from across the
+// page instead of switching on at the boundary.
+let held: HTMLElement[] = [];
 let px = 0;
 let py = 0;
 let queued = 0;
@@ -59,18 +63,21 @@ const clamp = (n: number) => (n < -1 ? -1 : n > 1 ? 1 : n);
 
 const paint = () => {
   queued = 0;
-  if (!pane) return;
 
-  const r = place(pane);
+  if (pane) {
+    const r = place(pane);
 
-  // Where the pointer sits in the pane, -1 to 1 from its centre. Written as
-  // plain numbers rather than angles so the size of the tilt stays in CSS,
-  // where it can differ per list — the project rows use it, the home rows
-  // simply never read it.
-  pane.style.setProperty('--tx', clamp((px - (r.left + r.width / 2)) / (r.width / 2)).toFixed(3));
-  pane.style.setProperty('--ty', clamp((py - (r.top + r.height / 2)) / (r.height / 2)).toFixed(3));
+    // Where the pointer sits in the pane, -1 to 1 from its centre. Written as
+    // plain numbers rather than angles so the size of the tilt stays in CSS,
+    // where it can differ per list — the project rows use it, the home rows
+    // simply never read it.
+    pane.style.setProperty('--tx', clamp((px - (r.left + r.width / 2)) / (r.width / 2)).toFixed(3));
+    pane.style.setProperty('--ty', clamp((py - (r.top + r.height / 2)) / (r.height / 2)).toFixed(3));
 
-  for (const child of followers) place(child);
+    for (const child of followers) place(child);
+  }
+
+  for (const el of held) if (el !== pane) place(el);
 };
 
 const release = () => {
@@ -99,14 +106,28 @@ const onMove = (e: PointerEvent) => {
     }
   }
 
-  if (pane && !queued) queued = requestAnimationFrame(paint);
+  if (!queued && (pane || held.length)) queued = requestAnimationFrame(paint);
+};
+
+const collect = () => {
+  held = Array.from(document.querySelectorAll<HTMLElement>('.glass-pane'));
 };
 
 if (fine && !still) {
   window.addEventListener('pointermove', onMove, { passive: true });
   // A pane can leave under a still cursor — a scroll, or the pointer leaving
   // the window entirely — and would otherwise stay lit with stale coordinates.
-  window.addEventListener('scroll', release, { passive: true });
+  // Held panes are the opposite case: they do not leave, but they move under a
+  // cursor that has not, so their coordinates need recomputing even though no
+  // pointer event fired.
+  window.addEventListener(
+    'scroll',
+    () => {
+      release();
+      if (!queued && held.length) queued = requestAnimationFrame(paint);
+    },
+    { passive: true },
+  );
   document.addEventListener('pointerleave', release);
 
   // Astro swaps the DOM on navigation, so the held pane is a detached node by
@@ -116,5 +137,8 @@ if (fine && !still) {
     queued = 0;
     pane = null;
     followers = [];
+    held = [];
   });
+  document.addEventListener('astro:page-load', collect);
+  collect();
 }

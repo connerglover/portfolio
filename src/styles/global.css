@@ -380,6 +380,14 @@ main { flex: 1 0 auto; padding-block: 3rem 5rem; }
     rotateY(calc(var(--tx, 0) * var(--tilt-y, 1.5deg)));
 }
 
+/* A pane that is always glass should always be catching the light, not only
+   while the pointer is inside it — that was the giveaway that the effect was a
+   hover state wearing a costume. It needs no switch: the gradient's own falloff
+   does the work, since a cursor far away is handed a centre well outside the
+   pane and the rim simply reads dark. The script keeps feeding these
+   coordinates wherever the pointer goes. */
+.glass-pane::after { opacity: var(--rim-lit, 1); }
+
 /* A region the pointer script tracks but nothing paints. It exists so a group
    of .rim-follow children can be lit without the group itself becoming glass —
    the tag row in a project's header, which sits in prose rather than inside a
