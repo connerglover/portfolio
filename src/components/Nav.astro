@@ -120,6 +120,13 @@ const groups = [
     border-radius: 0;
     -webkit-mask: none;
     mask: none;
+    /* Behind the bar's contents. An open dropdown hangs from a trigger inside
+       the bar and starts a few pixels above the bar's own bottom edge, so at
+       the default z-index this strip — generated content, and therefore last
+       in paint order — drew itself straight across the top of the menu.
+       Negative keeps it above the ::before glass, which is earlier in the DOM
+       at the same index, while putting it under anything positioned. */
+    z-index: -1;
   }
 
   .bar {

@@ -404,6 +404,12 @@ main { flex: 1 0 auto; padding-block: 3rem 5rem; }
   position: relative;
 }
 
+/* Its followers are lit by default, for the same reason a .glass-pane's rim is:
+   the region is there permanently, so the light should already be on it. The
+   script keeps feeding it coordinates wherever the pointer is, and the
+   gradient's falloff decides what actually shows. */
+.rim-host { --rim-lit: 1; }
+
 /* A region the pointer script tracks but nothing paints. It exists so a group
    of .rim-follow children can be lit without the group itself becoming glass —
    the tag row in a project's header, which sits in prose rather than inside a

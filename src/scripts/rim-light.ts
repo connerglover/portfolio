@@ -35,8 +35,13 @@
  */
 const TRACKED = '.glass-row, .glass-pane, .glass-edge, .rim-host';
 
-/** Surfaces lit whether or not the pointer is on them. */
-const HELD = '.glass-pane, .glass-edge';
+/**
+ * Surfaces lit whether or not the pointer is on them. A .rim-host qualifies for
+ * the same reason the others do: the tags in a project's header are permanent
+ * furniture, not something you aim at, so their edges should be catching the
+ * light before you arrive rather than switching on when you do.
+ */
+const HELD = '.glass-pane, .glass-edge, .rim-host';
 
 const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -49,8 +54,9 @@ let pane: HTMLElement | null = null;
 let followers: HTMLElement[] = [];
 // Panes that are glass whether or not the pointer is on them. They are fed
 // coordinates on every move, so their rim catches the light from across the
-// page instead of switching on at the boundary.
-let held: HTMLElement[] = [];
+// page instead of switching on at the boundary. Their followers are collected
+// alongside them, once per page, rather than queried every frame.
+let held: { el: HTMLElement; follows: HTMLElement[] }[] = [];
 let px = 0;
 let py = 0;
 let queued = 0;
@@ -80,7 +86,12 @@ const paint = () => {
     for (const child of followers) place(child);
   }
 
-  for (const el of held) if (el !== pane) place(el);
+  for (const surface of held) {
+    // The hovered branch above has already placed this one and its followers.
+    if (surface.el === pane) continue;
+    place(surface.el);
+    for (const child of surface.follows) place(child);
+  }
 };
 
 const release = () => {
@@ -113,7 +124,10 @@ const onMove = (e: PointerEvent) => {
 };
 
 const collect = () => {
-  held = Array.from(document.querySelectorAll<HTMLElement>(HELD));
+  held = Array.from(document.querySelectorAll<HTMLElement>(HELD)).map((el) => ({
+    el,
+    follows: Array.from(el.querySelectorAll<HTMLElement>('.rim-follow')),
+  }));
 };
 
 if (fine && !still) {
