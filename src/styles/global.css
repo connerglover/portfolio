@@ -332,6 +332,7 @@ main { flex: 1 0 auto; padding-block: 3rem 5rem; }
  */
 .glass-row::after,
 .glass-pane::after,
+.glass-edge::after,
 .rim-follow::after {
   content: '';
   position: absolute;
@@ -386,7 +387,22 @@ main { flex: 1 0 auto; padding-block: 3rem 5rem; }
    does the work, since a cursor far away is handed a centre well outside the
    pane and the rim simply reads dark. The script keeps feeding these
    coordinates wherever the pointer goes. */
-.glass-pane::after { opacity: var(--rim-lit, 1); }
+.glass-pane::after,
+.glass-edge::after { opacity: var(--rim-lit, 1); }
+
+/* The lit edge without the material.
+ *
+ * .glass-pane bundles the two together, which suits a box that is only ever a
+ * box. The header and the dropdown menus cannot use it: a bar the page scrolls
+ * under and a menu that floats over it both need a backing of their own, so
+ * they paint themselves and wear only the edge.
+ *
+ * Positioned so the ring has something to anchor to. Both current users set
+ * their own position — sticky and absolute — and out-specify this, but a
+ * future one that forgets would otherwise hang its ring on some ancestor. */
+.glass-edge {
+  position: relative;
+}
 
 /* A region the pointer script tracks but nothing paints. It exists so a group
    of .rim-follow children can be lit without the group itself becoming glass —

@@ -33,7 +33,10 @@
  * Order does not matter: closest() returns the nearest ancestor matching any
  * of them, so a tag inside a glass row still resolves to the row.
  */
-const TRACKED = '.glass-row, .glass-pane, .rim-host';
+const TRACKED = '.glass-row, .glass-pane, .glass-edge, .rim-host';
+
+/** Surfaces lit whether or not the pointer is on them. */
+const HELD = '.glass-pane, .glass-edge';
 
 const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -110,7 +113,7 @@ const onMove = (e: PointerEvent) => {
 };
 
 const collect = () => {
-  held = Array.from(document.querySelectorAll<HTMLElement>('.glass-pane'));
+  held = Array.from(document.querySelectorAll<HTMLElement>(HELD));
 };
 
 if (fine && !still) {

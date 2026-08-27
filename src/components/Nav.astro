@@ -40,7 +40,7 @@ const groups = [
 ];
 ---
 
-<header class="site-header">
+<header class="site-header glass-edge">
   <div class="wrap bar">
     <a class="brand" href="/">{site.name}</a>
 
@@ -52,7 +52,7 @@ const groups = [
               {g.label}
               <svg viewBox="0 0 24 24" aria-hidden="true" class="caret"><path d="M6 9l6 6 6-6" /></svg>
             </a>
-            <ul class="menu">
+            <ul class="menu glass-edge">
               {g.items.map((it) => (
                 <li>
                   <a href={it.href} aria-current={path === it.href ? 'page' : undefined}>
@@ -107,6 +107,21 @@ const groups = [
     -webkit-backdrop-filter: blur(var(--glass-blur));
     backdrop-filter: blur(var(--glass-blur));
   }
+  /* The bar's lit edge is its bottom border and nothing else. The shared ring
+     draws all four sides, which on a full-bleed sticky bar would run a line up
+     both viewport edges and across the very top of the page. Reshaped rather
+     than opted out of, so the light still tracks the cursor along the one edge
+     the bar actually has — including from below it, since the gradient is
+     placed in the header's own coordinates and simply falls off with distance. */
+  .site-header::after {
+    inset: auto 0 -1px;
+    height: 1px;
+    padding: 0;
+    border-radius: 0;
+    -webkit-mask: none;
+    mask: none;
+  }
+
   .bar {
     display: flex;
     flex-wrap: wrap;
@@ -192,6 +207,10 @@ const groups = [
     right: -0.6rem;
     display: block;
     gap: 0;
+    /* Shorter than the 300px default: a menu is a fraction of the width of the
+       bar or the contents box, and at the default the whole ring would light
+       at once rather than the edge nearest the cursor. */
+    --rim-reach: 200px;
     min-width: max-content;
     padding: 0.35rem;
     border: 1px solid var(--glass-rim);
