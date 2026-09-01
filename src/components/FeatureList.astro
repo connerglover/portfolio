@@ -93,7 +93,7 @@ const { items, numbered = true } = Astro.props;
 
   /* The group recedes so the hovered row can come forward. */
   @media (hover: hover) {
-    .feature:has(a:hover) > li > a { opacity: 0.42; }
+    .feature:has(a:hover) > li > a { opacity: 0.5; }
     .feature:has(a:hover) > li > a:hover { opacity: 1; }
   }
 
@@ -109,7 +109,7 @@ const { items, numbered = true } = Astro.props;
     width: 2.25rem;
     padding-top: 0.3rem;
     font-family: var(--font-mono);
-    font-size: 0.78rem;
+    font-size: var(--fs-small);
     color: var(--text-faint);
     transition: color var(--dur) var(--ease);
   }
@@ -119,7 +119,7 @@ const { items, numbered = true } = Astro.props;
 
   .meta {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: var(--fs-label);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--text-faint);
@@ -128,7 +128,7 @@ const { items, numbered = true } = Astro.props;
 
   h3 {
     margin: 0;
-    font-size: 1.4rem;
+    font-size: var(--fs-title-lg);
     letter-spacing: -0.02em;
     color: var(--text);
     transition:
@@ -137,14 +137,14 @@ const { items, numbered = true } = Astro.props;
   }
   .feature > li > a:hover h3,
   .feature > li > a:focus-visible h3 {
-    font-size: 1.75rem;
+    font-size: var(--fs-title-xl);
     color: var(--accent-bright);
   }
 
   .summary {
     margin: 0.5rem 0 0;
     color: var(--text-muted);
-    font-size: 0.96rem;
+    font-size: var(--fs-secondary);
     max-width: 68ch;
   }
 
@@ -164,7 +164,9 @@ const { items, numbered = true } = Astro.props;
        pane, rather than from a flat colour swap on hover. */
     border: 1px solid var(--glass-rim);
     color: var(--text-faint);
-    transition: all var(--dur) var(--ease);
+    transition:
+      color var(--dur) var(--ease),
+      transform var(--dur) var(--ease);
   }
   .arrow svg {
     width: 1rem;
@@ -186,7 +188,7 @@ const { items, numbered = true } = Astro.props;
     .feature > li > a:hover { padding-block: 1.6rem; }
     .index { display: none; }
     .arrow { display: none; }
-    h3 { font-size: 1.2rem; }
-    .feature > li > a:hover h3 { font-size: 1.35rem; }
+    h3 { font-size: var(--fs-title); }
+    .feature > li > a:hover h3 { font-size: var(--fs-title-lg); }
   }
 </style>

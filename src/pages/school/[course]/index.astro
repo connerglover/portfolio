@@ -96,7 +96,7 @@ const attachments = (item: (typeof all)[number]) => {
                   <details>
                     <summary>
                       <span class="marker" aria-hidden="true"></span>
-                      <span class="title">{item.data.title}</span>
+                      <h3 class="title">{item.data.title}</h3>
                       <span class="chips">
                         {item.data.status === 'in-progress' && <span class="chip warn">In progress</span>}
                         {item.data.status === 'not-started' && <span class="chip">Not started</span>}
@@ -138,7 +138,7 @@ const attachments = (item: (typeof all)[number]) => {
     gap: 0.5rem 1.4rem;
     margin: 0;
     font-family: var(--font-mono);
-    font-size: 0.74rem;
+    font-size: var(--fs-label);
     letter-spacing: 0.05em;
     color: var(--text-faint);
   }
@@ -161,7 +161,7 @@ const attachments = (item: (typeof all)[number]) => {
     border: 1px solid var(--border);
     border-radius: 999px;
     font-family: var(--font-mono);
-    font-size: 0.74rem;
+    font-size: var(--fs-label);
     color: var(--text-muted);
   }
   .unit-jump a:hover {
@@ -169,7 +169,7 @@ const attachments = (item: (typeof all)[number]) => {
     color: var(--accent-bright);
   }
   .unit-jump .count {
-    font-size: 0.68rem;
+    font-size: var(--fs-chip);
     color: var(--text-faint);
   }
 
@@ -187,12 +187,12 @@ const attachments = (item: (typeof all)[number]) => {
   }
   .unit-meta {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: var(--fs-label);
     font-weight: 400;
     letter-spacing: 0.06em;
     color: var(--text-faint);
   }
-  .empty { font-size: 0.92rem; }
+  .empty { font-size: var(--fs-secondary); }
 
   /* ---------- collapsible assignments ---------- */
 
@@ -229,17 +229,25 @@ const attachments = (item: (typeof all)[number]) => {
     height: 7px;
     border-radius: 50%;
     border: 1px solid var(--border-strong);
-    transition: all var(--dur) var(--ease);
+    transition:
+      border-color var(--dur) var(--ease),
+      background var(--dur) var(--ease);
   }
   details[open] .marker,
   summary:hover .marker { border-color: var(--accent); background: var(--accent); }
 
+  /* A heading, so a screen reader can jump assignment to assignment on a
+     page that runs to thirty of them; styled as the row text it always was. */
   .title {
     font-family: var(--font-display);
-    font-size: 1rem;
+    font-size: var(--fs-body);
     font-weight: 500;
     color: var(--text);
     letter-spacing: -0.01em;
+    line-height: 1.35;
+    margin: 0;
+    min-width: 0;
+    flex: 1;
   }
   details[open] .title { color: var(--accent-bright); }
 
@@ -252,13 +260,13 @@ const attachments = (item: (typeof all)[number]) => {
   }
   .files {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: var(--fs-label);
     color: var(--text-faint);
     white-space: nowrap;
   }
   .chip {
     font-family: var(--font-mono);
-    font-size: 0.63rem;
+    font-size: var(--fs-chip);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-muted);
@@ -279,13 +287,23 @@ const attachments = (item: (typeof all)[number]) => {
   .body > :first-child { margin-top: 0; }
   .byline {
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: var(--fs-label);
     color: var(--text-faint);
     margin: 0 0 0.75rem;
   }
 
+  /* Narrow screens keep the chips. Hiding them dropped "In progress" and the
+     file count on exactly the device a grader is most likely to tap from, so
+     the row wraps and the cluster takes a second line under the title,
+     indented past the marker. */
   @media (max-width: 34rem) {
-    .chips { display: none; }
+    summary { flex-wrap: wrap; row-gap: 0.3rem; }
+    .chips {
+      flex-basis: 100%;
+      margin-left: calc(7px + 0.85rem);
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
     .body { padding-left: 0.5rem; }
   }
 </style>

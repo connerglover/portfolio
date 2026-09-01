@@ -82,14 +82,14 @@ const alsoTaken = courseTimeline.filter((c) => !('slug' in c));
 <style>
   section + section { margin-top: 4.5rem; }
 
-  .lede p { font-size: 1.08rem; max-width: 54ch; }
+  .lede p { font-size: var(--fs-lede); max-width: 54ch; }
   .lede p:first-child { color: var(--text); }
 
   .section-head {
     display: flex;
     align-items: baseline;
     gap: 0.85rem;
-    font-size: 0.78rem;
+    font-size: var(--fs-small);
     font-family: var(--font-mono);
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -101,5 +101,5 @@ const alsoTaken = courseTimeline.filter((c) => !('slug' in c));
   }
   .section-head .num { color: var(--accent); }
 
-  .more { margin: 1.25rem 0 0; font-size: 0.92rem; }
+  .more { margin: 1.25rem 0 0; font-size: var(--fs-secondary); }
 </style>

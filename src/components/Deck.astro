@@ -38,6 +38,13 @@ const pages = meta
   ? Array.from({ length: meta.pages }, (_, i) => `${meta.dir}/p${String(i + 1).padStart(2, '0')}.webp`)
   : [];
 const paged = meta ? meta.pages > 1 : false;
+// The viewer takes focus and handles the keyboard, so it needs a name: what
+// it is, how long it is, and that arrows work. Documents scroll instead.
+const viewerLabel = meta
+  ? isDocument
+    ? `${label}, ${meta.pages}-page document. Scroll to read.`
+    : `${label}, ${meta.pages} slide${meta.pages === 1 ? '' : 's'}. Use the arrow keys to move between slides.`
+  : label;
 ---
 
 <figure class="deck">
@@ -47,12 +54,16 @@ const paged = meta ? meta.pages > 1 : false;
       data-variant={isDocument ? 'document' : 'slides'}
       data-pages={meta.pages}
       style={`--ratio: ${ratio}`}
+      role="group"
+      aria-label={viewerLabel}
     >
       <div class="stage" data-stage>
         {pages.map((src, i) => (
           <img
             src={src}
             alt={`${label} — page ${i + 1} of ${meta.pages}`}
+            width={meta.width}
+            height={meta.height}
             loading="lazy"
             decoding="async"
             draggable="false"
@@ -83,7 +94,7 @@ const paged = meta ? meta.pages > 1 : false;
         <button type="button" data-full aria-label="Full screen">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /></svg>
         </button>
-        <a href={pdf} target="_blank" rel="noopener noreferrer" class="pdf">PDF</a>
+        <a href={pdf} target="_blank" rel="noopener noreferrer" class="pdf">PDF<span class="sr-only"> (opens in a new tab)</span></a>
       </div>
     </slide-deck>
   ) : (
@@ -99,7 +110,7 @@ const paged = meta ? meta.pages > 1 : false;
   .deck { margin: 1.5rem 0; }
 
   figcaption {
-    font-size: 0.85rem;
+    font-size: var(--fs-caption);
     color: var(--text-muted);
     margin-top: 0.5rem;
   }
@@ -203,29 +214,43 @@ const paged = meta ? meta.pages > 1 : false;
   }
 
   .count {
-    font-size: 0.8rem;
+    font-size: var(--fs-small);
     color: var(--text-muted);
     font-variant-numeric: tabular-nums;
     padding-inline: 0.4rem;
   }
 
   .pdf {
-    font-size: 0.78rem;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    font-size: var(--fs-small);
     color: var(--text-muted);
     text-decoration: none;
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
   }
+
+  /* A finger is not a cursor. 2rem controls are fine under a mouse; on touch
+     they grow to the 44px the platforms ask for, and the bar grows with them. */
+  @media (pointer: coarse) {
+    .bar button,
+    .pdf { min-height: 2.75rem; }
+    .bar button { width: 2.75rem; }
+  }
   .pdf:hover { background: var(--bg-subtle); color: var(--text); }
 
   /* ---------- fullscreen ---------- */
 
+  /* Same palette as the page. Fullscreen used to swap in a blue-grey set of
+     its own, so the viewer changed brand the moment it went full screen; now
+     it only sheds its frame and lets the stage take the height. */
   .viewer:fullscreen {
     display: flex;
     flex-direction: column;
     border: 0;
     border-radius: 0;
-    background: #0b0d10;
+    background: var(--bg);
   }
   .viewer:fullscreen .stage {
     flex: 1;
@@ -233,14 +258,10 @@ const paged = meta ? meta.pages > 1 : false;
     min-height: 0;
   }
   .slides:fullscreen .stage { aspect-ratio: auto; }
-  .document:fullscreen .stage { background: #15181c; }
-  .viewer:fullscreen .bar {
-    background: #0b0d10;
-    border-top-color: #2a2f36;
-  }
+  .viewer:fullscreen .bar { background: var(--bg); }
   .viewer:fullscreen .count,
   .viewer:fullscreen .pdf,
-  .viewer:fullscreen button { color: #c9d1d9; }
+  .viewer:fullscreen button { color: var(--text); }
 
   /* ---------- no scripting ---------- */
 

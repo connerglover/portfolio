@@ -7,19 +7,24 @@
  * more, and stacking those full width buries the rest of the page. Each
  * thumbnail links to the full-size file.
  */
+import { imageSize } from '../lib/image-size';
+
 interface Props {
   images: { src: string; alt: string }[];
 }
 const { images } = Astro.props;
 const single = images.length === 1;
+// Read once at build so each photo reserves its box before it loads.
+const sized = images.map((img) => ({ ...img, ...imageSize(img.src) }));
 ---
 
 {images.length > 0 && (
   <div class={single ? 'single' : 'grid-gallery'}>
-    {images.map((img) => (
+    {sized.map((img) => (
       <figure>
         <a href={img.src} target="_blank" rel="noopener noreferrer">
-          <img src={img.src} alt={img.alt} loading="lazy" />
+          <img src={img.src} alt={img.alt} width={img.width} height={img.height} loading="lazy" />
+          <span class="sr-only">Full size, opens in a new tab</span>
         </a>
       </figure>
     ))}

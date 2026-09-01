@@ -5,6 +5,13 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Backdrop from '../components/Backdrop.astro';
 import { site } from '../data/site';
+// The three faces every page paints with, preloaded so the first render does
+// not flash system fonts and then swap. `?url` resolves to the same hashed
+// asset the stylesheet references, so nothing is fetched twice. Latin subsets
+// only; the others load on demand through unicode-range as before.
+import interUrl from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import groteskUrl from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
+import monoUrl from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
 
 interface Props {
   title?: string;
@@ -53,6 +60,9 @@ const ogImage = new URL('/og.png', Astro.site);
     <title>{pageTitle}</title>
     <meta name="description" content={metaDescription} />
     <meta name="theme-color" content="#0b0e0d" />
+    {[interUrl, groteskUrl, monoUrl].map((href) => (
+      <link rel="preload" as="font" type="font/woff2" href={href} crossorigin />
+    ))}
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

@@ -140,7 +140,7 @@ const groups = [
   .brand {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: 1.02rem;
+    font-size: var(--fs-body);
     letter-spacing: -0.02em;
     color: var(--text);
     border: 0;
@@ -160,18 +160,28 @@ const groups = [
   nav a {
     position: relative;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: var(--fs-label);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-faint);
     border: 0;
+  }
+  /* The text is 12px tall; the target is not. Padding grows the hit area to
+     the 24px floor and the negative margin gives the space straight back, so
+     the bar's rhythm does not move. The underline is placed from the padded
+     box, hence the positive offset. */
+  .top > li > a {
+    display: inline-flex;
+    align-items: center;
+    padding-block: 0.6rem;
+    margin-block: -0.6rem;
   }
   .top > li > a::after {
     content: '';
     position: absolute;
     left: 0;
     right: 100%;
-    bottom: -0.35rem;
+    bottom: 0.25rem;
     height: 1px;
     background: var(--accent);
     transition: right var(--dur) var(--ease);
@@ -270,13 +280,13 @@ const groups = [
   .menu .hint {
     flex: none;
     width: 2.6rem;
-    font-size: 0.68rem;
+    font-size: var(--fs-chip);
     letter-spacing: 0.08em;
     color: var(--accent);
   }
   .menu .full {
     font-family: var(--font-sans);
-    font-size: 0.86rem;
+    font-size: var(--fs-caption);
   }
 
   /* ---------- narrow screens ---------- */
@@ -286,6 +296,13 @@ const groups = [
   @media (max-width: 52rem) {
     nav ul.top { display: none; }
     nav ul.flat { display: flex; gap: 1.2rem; }
-    nav ul.flat a { font-size: 0.72rem; letter-spacing: 0.08em; }
+    nav ul.flat a {
+      display: inline-block;
+      font-size: var(--fs-label);
+      letter-spacing: 0.08em;
+      /* Thumb-sized on the surface that is actually tapped. */
+      padding: 0.75rem 0.4rem;
+      margin: -0.75rem -0.4rem;
+    }
   }
 </style>

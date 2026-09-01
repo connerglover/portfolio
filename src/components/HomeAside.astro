@@ -53,8 +53,8 @@ const elsewhere = [
     </nav>
 
     <ul class="social">
-      {site.github && <li><a href={site.github} target="_blank" rel="noopener noreferrer">GitHub</a></li>}
-      {site.linkedin && <li><a href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>}
+      {site.github && <li><a href={site.github} target="_blank" rel="noopener noreferrer">GitHub<span class="sr-only"> (opens in a new tab)</span></a></li>}
+      {site.linkedin && <li><a href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn<span class="sr-only"> (opens in a new tab)</span></a></li>}
       {site.email && <li><a href={`mailto:${site.email}`}>Email</a></li>}
     </ul>
   </div>
@@ -81,19 +81,19 @@ const elsewhere = [
   }
 
   h1 {
-    font-size: clamp(2.1rem, 1.4rem + 2vw, 2.9rem);
+    font-size: var(--fs-display-sm);
     margin: 0;
     letter-spacing: -0.035em;
   }
   .role {
     font-family: var(--font-display);
-    font-size: 1.05rem;
+    font-size: var(--fs-lede);
     color: var(--text);
     margin: 0.3rem 0 0.9rem;
   }
   .blurb {
     color: var(--text-muted);
-    font-size: 0.95rem;
+    font-size: var(--fs-secondary);
     max-width: 26ch;
     margin: 0;
   }
@@ -109,7 +109,7 @@ const elsewhere = [
     display: flex;
     align-items: center;
     gap: 0.85rem;
-    padding: 0.45rem 0;
+    padding: 0.55rem 0;
     color: var(--text-faint);
     border: 0;
   }
@@ -122,7 +122,7 @@ const elsewhere = [
   }
   .sections .label {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: var(--fs-label);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     transition: color var(--dur) var(--ease);
@@ -138,8 +138,9 @@ const elsewhere = [
   .elsewhere { margin-top: 2.5rem; }
   .elsewhere a {
     display: block;
-    padding: 0.2rem 0;
-    font-size: 0.9rem;
+    padding: 0.45rem 0;
+    margin: -0.25rem 0;
+    font-size: var(--fs-secondary);
     color: var(--text-muted);
     border: 0;
   }
@@ -152,11 +153,14 @@ const elsewhere = [
     margin-top: 1.75rem;
   }
   .social a {
+    display: inline-block;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: var(--fs-label);
     letter-spacing: 0.06em;
     color: var(--text-faint);
     border: 0;
+    padding: 0.6rem 0.3rem;
+    margin: -0.6rem -0.3rem;
   }
   .social a:hover { color: var(--accent-bright); }
 </style>

@@ -8,6 +8,8 @@ repo: 'https://github.com/connerglover/crt'
 cover:
   src: '/images/projects/crt/screenshot.png'
   alt: 'CRT running on Windows, showing a run timed at 1:57.000 without loads and 2:00.000 with loads, alongside frame inputs and a list of individual loads'
+  width: 782
+  height: 526
 featured: true
 draft: false
 ---

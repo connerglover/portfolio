@@ -18,11 +18,17 @@ const year = new Date().getFullYear();
     border-top: 1px solid var(--border);
     padding-block: 2rem;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: var(--fs-label);
     letter-spacing: 0.04em;
     color: var(--text-faint);
   }
   .site-footer p { margin: 0; }
-  .site-footer a { color: var(--text-muted); border: 0; }
+  .site-footer a {
+    display: inline-block;
+    color: var(--text-muted);
+    border: 0;
+    padding: 0.6rem 0.3rem;
+    margin: -0.6rem -0.3rem;
+  }
   .site-footer a:hover { color: var(--accent-bright); }
 </style>

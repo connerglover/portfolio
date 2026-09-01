@@ -53,7 +53,16 @@ const projects = defineCollection({
     tech: z.array(z.string()).default([]),
     repo: z.string().url().optional(),
     demo: z.string().url().optional(),
-    cover: z.object({ src: z.string(), alt: z.string() }).optional(),
+    // Intrinsic pixel size, so the page can reserve the cover's height before
+    // the file arrives instead of shoving the contents box down when it does.
+    cover: z
+      .object({
+        src: z.string(),
+        alt: z.string(),
+        width: z.number().int().positive().optional(),
+        height: z.number().int().positive().optional(),
+      })
+      .optional(),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
   }),

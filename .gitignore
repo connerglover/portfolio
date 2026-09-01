@@ -9,3 +9,8 @@ dist/
 .netlify
 __pycache__/
 *.pyc
+
+# Impeccable live-mode session state; machine-specific. config.json and design.json are shared.
+.impeccable/live/roots.json
+.impeccable/live/sessions/
+.impeccable/live/inject-journal.json

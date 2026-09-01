@@ -1,0 +1,577 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-01T23:32:52.100Z",
+  "title": "Design System: Conner Glover Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "signal-emerald": {
+        "role": "primary",
+        "displayName": "Signal Emerald",
+        "canonical": "oklch(70% 0.15 163)",
+        "tonalRamp": [
+          "oklch(15% 0.15 163)",
+          "oklch(27% 0.15 163)",
+          "oklch(39% 0.15 163)",
+          "oklch(51% 0.15 163)",
+          "oklch(63% 0.15 163)",
+          "oklch(75% 0.15 163)",
+          "oklch(85% 0.15 163)",
+          "oklch(95% 0.15 163)"
+        ]
+      },
+      "signal-emerald-bright": {
+        "role": "primary",
+        "displayName": "Signal Emerald Bright",
+        "canonical": "oklch(78% 0.15 163)",
+        "tonalRamp": [
+          "oklch(15% 0.15 163)",
+          "oklch(27% 0.15 163)",
+          "oklch(39% 0.15 163)",
+          "oklch(51% 0.15 163)",
+          "oklch(63% 0.15 163)",
+          "oklch(75% 0.15 163)",
+          "oklch(85% 0.15 163)",
+          "oklch(95% 0.15 163)"
+        ]
+      },
+      "signal-emerald-dim": {
+        "role": "primary",
+        "displayName": "Signal Emerald Dim",
+        "canonical": "oklch(58% 0.13 163)",
+        "tonalRamp": [
+          "oklch(15% 0.13 163)",
+          "oklch(27% 0.13 163)",
+          "oklch(39% 0.13 163)",
+          "oklch(51% 0.13 163)",
+          "oklch(63% 0.13 163)",
+          "oklch(75% 0.13 163)",
+          "oklch(85% 0.13 163)",
+          "oklch(95% 0.13 163)"
+        ]
+      },
+      "signal-emerald-wash": {
+        "role": "primary",
+        "displayName": "Signal Emerald Wash",
+        "canonical": "oklch(70% 0.15 163 / 0.12)",
+        "tonalRamp": [
+          "oklch(15% 0.15 163)",
+          "oklch(27% 0.15 163)",
+          "oklch(39% 0.15 163)",
+          "oklch(51% 0.15 163)",
+          "oklch(63% 0.15 163)",
+          "oklch(75% 0.15 163)",
+          "oklch(85% 0.15 163)",
+          "oklch(95% 0.15 163)"
+        ]
+      },
+      "signal-emerald-contrast": {
+        "role": "primary",
+        "displayName": "Signal Emerald Contrast",
+        "canonical": "oklch(16% 0.03 163)",
+        "tonalRamp": [
+          "oklch(15% 0.03 163)",
+          "oklch(27% 0.03 163)",
+          "oklch(39% 0.03 163)",
+          "oklch(51% 0.03 163)",
+          "oklch(63% 0.03 163)",
+          "oklch(75% 0.03 163)",
+          "oklch(85% 0.03 163)",
+          "oklch(95% 0.03 163)"
+        ]
+      },
+      "amber-in-flight": {
+        "role": "secondary",
+        "displayName": "Amber In Flight",
+        "canonical": "oklch(75% 0.13 80)",
+        "tonalRamp": [
+          "oklch(15% 0.13 80)",
+          "oklch(27% 0.13 80)",
+          "oklch(39% 0.13 80)",
+          "oklch(51% 0.13 80)",
+          "oklch(63% 0.13 80)",
+          "oklch(75% 0.13 80)",
+          "oklch(85% 0.13 80)",
+          "oklch(95% 0.13 80)"
+        ]
+      },
+      "night-moss": {
+        "role": "neutral",
+        "displayName": "Night Moss",
+        "canonical": "oklch(15% 0.006 170)",
+        "tonalRamp": [
+          "oklch(15% 0.006 170)",
+          "oklch(27% 0.006 170)",
+          "oklch(39% 0.006 170)",
+          "oklch(51% 0.006 170)",
+          "oklch(63% 0.006 170)",
+          "oklch(75% 0.006 170)",
+          "oklch(85% 0.006 170)",
+          "oklch(95% 0.006 170)"
+        ]
+      },
+      "night-moss-subtle": {
+        "role": "neutral",
+        "displayName": "Night Moss Subtle",
+        "canonical": "oklch(18% 0.007 165)",
+        "tonalRamp": [
+          "oklch(15% 0.007 165)",
+          "oklch(27% 0.007 165)",
+          "oklch(39% 0.007 165)",
+          "oklch(51% 0.007 165)",
+          "oklch(63% 0.007 165)",
+          "oklch(75% 0.007 165)",
+          "oklch(85% 0.007 165)",
+          "oklch(95% 0.007 165)"
+        ]
+      },
+      "night-moss-raised": {
+        "role": "neutral",
+        "displayName": "Night Moss Raised",
+        "canonical": "oklch(21% 0.009 165)",
+        "tonalRamp": [
+          "oklch(15% 0.009 165)",
+          "oklch(27% 0.009 165)",
+          "oklch(39% 0.009 165)",
+          "oklch(51% 0.009 165)",
+          "oklch(63% 0.009 165)",
+          "oklch(75% 0.009 165)",
+          "oklch(85% 0.009 165)",
+          "oklch(95% 0.009 165)"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "oklch(26% 0.011 165)",
+        "tonalRamp": [
+          "oklch(15% 0.011 165)",
+          "oklch(27% 0.011 165)",
+          "oklch(39% 0.011 165)",
+          "oklch(51% 0.011 165)",
+          "oklch(63% 0.011 165)",
+          "oklch(75% 0.011 165)",
+          "oklch(85% 0.011 165)",
+          "oklch(95% 0.011 165)"
+        ]
+      },
+      "hairline-strong": {
+        "role": "neutral",
+        "displayName": "Hairline Strong",
+        "canonical": "oklch(34% 0.014 165)",
+        "tonalRamp": [
+          "oklch(15% 0.014 165)",
+          "oklch(27% 0.014 165)",
+          "oklch(39% 0.014 165)",
+          "oklch(51% 0.014 165)",
+          "oklch(63% 0.014 165)",
+          "oklch(75% 0.014 165)",
+          "oklch(85% 0.014 165)",
+          "oklch(95% 0.014 165)"
+        ]
+      },
+      "chalk": {
+        "role": "neutral",
+        "displayName": "Chalk",
+        "canonical": "oklch(93% 0.007 165)",
+        "tonalRamp": [
+          "oklch(15% 0.007 165)",
+          "oklch(27% 0.007 165)",
+          "oklch(39% 0.007 165)",
+          "oklch(51% 0.007 165)",
+          "oklch(63% 0.007 165)",
+          "oklch(75% 0.007 165)",
+          "oklch(85% 0.007 165)",
+          "oklch(95% 0.007 165)"
+        ]
+      },
+      "chalk-muted": {
+        "role": "neutral",
+        "displayName": "Chalk Muted",
+        "canonical": "oklch(66% 0.017 165)",
+        "tonalRamp": [
+          "oklch(15% 0.017 165)",
+          "oklch(27% 0.017 165)",
+          "oklch(39% 0.017 165)",
+          "oklch(51% 0.017 165)",
+          "oklch(63% 0.017 165)",
+          "oklch(75% 0.017 165)",
+          "oklch(85% 0.017 165)",
+          "oklch(95% 0.017 165)"
+        ]
+      },
+      "chalk-faint": {
+        "role": "neutral",
+        "displayName": "Chalk Faint",
+        "canonical": "oklch(60% 0.017 165)",
+        "tonalRamp": [
+          "oklch(15% 0.017 165)",
+          "oklch(27% 0.017 165)",
+          "oklch(39% 0.017 165)",
+          "oklch(51% 0.017 165)",
+          "oklch(63% 0.017 165)",
+          "oklch(75% 0.017 165)",
+          "oklch(85% 0.017 165)",
+          "oklch(95% 0.017 165)"
+        ]
+      },
+      "glass-tint": {
+        "role": "neutral",
+        "displayName": "Glass Tint",
+        "canonical": "oklch(98% 0.04 160 / 0.018)",
+        "tonalRamp": [
+          "oklch(15% 0.04 160)",
+          "oklch(27% 0.04 160)",
+          "oklch(39% 0.04 160)",
+          "oklch(51% 0.04 160)",
+          "oklch(63% 0.04 160)",
+          "oklch(75% 0.04 160)",
+          "oklch(85% 0.04 160)",
+          "oklch(95% 0.04 160)"
+        ]
+      },
+      "glass-tint-lit": {
+        "role": "neutral",
+        "displayName": "Glass Tint Lit",
+        "canonical": "oklch(98% 0.04 160 / 0.065)",
+        "tonalRamp": [
+          "oklch(15% 0.04 160)",
+          "oklch(27% 0.04 160)",
+          "oklch(39% 0.04 160)",
+          "oklch(51% 0.04 160)",
+          "oklch(63% 0.04 160)",
+          "oklch(75% 0.04 160)",
+          "oklch(85% 0.04 160)",
+          "oklch(95% 0.04 160)"
+        ]
+      },
+      "glass-rim": {
+        "role": "neutral",
+        "displayName": "Glass Rim",
+        "canonical": "oklch(98% 0.04 160 / 0.09)",
+        "tonalRamp": [
+          "oklch(15% 0.04 160)",
+          "oklch(27% 0.04 160)",
+          "oklch(39% 0.04 160)",
+          "oklch(51% 0.04 160)",
+          "oklch(63% 0.04 160)",
+          "oklch(75% 0.04 160)",
+          "oklch(85% 0.04 160)",
+          "oklch(95% 0.04 160)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Page h1 in Space Grotesk. --fs-display."
+      },
+      "display-sm": {
+        "displayName": "Display Sm",
+        "purpose": "The name on the home page and the GPA figure. --fs-display-sm."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "h2, unit headings, About sections; fluid. --fs-headline."
+      },
+      "title-xl": {
+        "displayName": "Title XL",
+        "purpose": "A feature-row title while hovered; the row grows as real layout, never scale(). --fs-title-xl."
+      },
+      "title-lg": {
+        "displayName": "Title Lg",
+        "purpose": "Feature-row titles at rest, the AP score. --fs-title-lg."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "h3, and feature-row titles on narrow screens. --fs-title."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Spotlight row titles, ledes, the role line, term headings. --fs-lede."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Inter at a 68ch measure. --fs-body."
+      },
+      "secondary": {
+        "displayName": "Secondary",
+        "purpose": "Summaries, blurbs, table body and quiet links in Chalk Muted. --fs-secondary."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Figure captions, dropdown labels, notes under a figure or table. --fs-caption."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Mono: section heads, number rail, footer, deck counters. --fs-small."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Tracked mono: eyebrows, nav, meta, tags, stats, bylines, table levels. --fs-label."
+      },
+      "chip": {
+        "displayName": "Chip",
+        "purpose": "Uppercase mono: status chips, table headers, dropdown hints. --fs-chip."
+      }
+    },
+    "shadows": [
+      {
+        "name": "glass-shadow",
+        "value": "0 4px 30px rgb(0 0 0 / 0.35)",
+        "purpose": "Under a lit pane. Higher alpha than usual because a black shadow on a near-black page has almost nothing to darken."
+      },
+      {
+        "name": "menu-shadow",
+        "value": "0 12px 32px rgb(0 0 0 / 0.45)",
+        "purpose": "Under an open dropdown, which is genuinely off the page rather than set into it."
+      },
+      {
+        "name": "sheet-shadow",
+        "value": "0 1px 4px rgb(0 0 0 / 0.28)",
+        "purpose": "Under each white page of a document-style deck so the sheets read as paper."
+      },
+      {
+        "name": "glass-blur",
+        "value": "blur(12px)",
+        "purpose": "Backdrop filter of a lit pane; rests at blur(0px) so it has a value to animate from."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Default easing for every state change."
+      },
+      {
+        "name": "dur",
+        "value": "220ms",
+        "purpose": "Default duration for colour, fill, border, shadow, blur, padding and font-size transitions."
+      },
+      {
+        "name": "tilt",
+        "value": "transform 130ms ease-out",
+        "purpose": "The pane tilt tracks the pointer, so it is shorter than a state change: long enough to smooth arrival, short enough not to lag the cursor."
+      },
+      {
+        "name": "reveal",
+        "value": "240ms, from opacity 0 / translateY(-4px)",
+        "purpose": "An assignment body opening."
+      },
+      {
+        "name": "wash",
+        "value": "opacity 800ms",
+        "purpose": "The backdrop pointer wash fading in."
+      },
+      {
+        "name": "page-out",
+        "value": "90ms ease, fade",
+        "purpose": "View transition: the old page."
+      },
+      {
+        "name": "page-in",
+        "value": "180ms, fade from translateY(6px)",
+        "purpose": "View transition: the new page."
+      },
+      {
+        "name": "tilt-perspective",
+        "value": "perspective(1200px)",
+        "purpose": "Shared by every tilting pane. Angles per list: spotlight rows 4.5° / 2.5°, feature rows 4° / 1.5°."
+      },
+      {
+        "name": "sibling-dim",
+        "value": "opacity 0.42",
+        "purpose": "Every other row in a hovered list, via :has() and only under (hover: hover)."
+      },
+      {
+        "name": "rim-reach",
+        "value": "300px pane · 200px menu · 70px arrow · 52px tag",
+        "purpose": "Radius of the cursor rim gradient, scaled to the size of the element wearing it."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "home-split",
+        "value": "62rem",
+        "purpose": "min-width: the home page splits into pinned aside and content column."
+      },
+      {
+        "name": "nav-flat",
+        "value": "52rem",
+        "purpose": "max-width: dropdowns are dropped for a flat link row."
+      },
+      {
+        "name": "row-compact",
+        "value": "40rem",
+        "purpose": "max-width: feature rows lose the number rail and arrow."
+      },
+      {
+        "name": "row-tight",
+        "value": "34rem",
+        "purpose": "max-width: assignment chips hide and the body loses its indent."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Glass Row (Spotlight)",
+      "kind": "card",
+      "refersTo": "glass-row",
+      "description": "A home-page list row: bare at rest, frosts and lights its rim on hover, nudges 3px right and turns toward the cursor.",
+      "html": "<a class=\"ds-glass-row\" href=\"#\"><div class=\"ds-glass-row__head\"><h3>Greenway Label Printer</h3><span class=\"ds-glass-row__meta\">Jul 2025</span></div><p class=\"ds-glass-row__summary\">A browser tool that turns an EMR daily summary export into a print-ready PDF of patient ID labels.</p><ul class=\"ds-tag-row\"><li class=\"ds-tag\">React</li><li class=\"ds-tag\">Vite</li><li class=\"ds-tag\">jsPDF</li></ul></a>",
+      "css": ".ds-glass-row{position:relative;display:block;padding:1.15rem 1.25rem;color:var(--text,#e6ece9);text-decoration:none;border:1px solid transparent;border-radius:var(--radius,10px);background:var(--glass-tint,rgb(214 255 240 / .018));-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);transform:perspective(1200px) translateX(var(--nudge,0)) rotateX(calc(var(--ty,0) * 4.5deg * -1)) rotateY(calc(var(--tx,0) * 2.5deg));transition:background var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1)),border-color var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1)),box-shadow var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1)),backdrop-filter var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1)),transform 130ms ease-out}.ds-glass-row:hover,.ds-glass-row:focus-visible{--nudge:3px;background:var(--glass-tint-lit,rgb(214 255 240 / .065));border-color:var(--glass-rim,rgb(214 255 240 / .09));box-shadow:var(--glass-shadow,0 4px 30px rgb(0 0 0 / .35));-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}.ds-glass-row:focus-visible{outline:2px solid var(--accent,#10b981);outline-offset:3px}.ds-glass-row::after{content:'';position:absolute;inset:-1px;border-radius:calc(var(--radius,10px) + 1px);padding:1px;pointer-events:none;opacity:0;transition:opacity var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1));background:radial-gradient(300px circle at var(--mx,30%) var(--my,40%),var(--accent-bright,#34d399),color-mix(in srgb,var(--accent,#10b981) 35%,transparent) 45%,transparent 78%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}.ds-glass-row:hover::after,.ds-glass-row:focus-visible::after{opacity:1}.ds-glass-row__head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}.ds-glass-row h3{margin:0;font-family:var(--font-display,'Space Grotesk Variable',system-ui,sans-serif);font-size:1.08rem;font-weight:600;letter-spacing:-.02em;line-height:1.15;transition:color var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1))}.ds-glass-row:hover h3{color:var(--accent-bright,#34d399)}.ds-glass-row__meta{flex:none;font-family:var(--font-mono,'JetBrains Mono Variable',ui-monospace,monospace);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-faint,#5f6d67)}.ds-glass-row__summary{margin:.4rem 0 0;color:var(--text-muted,#8b9a94);font-size:.94rem;line-height:1.65;max-width:62ch}.ds-tag-row{display:flex;flex-wrap:wrap;gap:.4rem;list-style:none;padding:0;margin:.7rem 0 0}.ds-tag{font-family:var(--font-mono,'JetBrains Mono Variable',ui-monospace,monospace);font-size:.72rem;color:var(--text-muted,#8b9a94);border:1px solid var(--glass-rim,rgb(214 255 240 / .09));border-radius:999px;padding:.12rem .6rem;background:var(--glass-tint-lit,rgb(214 255 240 / .065))}"
+    },
+    {
+      "name": "Feature Row",
+      "kind": "card",
+      "refersTo": "feature-row",
+      "description": "An index-page row with a number rail and arrow. On hover it grows its padding and title as real layout, lights, tilts, and the rest of the list recedes.",
+      "html": "<ul class=\"ds-feature\"><li><a class=\"ds-feature__row\" href=\"#\"><span class=\"ds-feature__index\">01</span><div class=\"ds-feature__text\"><p class=\"ds-feature__meta\">Aug 2026</p><h3>Bluebook Simulator</h3><p class=\"ds-feature__summary\">A practice-test app styled after College Board's Bluebook exam software.</p></div><span class=\"ds-feature__arrow\" aria-hidden=\"true\"><svg viewBox=\"0 0 24 24\"><path d=\"M5 12h13M12 5l7 7-7 7\"/></svg></span></a></li><li><a class=\"ds-feature__row\" href=\"#\"><span class=\"ds-feature__index\">02</span><div class=\"ds-feature__text\"><p class=\"ds-feature__meta\">Oct 2024</p><h3>CRT — Conner's Retime Tool</h3><p class=\"ds-feature__summary\">A desktop app that times a speedrun frame-accurately, with and without loads.</p></div><span class=\"ds-feature__arrow\" aria-hidden=\"true\"><svg viewBox=\"0 0 24 24\"><path d=\"M5 12h13M12 5l7 7-7 7\"/></svg></span></a></li></ul>",
+      "css": ".ds-feature{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.6rem}.ds-feature__row{position:relative;display:flex;align-items:flex-start;gap:1.5rem;padding:1.6rem 1.75rem;color:var(--text,#e6ece9);text-decoration:none;border:1px solid transparent;border-radius:var(--radius,10px);background:var(--glass-tint,rgb(214 255 240 / .018));transform:perspective(1200px) rotateX(calc(var(--ty,0) * 4deg * -1)) rotateY(calc(var(--tx,0) * 1.5deg));transition:padding var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1)),opacity var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1)),background var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1)),border-color var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1)),box-shadow var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1)),backdrop-filter var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1)),transform 130ms ease-out}@media (hover:hover){.ds-feature:has(a:hover) .ds-feature__row{opacity:.42}.ds-feature:has(a:hover) .ds-feature__row:hover{opacity:1}}.ds-feature__row:hover,.ds-feature__row:focus-visible{padding-block:2.4rem;background:var(--glass-tint-lit,rgb(214 255 240 / .065));border-color:var(--glass-rim,rgb(214 255 240 / .09));box-shadow:var(--glass-shadow,0 4px 30px rgb(0 0 0 / .35));-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}.ds-feature__row::after{content:'';position:absolute;inset:-1px;border-radius:calc(var(--radius,10px) + 1px);padding:1px;pointer-events:none;opacity:0;transition:opacity var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1));background:radial-gradient(300px circle at var(--mx,30%) var(--my,40%),var(--accent-bright,#34d399),color-mix(in srgb,var(--accent,#10b981) 35%,transparent) 45%,transparent 78%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}.ds-feature__row:hover::after,.ds-feature__row:focus-visible::after{opacity:1}.ds-feature__index{flex:none;width:2.25rem;padding-top:.3rem;font-family:var(--font-mono,'JetBrains Mono Variable',ui-monospace,monospace);font-size:.78rem;color:var(--text-faint,#5f6d67);transition:color var(--dur,220ms)}.ds-feature__row:hover .ds-feature__index{color:var(--accent,#10b981)}.ds-feature__text{flex:1;min-width:0}.ds-feature__meta{margin:0 0 .35rem;font-family:var(--font-mono,'JetBrains Mono Variable',ui-monospace,monospace);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-faint,#5f6d67)}.ds-feature__row h3{margin:0;font-family:var(--font-display,'Space Grotesk Variable',system-ui,sans-serif);font-size:1.4rem;font-weight:600;letter-spacing:-.02em;line-height:1.15;transition:font-size var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1)),color var(--dur,220ms)}.ds-feature__row:hover h3{font-size:1.75rem;color:var(--accent-bright,#34d399)}.ds-feature__summary{margin:.5rem 0 0;color:var(--text-muted,#8b9a94);font-size:.96rem;line-height:1.65;max-width:68ch}.ds-feature__arrow{position:relative;flex:none;align-self:center;display:grid;place-items:center;width:2.1rem;height:2.1rem;border-radius:50%;border:1px solid var(--glass-rim,rgb(214 255 240 / .09));color:var(--text-faint,#5f6d67);transition:all var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1))}.ds-feature__arrow svg{width:1rem;height:1rem;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.ds-feature__row:hover .ds-feature__arrow{color:var(--accent-bright,#34d399);transform:translateX(4px)}"
+    },
+    {
+      "name": "Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "A mono pill made of the same glass as the pane it sits on. Its own rim lights within 52px of the cursor.",
+      "html": "<ul class=\"ds-tags\"><li class=\"ds-tag\">Python</li><li class=\"ds-tag\">PySide6</li><li class=\"ds-tag\">GitHub Actions</li></ul>",
+      "css": ".ds-tags{display:flex;flex-wrap:wrap;gap:.4rem;list-style:none;padding:0;margin:0}.ds-tag{position:relative;font-family:var(--font-mono,'JetBrains Mono Variable',ui-monospace,monospace);font-size:.72rem;color:var(--text-muted,#8b9a94);border:1px solid var(--glass-rim,rgb(214 255 240 / .09));border-radius:999px;padding:.12rem .6rem;background:var(--glass-tint-lit,rgb(214 255 240 / .065))}.ds-tag::after{content:'';position:absolute;inset:-1px;border-radius:calc(var(--radius,10px) + 1px);padding:1px;pointer-events:none;opacity:0;transition:opacity var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1));background:radial-gradient(52px circle at var(--mx,30%) var(--my,40%),var(--accent-bright,#34d399),color-mix(in srgb,var(--accent,#10b981) 35%,transparent) 45%,transparent 78%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}.ds-tag:hover::after,.ds-tag:focus-visible::after{opacity:1}.ds-tag::after{border-radius:inherit}"
+    },
+    {
+      "name": "Status Chip",
+      "kind": "chip",
+      "refersTo": "chip-status",
+      "description": "Uppercase mono pill on an assignment row. Amber for in-progress work so unfinished reads as in flight, not alarming.",
+      "html": "<span class=\"ds-chip ds-chip--warn\">In progress</span> <span class=\"ds-chip\">Not started</span> <span class=\"ds-files\">2 files · 3 photos</span>",
+      "css": ".ds-chip{display:inline-block;font-family:var(--font-mono,'JetBrains Mono Variable',ui-monospace,monospace);font-size:.63rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted,#8b9a94);border:1px solid var(--border,#232b28);border-radius:999px;padding:.1rem .5rem;white-space:nowrap}.ds-chip--warn{color:var(--warn,#d9a441);border-color:color-mix(in srgb,var(--warn,#d9a441) 40%,transparent)}.ds-files{font-family:var(--font-mono,'JetBrains Mono Variable',ui-monospace,monospace);font-size:.7rem;color:var(--text-faint,#5f6d67);margin-left:.6rem}"
+    },
+    {
+      "name": "Top Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "The sticky glass bar: grotesk brand, mono uppercase links with an emerald underline that slides in from the left and stays on the current page.",
+      "html": "<header class=\"ds-nav\"><a class=\"ds-nav__brand\" href=\"#\">Conner Glover</a><nav><ul class=\"ds-nav__list\"><li><a href=\"#\">Projects <svg class=\"ds-nav__caret\" viewBox=\"0 0 24 24\"><path d=\"M6 9l6 6 6-6\"/></svg></a></li><li><a href=\"#\" aria-current=\"page\">School <svg class=\"ds-nav__caret\" viewBox=\"0 0 24 24\"><path d=\"M6 9l6 6 6-6\"/></svg></a></li><li><a href=\"#\">About</a></li></ul></nav></header>",
+      "css": ".ds-nav{position:relative;display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.9rem 1.5rem;border-bottom:1px solid var(--glass-rim,rgb(214 255 240 / .09));background:linear-gradient(var(--glass-tint-lit,rgb(214 255 240 / .065)),var(--glass-tint-lit,rgb(214 255 240 / .065))),color-mix(in srgb,var(--bg,#0b0e0d) 70%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}.ds-nav__brand{font-family:var(--font-display,'Space Grotesk Variable',system-ui,sans-serif);font-weight:600;font-size:1.02rem;letter-spacing:-.02em;color:var(--text,#e6ece9);text-decoration:none;transition:color var(--dur,220ms)}.ds-nav__brand:hover{color:var(--accent-bright,#34d399)}.ds-nav__list{display:flex;align-items:center;gap:1.4rem;list-style:none;margin:0;padding:0}.ds-nav__list a{position:relative;display:inline-flex;align-items:center;gap:.35rem;font-family:var(--font-mono,'JetBrains Mono Variable',ui-monospace,monospace);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint,#5f6d67);text-decoration:none;transition:color var(--dur,220ms)}.ds-nav__list a::after{content:'';position:absolute;left:0;right:100%;bottom:-.35rem;height:1px;background:var(--accent,#10b981);transition:right var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1))}.ds-nav__list a:hover{color:var(--text,#e6ece9)}.ds-nav__list a:hover::after,.ds-nav__list a[aria-current=page]::after{right:0}.ds-nav__list a[aria-current=page]{color:var(--accent-bright,#34d399)}.ds-nav__list a:focus-visible{outline:2px solid var(--accent,#10b981);outline-offset:3px;border-radius:2px}.ds-nav__caret{width:.85rem;height:.85rem;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;transition:transform var(--dur,220ms)}.ds-nav__list li:hover .ds-nav__caret{transform:rotate(180deg)}"
+    },
+    {
+      "name": "Dropdown Menu",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "A floating glass menu under a nav trigger: mono hint column in emerald, sans labels, 6px item radius.",
+      "html": "<ul class=\"ds-menu\"><li><a href=\"#\"><span class=\"ds-menu__hint\">IED</span><span class=\"ds-menu__full\">Introduction to Engineering Design</span></a></li><li><a href=\"#\" aria-current=\"page\"><span class=\"ds-menu__hint\">PoE</span><span class=\"ds-menu__full\">Principles of Engineering</span></a></li><li><a href=\"#\"><span class=\"ds-menu__hint\">CEA</span><span class=\"ds-menu__full\">Civil Engineering and Architecture</span></a></li><li><a href=\"#\"><span class=\"ds-menu__hint\">DE</span><span class=\"ds-menu__full\">Digital Electronics</span></a></li></ul>",
+      "css": ".ds-menu{list-style:none;margin:0;padding:.35rem;min-width:max-content;border:1px solid var(--glass-rim,rgb(214 255 240 / .09));border-radius:var(--radius,10px);background:linear-gradient(var(--glass-tint-lit,rgb(214 255 240 / .065)),var(--glass-tint-lit,rgb(214 255 240 / .065))),color-mix(in srgb,var(--bg,#0b0e0d) 74%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 12px 32px rgb(0 0 0 / .45)}.ds-menu a{display:flex;align-items:center;gap:.65rem;padding:.42rem .6rem;border-radius:6px;color:var(--text-faint,#5f6d67);text-decoration:none;white-space:nowrap;transition:background var(--dur,220ms),color var(--dur,220ms)}.ds-menu a:hover{background:var(--glass-tint-lit,rgb(214 255 240 / .065));color:var(--text,#e6ece9)}.ds-menu a[aria-current=page]{color:var(--accent-bright,#34d399)}.ds-menu a:focus-visible{outline:2px solid var(--accent,#10b981);outline-offset:-2px}.ds-menu__hint{flex:none;width:2.6rem;font-family:var(--font-mono,'JetBrains Mono Variable',ui-monospace,monospace);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent,#10b981)}.ds-menu__full{font-family:var(--font-sans,'Inter Variable',system-ui,sans-serif);font-size:.86rem}"
+    },
+    {
+      "name": "Assignment Row",
+      "kind": "custom",
+      "refersTo": "assignment-row",
+      "description": "A native details row on a course page: ring marker, grotesk title, status chip and file summary. Opens in place with no JavaScript.",
+      "html": "<ol class=\"ds-assignments\"><li><details><summary><span class=\"ds-asg__marker\"></span><span class=\"ds-asg__title\">1.1.3 Concept Sketching</span><span class=\"ds-asg__chips\"><span class=\"ds-asg__files\">1 file · 1 photo</span></span></summary><div class=\"ds-asg__body\"><p>Isometric and perspective sketches of everyday objects, then a set of thumbnails for the charm project.</p></div></details></li><li><details open><summary><span class=\"ds-asg__marker\"></span><span class=\"ds-asg__title\">1.2.7 Random Number Generator</span><span class=\"ds-asg__chips\"><span class=\"ds-chip ds-chip--warn\">In progress</span></span></summary><div class=\"ds-asg__body\"><p>A 555 timer clocking a counter into a seven-segment display. Board is populated; write-up to follow.</p></div></details></li></ol>",
+      "css": ".ds-assignments{list-style:none;margin:0;padding:0;border-top:1px solid var(--border,#232b28)}.ds-assignments li{border-bottom:1px solid var(--border,#232b28)}.ds-assignments summary{display:flex;align-items:center;gap:.85rem;padding:.95rem .5rem;cursor:pointer;list-style:none;transition:background var(--dur,220ms) var(--ease,cubic-bezier(.22,1,.36,1))}.ds-assignments summary::-webkit-details-marker{display:none}.ds-assignments summary:hover{background:var(--bg-subtle,#121614)}.ds-assignments summary:focus-visible{outline:2px solid var(--accent,#10b981);outline-offset:-2px}.ds-asg__marker{flex:none;width:7px;height:7px;border-radius:50%;border:1px solid var(--border-strong,#33403b);transition:all var(--dur,220ms)}.ds-assignments details[open] .ds-asg__marker,.ds-assignments summary:hover .ds-asg__marker{border-color:var(--accent,#10b981);background:var(--accent,#10b981)}.ds-asg__title{font-family:var(--font-display,'Space Grotesk Variable',system-ui,sans-serif);font-size:1rem;font-weight:500;letter-spacing:-.01em;color:var(--text,#e6ece9)}.ds-assignments details[open] .ds-asg__title{color:var(--accent-bright,#34d399)}.ds-asg__chips{margin-left:auto;display:flex;align-items:center;gap:.6rem;flex:none}.ds-asg__files{font-family:var(--font-mono,'JetBrains Mono Variable',ui-monospace,monospace);font-size:.7rem;color:var(--text-faint,#5f6d67);white-space:nowrap}.ds-chip{display:inline-block;font-family:var(--font-mono,'JetBrains Mono Variable',ui-monospace,monospace);font-size:.63rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted,#8b9a94);border:1px solid var(--border,#232b28);border-radius:999px;padding:.1rem .5rem;white-space:nowrap}.ds-chip--warn{color:var(--warn,#d9a441);border-color:color-mix(in srgb,var(--warn,#d9a441) 40%,transparent)}.ds-asg__body{padding:.25rem .5rem 1.75rem 1.9rem;color:var(--text-muted,#8b9a94);font-size:.96rem;line-height:1.65;animation:ds-reveal 240ms var(--ease,cubic-bezier(.22,1,.36,1))}.ds-asg__body p{margin:0}@keyframes ds-reveal{from{opacity:0;transform:translateY(-4px)}}"
+    },
+    {
+      "name": "Deck Control Bar",
+      "kind": "button",
+      "refersTo": "icon-button",
+      "description": "The only buttons on the site: borderless 2rem icon buttons, a tabular counter, full-screen, and a PDF link, on Night Moss under a hairline.",
+      "html": "<div class=\"ds-deckbar\"><button type=\"button\" aria-label=\"Previous slide\" disabled><svg viewBox=\"0 0 24 24\"><path d=\"M15 5l-7 7 7 7\"/></svg></button><button type=\"button\" aria-label=\"Next slide\"><svg viewBox=\"0 0 24 24\"><path d=\"M9 5l7 7-7 7\"/></svg></button><span class=\"ds-deckbar__count\"><span>1</span> / 14</span><span class=\"ds-deckbar__gap\"></span><button type=\"button\" aria-label=\"Full screen\"><svg viewBox=\"0 0 24 24\"><path d=\"M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5\"/></svg></button><a class=\"ds-deckbar__pdf\" href=\"#\">PDF</a></div>",
+      "css": ".ds-deckbar{display:flex;align-items:center;gap:.25rem;padding:.4rem .5rem;border:1px solid var(--border,#232b28);border-radius:var(--radius,10px);background:var(--bg,#0b0e0d)}.ds-deckbar__gap{flex:1}.ds-deckbar button{display:grid;place-items:center;width:2rem;height:2rem;padding:0;border:0;border-radius:4px;background:none;color:var(--text-muted,#8b9a94);cursor:pointer;transition:background var(--dur,220ms),color var(--dur,220ms)}.ds-deckbar button:hover:not(:disabled){background:var(--bg-subtle,#121614);color:var(--text,#e6ece9)}.ds-deckbar button:focus-visible{outline:2px solid var(--accent,#10b981);outline-offset:2px}.ds-deckbar button:disabled{opacity:.35;cursor:default}.ds-deckbar svg{width:1.05rem;height:1.05rem;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.ds-deckbar__count{font-family:var(--font-sans,'Inter Variable',system-ui,sans-serif);font-size:.8rem;color:var(--text-muted,#8b9a94);font-variant-numeric:tabular-nums;padding-inline:.4rem}.ds-deckbar__pdf{font-size:.78rem;color:var(--text-muted,#8b9a94);text-decoration:none;padding:.25rem .5rem;border-radius:4px;transition:background var(--dur,220ms),color var(--dur,220ms)}.ds-deckbar__pdf:hover{background:var(--bg-subtle,#121614);color:var(--text,#e6ece9)}"
+    },
+    {
+      "name": "Section Head and Eyebrow",
+      "kind": "custom",
+      "refersTo": "eyebrow",
+      "description": "Tracked uppercase mono labels: the emerald-numbered section head with a hairline underline, and the plain eyebrow above a page title.",
+      "html": "<p class=\"ds-eyebrow\">Project Lead The Way</p><h2 class=\"ds-section-head\"><span class=\"ds-section-head__num\">01</span> Projects</h2>",
+      "css": ".ds-eyebrow{margin:0 0 .4rem;font-family:var(--font-mono,'JetBrains Mono Variable',ui-monospace,monospace);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint,#5f6d67)}.ds-section-head{display:flex;align-items:baseline;gap:.85rem;margin:1.25rem 0 0;padding-bottom:.75rem;border-bottom:1px solid var(--border,#232b28);font-family:var(--font-mono,'JetBrains Mono Variable',ui-monospace,monospace);font-size:.78rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted,#8b9a94)}.ds-section-head__num{color:var(--accent,#10b981)}"
+    },
+    {
+      "name": "Pill Link and Inline Link",
+      "kind": "button",
+      "refersTo": "pill-link",
+      "description": "The unit-jump pill with a faint count, and the default prose link with its 35% emerald underline.",
+      "html": "<nav class=\"ds-jump\"><a href=\"#\">Unit 1 <span>15</span></a><a href=\"#\">Unit 2 <span>11</span></a><a href=\"#\">Unit 3 <span>5</span></a></nav><p class=\"ds-prose\">Rewritten from scratch as <a href=\"#\">CRT</a>, on PySide6 instead.</p>",
+      "css": ".ds-jump{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1rem}.ds-jump a{display:inline-flex;align-items:center;gap:.5rem;padding:.35rem .75rem;border:1px solid var(--border,#232b28);border-radius:999px;font-family:var(--font-mono,'JetBrains Mono Variable',ui-monospace,monospace);font-size:.74rem;color:var(--text-muted,#8b9a94);text-decoration:none;transition:border-color var(--dur,220ms),color var(--dur,220ms)}.ds-jump a:hover{border-color:var(--accent,#10b981);color:var(--accent-bright,#34d399)}.ds-jump a:focus-visible{outline:2px solid var(--accent,#10b981);outline-offset:3px}.ds-jump span{font-size:.68rem;color:var(--text-faint,#5f6d67)}.ds-prose{margin:0;font-family:var(--font-sans,'Inter Variable',system-ui,sans-serif);font-size:1rem;line-height:1.65;color:var(--text,#e6ece9)}.ds-prose a{color:var(--accent,#10b981);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--accent,#10b981) 35%,transparent);transition:color var(--dur,220ms),border-color var(--dur,220ms)}.ds-prose a:hover{color:var(--accent-bright,#34d399);border-bottom-color:currentColor}.ds-prose a:focus-visible{outline:2px solid var(--accent,#10b981);outline-offset:3px;border-radius:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Lamp on the Bench",
+    "overview": "The site is a dark workshop bench, and the cursor is the only lamp. At rest the page is near-black with a faint drifting dot field and plain text on it: no boxes, no cards, no chrome. Glass panes exist, but they are bare until light reaches them, and when it does, the light catches their edge before their face. A row you hover frosts over, its rim brightens nearest the pointer, it tilts a few degrees toward you and comes forward while its siblings recede. The material is a response, not a decoration. The lamp is emerald, and emerald appears only where the light lands: the lit rim, the active nav item, the open assignment's title, the one number on the page that matters.\n\nEverything else is a readout. Metadata is set in mono with tracked uppercase labels and tabular figures, so course numbers, dates, grades and counts read as instrument markings rather than prose. Headings are a squared grotesk, tight and unfussy. Body is a neutral sans at a generous measure. Density is editorial: one column, long measure, wide gaps between sections, and lists that stay quiet until touched. The work itself, decks and photos and reports, gets the full width and a plain frame, because it is the reason the page exists.\n\nConfirmed rejections: neon or cyberpunk glow, browser-chrome embeds, and a light theme.",
+    "keyCharacteristics": [
+      "Near-black ground with a hint of green, dark only, no light variant",
+      "Emerald used as a light source, never as a fill or a costume",
+      "Glass that is bare at rest and frosts, lights, tilts and lifts on hover",
+      "Three typefaces with strict jobs: grotesk for headings, sans for body, mono for data",
+      "Group-level hover: the hovered row comes forward, the rest recede to 50%",
+      "Motion is short, eased and interruptible, and every effect degrades to nothing under reduced motion or coarse pointers"
+    ],
+    "rules": [
+      {
+        "name": "The Light Source Rule",
+        "body": "Emerald is what the lamp does to a surface, never what a surface is made of. It appears on text, rules, rings, markers and dots. There are no solid emerald fills, buttons or backgrounds anywhere on the site.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Lamp Rule",
+        "body": "Bright emerald marks at most one thing per region: the active nav item, the open row's title, the hovered row's heading, the one figure that matters. If two things in the same region are bright emerald, one of them is wrong.",
+        "section": "colors"
+      },
+      {
+        "name": "The Green Film Rule",
+        "body": "Glass is a tinted light film, not a dark one. A white film reads grey against a green-tinted ground, so the film is `214 255 240` and its alphas are set so the lit pane lands on Night Moss Raised and its rim on Hairline.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono Means Data Rule",
+        "body": "Anything that is a number, a code, a date or a label is set in JetBrains Mono. Anything that is a sentence is set in Inter. Anything that names a thing is set in Space Grotesk. There are no exceptions and no fourth face.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tracked Caps Rule",
+        "body": "Uppercase only ever appears in mono at 0.63–0.78rem with 0.08–0.16em tracking. Never uppercase the grotesk or the sans.",
+        "section": "typography"
+      },
+      {
+        "name": "The Balanced Heading Rule",
+        "body": "Headings use `text-wrap: balance` and negative tracking; they never wrap into a widow.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lift On Touch Rule",
+        "body": "No surface is lifted at rest. Frost, rim, shadow, tilt and growth arrive together on hover or focus and leave together on exit. A pane that is always lifted is furniture, and it is the exception, not the pattern.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Edge Before Face Rule",
+        "body": "A pane is separated from the page by its lit edge, not by its fill. If a surface needs a solid box to be legible, it is not glass and should use a Night Moss step instead.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Nothing Moves Without A Pointer Rule",
+        "body": "Tilt, rim light, the backdrop trail and the sibling dim all require a fine pointer with hover. On touch every row stays at full strength, and under reduced motion the rim ring, the wash and the flow field are removed outright rather than slowed.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep every surface bare at rest and let frost, rim, shadow, tilt and growth arrive together on hover or focus (The Lift On Touch Rule).",
+      "Do use emerald only as light: text, rules, rings, markers, dots. Bright emerald marks one thing per region (The One Lamp Rule).",
+      "Do set every number, code, date and label in JetBrains Mono, tracked uppercase for labels and tabular figures for data (The Mono Means Data Rule).",
+      "Do share `.glass-row`, `.glass-pane`, `.glass-edge`, `.rim-follow` and `.tilt` from `global.css` rather than reimplementing the material; two lookalike copies have drifted apart before.",
+      "Do qualify a class that must beat a scoped element selector (`nav ul.menu`), because Astro's scoping attribute lifts `nav ul` above `.menu`.",
+      "Do set `--glass-rest`, `--nudge`, `--tilt-x` and `--tilt-y` as variables rather than declaring `background` or `transform` on a pane; a second declaration replaces the shared one and silently kills the effect.",
+      "Do keep hover-only effects behind `(hover: hover)` and `(pointer: fine)`, and remove rim, wash and field outright under `prefers-reduced-motion`.",
+      "Do grow a row with padding and font-size, not `scale()`, so text never rasterises soft mid-animation.",
+      "Do render attachments as pre-rasterised pages inside the site's own frame and keep the original PDF one click away.",
+      "Do re-resolve DOM references on `astro:page-load`; view transitions replace every element on navigation."
+    ],
+    "donts": [
+      "Don't add a light theme, a theme toggle, or any colour that must work on white. The site is dark only.",
+      "Don't use neon glow, gradient text, scanlines, or emerald as a solid fill, button, or background.",
+      "Don't embed a PDF, Google Slides or Drive preview in a browser frame with its own toolbar; nothing should look bolted on.",
+      "Don't give a row a visible border, card fill, or shadow at rest, and don't use a dark film for glass; it reads as a darker box, not a pane.",
+      "Don't put `backdrop-filter` on the sticky header itself; it becomes a backdrop root and the dropdowns can no longer blur the page.",
+      "Don't open assignment rows by default or make them an exclusive accordion; a course can carry thirty decks and closing what a reader did not ask to close is worse than a long page.",
+      "Don't uppercase Space Grotesk or Inter, or introduce a fourth typeface.",
+      "Don't publish transcript percentages, teacher names, or an address in any surface; the visual system has no place for that data."
+    ]
+  }
+}

@@ -15,6 +15,8 @@ tech: ['Python', 'PostgreSQL'] # optional, shown as tags
 # cover:
 #   src: '/images/projects/my-cool-thing/cover.png'
 #   alt: 'Describe the image for screen readers'
+#   width: 1600                # pixel size, so the page reserves the space
+#   height: 900
 featured: false                # true pins it to the home page
 draft: true                    # true keeps it out of the build entirely
 ---

@@ -17,6 +17,13 @@
  * The pointer is tracked with easing so the lit patch lags behind the cursor
  * and reads as a trail. The wash behind it is CSS, at a radius deliberately
  * matched to the lit dots so the two read as a single light.
+ *
+ * The loop is not perpetual. It runs while the pointer is moving and for a
+ * few seconds after, then stops until the next move; a texture nobody is
+ * looking at should not cost a millisecond a frame for the whole visit. The
+ * noise is driven by a clock that only advances while drawing, so a resumed
+ * field picks up where it paused instead of jumping to wherever wall time
+ * has got to.
  */
 ---
 
@@ -46,7 +53,7 @@
     transition: opacity 800ms var(--ease);
     background: radial-gradient(
       var(--glow-r, 200px) var(--glow-r, 200px) at var(--gx, 50%) var(--gy, -20%),
-      rgb(16 185 129 / 0.07),
+      color-mix(in srgb, var(--accent) 7%, transparent),
       transparent 70%
     );
   }
@@ -66,6 +73,7 @@
   const GLOW_R = 200;   // radius of the lit patch; the CSS wash matches it
   const DOT = 1.6;      // px
   const BUCKETS = 6;    // alpha quantisation, to batch canvas state changes
+  const IDLE_MS = 8000; // keep drifting this long after the pointer last moved
 
   const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fine = window.matchMedia('(pointer: fine)').matches;
@@ -85,11 +93,22 @@
   let rows = 0;
   let seeds = new Float32Array(0);
 
+  // Paint colours, read from the theme's custom properties when the canvas
+  // binds rather than typed here a second time. The grey pass uses the glass
+  // film's tint: a pure white dot reads grey-blue against a green-tinted
+  // ground, the way a white film did before the film was tinted.
+  let dotColour = 'rgb(214 255 240)';
+  let litColour = '#34d399';
+
   let tx = -9999;
   let ty = -9999;
   let px = -9999;
   let py = -9999;
   let running = false;
+  // Drawing clock: advances only while frames are being drawn.
+  let clock = 0;
+  let lastFrame = 0;
+  let lastMove = 0;
 
   const resize = () => {
     if (!canvas || !ctx) return;
@@ -168,8 +187,8 @@
       }
     }
 
-    paintBucket(grey, '#ffffff', 0.14);
-    paintBucket(green, '#34d399', 0.95);
+    paintBucket(grey, dotColour, 0.14);
+    paintBucket(green, litColour, 0.95);
     ctx.globalAlpha = 1;
   };
 
@@ -178,6 +197,10 @@
       running = false;
       return;
     }
+    // Capped so a tab that was hidden for an hour does not leap forward.
+    if (lastFrame) clock += Math.min(time - lastFrame, 100);
+    lastFrame = time;
+
     if (tx > -5000) {
       if (px < -5000) {
         px = tx;
@@ -189,10 +212,18 @@
       backdrop?.style.setProperty('--gx', `${px}px`);
       backdrop?.style.setProperty('--gy', `${py}px`);
     }
-    draw(still ? 0 : time);
+    draw(still ? 0 : clock);
     if (still) {
       // One static frame is enough when motion is not wanted.
       running = false;
+      return;
+    }
+    // Rest once the pointer has been still long enough and the trail has
+    // caught up with it. The next move kicks the loop again.
+    const settled = px < -5000 || (Math.abs(tx - px) < 0.5 && Math.abs(ty - py) < 0.5);
+    if (settled && time - lastMove > IDLE_MS) {
+      running = false;
+      lastFrame = 0;
       return;
     }
     requestAnimationFrame(frame);
@@ -208,6 +239,7 @@
     window.addEventListener('pointermove', (e) => {
       tx = e.clientX;
       ty = e.clientY;
+      lastMove = performance.now();
       backdrop?.classList.add('on');
       kick();
     }, { passive: true });
@@ -224,6 +256,12 @@
     ctx = canvas?.getContext('2d') ?? null;
     if (!backdrop || !ctx) return;
 
+    const theme = getComputedStyle(document.documentElement);
+    const film = theme.getPropertyValue('--glass-light').trim();
+    const lit = theme.getPropertyValue('--accent-bright').trim();
+    if (film) dotColour = `rgb(${film})`;
+    if (lit) litColour = lit;
+
     backdrop.style.setProperty('--glow-r', `${GLOW_R}px`);
     resize();
     // Restore the trail straight away — the element is new and carries none of
@@ -235,6 +273,9 @@
       backdrop.classList.add('on');
     }
     running = false;
+    // A fresh page gets its few seconds of drift even before the pointer moves,
+    // so the field reads as alive on arrival and then settles.
+    lastMove = performance.now();
     kick();
   };
 

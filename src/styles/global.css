@@ -17,6 +17,41 @@
   --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, Menlo, Consolas, monospace;
 
+  /* ---------- type ramp ----------
+   *
+   * Every font-size on the site is one of these. Named by the job, not the
+   * number, so a new component picks a role rather than inventing a size.
+   * The small steps are close together on purpose: this is a readout, and
+   * chips, labels and captions need to be told apart without any of them
+   * shouting. Above body the steps open up.
+   *
+   * chip       status chips, table headers, menu hints — mono, uppercase
+   * label      eyebrows, nav, meta, tags, stats, bylines — mono
+   * small      section heads, number rail, footer, counters — mono
+   * caption    figure captions, menu items, notes under a figure
+   * secondary  summaries, blurbs, table body, quiet links — sans
+   * body       prose
+   * lede       row titles, ledes, the role line, term headings
+   * title      h3
+   * title-lg   feature-row titles at rest, the AP score
+   * title-xl   a feature-row title while hovered
+   * headline   h2, fluid
+   * display-sm the name on the home page, the GPA figure, fluid
+   * display    h1, fluid */
+  --fs-chip: 0.66rem;
+  --fs-label: 0.72rem;
+  --fs-small: 0.78rem;
+  --fs-caption: 0.86rem;
+  --fs-secondary: 0.94rem;
+  --fs-body: 1rem;
+  --fs-lede: 1.08rem;
+  --fs-title: 1.2rem;
+  --fs-title-lg: 1.4rem;
+  --fs-title-xl: 1.75rem;
+  --fs-headline: clamp(1.4rem, 1.2rem + 0.8vw, 1.75rem);
+  --fs-display-sm: clamp(2.1rem, 1.4rem + 2vw, 2.9rem);
+  --fs-display: clamp(2rem, 1.3rem + 2.6vw, 3rem);
+
   /* Ground. Not pure black — a hint of blue-green keeps it from feeling like
      a hole, and gives the grain something to sit on. */
   --bg: #0b0e0d;
@@ -27,7 +62,11 @@
 
   --text: #e6ece9;
   --text-muted: #8b9a94;
-  --text-faint: #5f6d67;
+  /* The quietest text that is still meant to be read: labels, eyebrows, nav
+     at rest, meta. Set to clear 4.5:1 on the ground, on both raised steps and
+     on a lit glass pane, since it lands on all four. It was #5f6d67, which
+     read well but sat at 3.6:1 and failed AA on every small mono label. */
+  --text-faint: #7a8a83;
 
   --accent: #10b981;
   --accent-bright: #34d399;
@@ -116,7 +155,7 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
-  font-size: 1rem;
+  font-size: var(--fs-body);
   line-height: 1.65;
   font-synthesis-weight: none;
   -webkit-font-smoothing: antialiased;
@@ -149,9 +188,9 @@ h1, h2, h3, h4 {
   margin: 2rem 0 0.5rem;
   text-wrap: balance;
 }
-h1 { font-size: clamp(2rem, 1.3rem + 2.6vw, 3rem); margin-top: 0; }
-h2 { font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.75rem); }
-h3 { font-size: 1.15rem; }
+h1 { font-size: var(--fs-display); margin-top: 0; }
+h2 { font-size: var(--fs-headline); }
+h3 { font-size: var(--fs-title); }
 
 p, ul, ol { margin: 0 0 1rem; }
 ul, ol { padding-left: 1.25rem; }
@@ -213,37 +252,17 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 3rem 0; }
    rows have somewhere to grow into. */
 .wrap.wide { max-width: var(--page-wide); }
 
-.prose { max-width: var(--measure); }
+.prose { max-width: var(--measure); overflow-wrap: break-word; }
 .prose a { border-bottom-color: color-mix(in srgb, var(--accent) 35%, transparent); }
 
 .muted { color: var(--text-muted); }
 .stack > * + * { margin-top: var(--space); }
 
-.grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
-}
-
-.card {
-  position: relative;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.15rem 1.25rem;
-  background: var(--bg-subtle);
-  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
-}
-.card:hover { border-color: var(--border-strong); background: var(--bg-raised); }
-.card h3 { margin-top: 0; }
-.card > :last-child { margin-bottom: 0; }
-.card a { color: var(--text); }
-.card a:hover { color: var(--accent-bright); border-bottom-color: transparent; }
-
 /* Metadata is set in mono — course numbers, dates, counts, grades. */
 .tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; padding: 0; margin: 0.7rem 0 0; }
 .tag {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--fs-label);
   color: var(--text-muted);
   /* Glass, like the pane it sits on. This was filled with --bg, which is
      darker than the pane beneath it, so a tag read as a hole punched through
@@ -263,7 +282,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 3rem 0; }
 
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--fs-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -429,6 +448,21 @@ main { flex: 1 0 auto; padding-block: 3rem 5rem; }
   .glass-row::after,
   .glass-pane::after,
   .rim-follow::after { display: none; }
+}
+
+/* Read by screen readers, invisible to everyone else. For "opens in a new
+   tab" on external links and table captions the layout already names. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ---------- skip link ---------- */

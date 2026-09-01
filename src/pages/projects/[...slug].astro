@@ -27,10 +27,10 @@ const toc = headings.filter((h) => h.depth === 2);
         <span>{fmt(project.data.date)}</span>
         {project.data.updated && <span>Updated {fmt(project.data.updated)}</span>}
         {project.data.repo && (
-          <a href={project.data.repo} target="_blank" rel="noopener noreferrer">Source</a>
+          <a href={project.data.repo} target="_blank" rel="noopener noreferrer">Source<span class="sr-only"> (opens in a new tab)</span></a>
         )}
         {project.data.demo && (
-          <a href={project.data.demo} target="_blank" rel="noopener noreferrer">Live demo</a>
+          <a href={project.data.demo} target="_blank" rel="noopener noreferrer">Live demo<span class="sr-only"> (opens in a new tab)</span></a>
         )}
       </p>
       {project.data.tech.length > 0 && (
@@ -42,7 +42,12 @@ const toc = headings.filter((h) => h.depth === 2);
 
     {project.data.cover && (
       <figure>
-        <img src={project.data.cover.src} alt={project.data.cover.alt} />
+        <img
+          src={project.data.cover.src}
+          alt={project.data.cover.alt}
+          width={project.data.cover.width}
+          height={project.data.cover.height}
+        />
       </figure>
     )}
 
@@ -60,12 +65,12 @@ const toc = headings.filter((h) => h.depth === 2);
 </BaseLayout>
 
 <style>
-  .lede { font-size: 1.1rem; }
+  .lede { font-size: var(--fs-lede); }
   .meta {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem 1.25rem;
-    font-size: 0.9rem;
+    font-size: var(--fs-secondary);
   }
   /* Frame, fill and blur come from .glass-pane in global.css — held lit,
      since this is furniture rather than something you aim at. */

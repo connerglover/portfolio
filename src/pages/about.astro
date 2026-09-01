@@ -43,6 +43,7 @@ import { apExams, courseLevelKey, gpa, terms } from '../data/academics';
           {term.note && <p class="muted note">{term.note}</p>}
           <div class="table-scroll">
             <table>
+              <caption class="sr-only">{term.label}: courses, levels and semester grades</caption>
               <thead>
                 <tr>
                   <th scope="col">Course</th>
@@ -109,27 +110,27 @@ import { apExams, courseLevelKey, gpa, terms } from '../data/academics';
   }
   .gpa strong {
     font-family: var(--font-mono);
-    font-size: clamp(2.1rem, 1.6rem + 1.6vw, 2.75rem);
+    font-size: var(--fs-display-sm);
     font-weight: 600;
     line-height: 1;
     color: var(--accent-bright);
     letter-spacing: -0.03em;
   }
-  .gpa span { font-size: 0.88rem; }
+  .gpa span { font-size: var(--fs-caption); }
 
   .scale,
   .note,
-  .key { max-width: var(--measure); font-size: 0.86rem; }
+  .key { max-width: var(--measure); font-size: var(--fs-caption); }
 
   .term { margin-top: 2.75rem; }
   .term h3 {
-    font-size: 1.05rem;
+    font-size: var(--fs-lede);
     margin-bottom: 0.3rem;
   }
   .note {
     margin: 0 0 0.9rem;
     font-family: var(--font-mono);
-    font-size: 0.74rem;
+    font-size: var(--fs-label);
     letter-spacing: 0.03em;
     color: var(--text-faint);
   }
@@ -145,7 +146,7 @@ import { apExams, courseLevelKey, gpa, terms } from '../data/academics';
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.92rem;
+    font-size: var(--fs-secondary);
   }
   th, td {
     text-align: left;
@@ -159,7 +160,7 @@ import { apExams, courseLevelKey, gpa, terms } from '../data/academics';
 
   thead th {
     font-family: var(--font-mono);
-    font-size: 0.66rem;
+    font-size: var(--fs-chip);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--text-faint);
@@ -177,7 +178,7 @@ import { apExams, courseLevelKey, gpa, terms } from '../data/academics';
 
   .lvl {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: var(--fs-label);
     color: var(--text-faint);
     white-space: nowrap;
   }
@@ -191,7 +192,7 @@ import { apExams, courseLevelKey, gpa, terms } from '../data/academics';
 
   .summer {
     font-family: var(--font-mono);
-    font-size: 0.66rem;
+    font-size: var(--fs-chip);
     font-weight: 400;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -220,16 +221,16 @@ import { apExams, courseLevelKey, gpa, terms } from '../data/academics';
   }
   .ap-score {
     font-family: var(--font-mono);
-    font-size: 1.5rem;
+    font-size: var(--fs-title-lg);
     font-weight: 600;
     line-height: 1;
     color: var(--accent-bright);
     font-variant-numeric: tabular-nums;
   }
-  .ap-name { font-size: 0.94rem; }
+  .ap-name { font-size: var(--fs-secondary); }
   .ap-year {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: var(--fs-label);
     letter-spacing: 0.05em;
     color: var(--text-faint);
   }
