@@ -36,6 +36,12 @@ const school = defineCollection({
       .array(z.object({ id: z.string(), title: z.string() }))
       .default([]),
     images: z.array(z.object({ src: z.string(), alt: z.string() })).default([]),
+    videos: z.array(z.object({
+      src: z.string(),
+      title: z.string(),
+      description: z.string(),
+      poster: z.string().optional(),
+    })).default([]),
     // `not-started` is for work still ahead on the schedule, so a course
     // page reads as a roadmap rather than only what is finished.
     status: z.enum(['complete', 'in-progress', 'not-started']).default('complete'),

@@ -1,0 +1,23 @@
+---
+interface Props {
+  src: string;
+  title: string;
+  description: string;
+  poster?: string;
+}
+const { src, title, description, poster } = Astro.props;
+---
+
+<figure>
+  <video controls playsinline preload="none" poster={poster} aria-label={title} width="1920" height="1080">
+    <source src={src} type="video/mp4" />
+    <a href={src}>Download the demonstration video</a>
+  </video>
+  <figcaption>{description} <a href={src}>Download video</a></figcaption>
+</figure>
+
+<style>
+  figure { margin: 0 0 1.5rem; }
+  video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: var(--radius); }
+  figcaption { margin-top: 0.65rem; color: var(--text-muted); font-size: var(--fs-secondary); }
+</style>

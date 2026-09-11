@@ -5,6 +5,7 @@ import { getCollection, render } from 'astro:content';
 import Deck from '../../../components/Deck.astro';
 import DriveFile from '../../../components/DriveFile.astro';
 import Gallery from '../../../components/Gallery.astro';
+import Video from '../../../components/Video.astro';
 import { courses, unitLabel } from '../../../data/site';
 
 export const getStaticPaths = (() =>
@@ -38,7 +39,7 @@ const units = await Promise.all(
 const total = all.length;
 const done = all.filter((a) => a.data.status === 'complete').length;
 const anyUpcoming = all.some((a) => a.data.status === 'not-started');
-const withFiles = all.filter((a) => a.data.decks.length > 0 || a.data.files.length > 0).length;
+const withFiles = all.filter((a) => a.data.decks.length > 0 || a.data.files.length > 0 || a.data.videos.length > 0).length;
 
 /** A short summary of what's attached, shown on the collapsed row. */
 const attachments = (item: (typeof all)[number]) => {
@@ -46,6 +47,7 @@ const attachments = (item: (typeof all)[number]) => {
   const decks = item.data.decks.length;
   const photos = item.data.images.length;
   if (decks) bits.push(`${decks} file${decks > 1 ? 's' : ''}`);
+  if (item.data.videos.length) bits.push(`${item.data.videos.length} video${item.data.videos.length > 1 ? 's' : ''}`);
   if (photos) bits.push(`${photos} photo${photos > 1 ? 's' : ''}`);
   if (item.data.files.length) bits.push('drive');
   return bits.join(' · ');
@@ -108,7 +110,10 @@ const attachments = (item: (typeof all)[number]) => {
                       {item.data.partners.length > 0 && (
                         <p class="byline">With {item.data.partners.join(', ')}</p>
                       )}
-                      <div class="prose"><Content /></div>
+                      <div class="prose">
+                        {item.data.videos.map((video) => <Video {...video} />)}
+                        <Content />
+                      </div>
                       <Gallery images={item.data.images} />
                       {item.data.decks.map((d) => <Deck pdf={d.pdf} title={d.title} />)}
                       {item.data.files.map((f) => <DriveFile id={f.id} title={f.title} />)}
