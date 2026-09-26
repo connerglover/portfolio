@@ -4,8 +4,8 @@
  * browser reserves the space before the file arrives. Without that, a photo
  * loading into a course page shoves everything below it down.
  *
- * Handles the three formats the site ships: JPEG, PNG and WebP (lossy, lossless
- * and extended). Anything else, or a missing file, returns null and the
+ * Handles the four formats the site ships: JPEG, PNG, GIF and WebP (lossy,
+ * lossless and extended). Anything else, or a missing file, returns null and the
  * component simply omits the attributes, which is what it did before.
  *
  * Only ever runs in Node during `astro build` / `astro dev`, never in the
@@ -26,7 +26,7 @@ export function imageSize(publicPath: string): Size | null {
   let size: Size | null = null;
   try {
     const buf = readFileSync(join(process.cwd(), 'public', publicPath.replace(/^\//, '')));
-    size = png(buf) ?? webp(buf) ?? jpeg(buf);
+    size = png(buf) ?? gif(buf) ?? webp(buf) ?? jpeg(buf);
   } catch {
     size = null;
   }
@@ -37,6 +37,11 @@ export function imageSize(publicPath: string): Size | null {
 function png(b: Buffer): Size | null {
   if (b.length < 24 || b.toString('ascii', 1, 4) !== 'PNG') return null;
   return { width: b.readUInt32BE(16), height: b.readUInt32BE(20) };
+}
+
+function gif(b: Buffer): Size | null {
+  if (b.length < 10 || b.toString('ascii', 0, 4) !== 'GIF8') return null;
+  return { width: b.readUInt16LE(6), height: b.readUInt16LE(8) };
 }
 
 function webp(b: Buffer): Size | null {
