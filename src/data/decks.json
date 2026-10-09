@@ -281,9 +281,9 @@
   },
   "/decks/de/unit-1/124-1-2-4-counters.pdf": {
     "dir": "/deck-pages/de/unit-1/124-1-2-4-counters",
-    "hash": "02864c64ce1e307067cd55c1cea83edd",
+    "hash": "8060f3a46f9640f32252cabaace3fe83",
     "height": 900,
-    "pages": 10,
+    "pages": 8,
     "width": 1600
   },
   "/decks/de/unit-1/125-1-2-5-555-timer.pdf": {
@@ -291,6 +291,20 @@
     "hash": "989949bb9c9b7f3742b44153a84a6f75",
     "height": 900,
     "pages": 15,
+    "width": 1600
+  },
+  "/decks/de/unit-1/127-1-2-7-random-number-generator-answers.pdf": {
+    "dir": "/deck-pages/de/unit-1/127-1-2-7-random-number-generator-answers",
+    "hash": "b4a0a43c922a6d71031fe82ad0c57517",
+    "height": 2071,
+    "pages": 3,
+    "width": 1600
+  },
+  "/decks/de/unit-1/127-1-2-7-random-number-generator.pdf": {
+    "dir": "/deck-pages/de/unit-1/127-1-2-7-random-number-generator",
+    "hash": "1662ec31f62bc9701a0d7d0aa6ae1dfb",
+    "height": 900,
+    "pages": 14,
     "width": 1600
   },
   "/decks/ied/unit-1/114-1-1-4-product-improvement.pdf": {

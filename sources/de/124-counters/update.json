@@ -1,0 +1,48 @@
+{
+  "operation": "update-existing-portfolio-entry",
+  "entryId": "62e5a85090f5",
+  "activity": "1.2.4",
+  "title": "1.2.4 Introduction to Sequential Logic Design: Counters",
+  "unit": "1.2 Logic Design Fundamentals",
+  "status": "complete",
+  "statusScope": "class-required simulation-only work",
+  "requestedBy": "Conner Glover",
+  "requestedOn": "2026-10-08",
+  "completionBasis": [
+    "Conner requested complete-status update",
+    "Physical protoboard/myDAQ work in steps 6–10 is waived per Conner's class direction recorded 2026-10-06",
+    "Current write-up and Multisim evidence cover steps 1–5; existing student RWL retained"
+  ],
+  "existingSchoolTask": {
+    "id": "d-372feec164",
+    "completedAt": "2026-10-06T13:51:48-05:00",
+    "changeRequested": false
+  },
+  "replaceFiles": [
+    {
+      "file": "presentation.pdf",
+      "pages": 8,
+      "sha256": "bb841d3ed4c0b20570d58c20539b96b098d6c86467861bd84ff304572283bf4c"
+    },
+    {
+      "file": "write-up.pdf",
+      "pages": 4,
+      "sha256": "3cd0a08c4748b443cd8535d55f8f2ca5a74a9dfa192833566f73db77d7b9050b"
+    }
+  ],
+  "removePendingRequirements": [
+    "Physical protoboard build",
+    "myDAQ physical-build steps 6–10"
+  ],
+  "preserve": [
+    "Student RWL",
+    "Simulation-vs-calculation provenance",
+    "Existing grade and submission records"
+  ],
+  "doNot": [
+    "Create duplicate entry",
+    "Add file-location or rubric-mapping slides",
+    "Modify unrelated portfolio entries"
+  ],
+  "externalImportExecuted": false
+}

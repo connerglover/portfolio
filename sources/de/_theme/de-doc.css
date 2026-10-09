@@ -1,0 +1,352 @@
+/* Digital Electronics document theme (write-ups and answer sheets), printed
+   on US Letter. Same palette, faces and drawing-sheet motif as de-deck.scss.
+   Load after fonts.css. */
+
+:root {
+  --paper: #f2efe6;
+  --ink: #13202b;
+  --ink-2: #3f4b57;
+  --ink-3: #6b7682;
+  --signal: #e0502a;
+  --trace: #0e7f7b;
+  --amber: #f2b134;
+  --night: #0f1a24;
+  --rule: rgba(19, 32, 43, 0.18);
+}
+
+@page {
+  size: Letter;
+  margin: 0.8in 0.75in 0.85in;
+  @top-left {
+    content: var(--dwg, 'PLTW DE');
+    font-family: 'DE Mono', 'DE Text', monospace;
+    font-size: 7.5pt;
+    letter-spacing: 0.08em;
+    color: #6b7682;
+    text-transform: uppercase;
+  }
+  @top-right {
+    content: 'Digital Electronics · Period F';
+    font-family: 'DE Mono', 'DE Text', monospace;
+    font-size: 7.5pt;
+    letter-spacing: 0.08em;
+    color: #6b7682;
+    text-transform: uppercase;
+  }
+  @bottom-right {
+    content: 'Sheet ' counter(page) ' of ' counter(pages);
+    font-family: 'DE Mono', 'DE Text', monospace;
+    font-size: 7.5pt;
+    letter-spacing: 0.08em;
+    color: #13202b;
+  }
+}
+@page :first {
+  margin-top: 0.8in;
+  @top-left { content: none; }
+  @top-right { content: none; }
+}
+
+html {
+  font-size: 10.5pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+body {
+  margin: 0;
+  background: #fff;
+  color: var(--ink-2);
+  font-family: 'DE Text', sans-serif;
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+}
+::selection {
+  background: rgba(224, 80, 42, 0.25);
+}
+#title-block-header {
+  display: none;
+}
+main,
+#quarto-content,
+.content {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---- Simple title: larger dark type, no decorative header. */
+.cover {
+  box-sizing: border-box;
+  width: auto;
+  margin: 0 0 18pt;
+  padding: 0 !important;
+  background: none;
+  color: var(--ink);
+}
+.cover .num {
+  display: block;
+  font-family: 'DE Text', sans-serif;
+  font-size: 9pt;
+  font-weight: 400;
+  color: var(--ink-2);
+  letter-spacing: normal;
+  margin-bottom: 7pt;
+}
+.cover h1 {
+  margin: 0 0 8pt;
+  font-family: 'DE Text', sans-serif;
+  font-weight: 600;
+  font-size: 26pt;
+  line-height: 1.15;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.cover .deck {
+  margin: 0;
+  font-size: 10.5pt;
+  line-height: 1.5;
+}
+.cover .block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6pt 18pt;
+  margin-top: 10pt;
+  border: none;
+  font-family: 'DE Text', sans-serif;
+  font-size: 8pt;
+  color: var(--ink-2);
+}
+.cover .block span { padding: 0; border: none; }
+.cover .block b { font-weight: 400; margin-left: 4pt; color: var(--ink); }
+
+/* ---- Headings: numbered sections, display face. */
+h2,
+h3 {
+  font-family: 'DE Display', 'DE Text', sans-serif;
+  color: var(--ink);
+  text-wrap: balance;
+  break-after: avoid;
+  page-break-after: avoid;
+}
+h2 {
+  margin: 22pt 0 8pt;
+  padding-top: 8pt;
+  border-top: 2px solid var(--ink);
+  font-size: 16pt;
+  font-weight: 780;
+  font-stretch: 110%;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+h2 .secnum {
+  font-family: 'DE Mono', 'DE Text', monospace;
+  font-weight: 500;
+  font-size: 10pt;
+  color: var(--signal);
+  letter-spacing: 0.08em;
+  margin-right: 10pt;
+  vertical-align: 2pt;
+}
+h3 {
+  margin: 14pt 0 5pt;
+  font-size: 11.5pt;
+  font-weight: 700;
+  font-stretch: 100%;
+}
+p,
+li {
+  max-width: 6.4in;
+  orphans: 3;
+  widows: 3;
+}
+p {
+  margin: 0 0 7pt;
+}
+strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+ul,
+ol {
+  margin: 0 0 8pt;
+  padding-left: 16pt;
+}
+li + li {
+  margin-top: 3pt;
+}
+li::marker {
+  color: var(--signal);
+}
+code,
+.mono {
+  font-family: 'DE Mono', 'DE Text', monospace;
+}
+math {
+  font-family: 'DE Math', math;
+  font-size: 1.05em;
+}
+math[display='block'] {
+  margin: 6pt 0;
+}
+
+/* ---- Answer blocks: question number in the margin column. */
+.qa {
+  display: grid;
+  grid-template-columns: 0.42in minmax(0, 1fr);
+  gap: 0 10pt;
+  padding: 8pt 0;
+  border-bottom: 1px solid var(--rule);
+  break-inside: avoid;
+}
+.qa > .q {
+  font-family: 'DE Mono', 'DE Text', monospace;
+  font-weight: 500;
+  font-size: 11pt;
+  color: var(--signal);
+}
+.qa > div > p:last-child {
+  margin-bottom: 0;
+}
+.ask {
+  color: var(--ink-3);
+  font-size: 9.5pt;
+  margin-bottom: 4pt !important;
+}
+
+/* ---- Tables. */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 6pt 0 4pt;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+th {
+  font-weight: 600;
+  font-size: 8pt;
+  letter-spacing: 0.03em;
+  color: var(--ink-2);
+  text-align: right;
+  border-bottom: 1.5px solid var(--ink);
+  padding: 4pt 7pt;
+}
+td {
+  font-family: 'DE Mono', 'DE Text', monospace;
+  text-align: right;
+  padding: 4pt 7pt;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+}
+th:first-child,
+td:first-child {
+  padding-left: 0;
+}
+tr.base td {
+  background: rgba(242, 177, 52, 0.22);
+}
+td.gap {
+  color: var(--signal);
+  text-align: center;
+  font-family: 'DE Text', sans-serif;
+  font-size: 8pt;
+}
+.tcap,
+figcaption {
+  margin-top: 4pt;
+  font-family: 'DE Mono', 'DE Text', monospace;
+  font-size: 7.5pt;
+  letter-spacing: 0.02em;
+  color: var(--ink-3);
+}
+
+/* ---- Figures. */
+figure {
+  margin: 8pt 0 10pt;
+  break-inside: avoid;
+}
+figure img,
+figure svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1.5px solid var(--ink);
+}
+figure.bare img,
+figure.bare svg {
+  border: 0;
+}
+.pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12pt;
+}
+
+/* ---- Missing evidence. */
+.gap-box {
+  margin: 8pt 0;
+  padding: 8pt 11pt;
+  border: 1.5px dashed var(--signal);
+  background: repeating-linear-gradient(-45deg, rgba(224, 80, 42, 0.03) 0 6pt, rgba(224, 80, 42, 0.08) 6pt 12pt);
+  color: var(--ink);
+  break-inside: avoid;
+}
+.gap-box .gap-label {
+  display: inline-block;
+  margin-bottom: 4pt;
+  padding: 1pt 6pt;
+  background: var(--signal);
+  color: #fff;
+  font-family: 'DE Mono', 'DE Text', monospace;
+  font-size: 7.5pt;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.gap-box p:last-child,
+.gap-box ul:last-child {
+  margin-bottom: 0;
+}
+
+.readouts {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  justify-content: start;
+  border-top: 1.5px solid var(--ink);
+  border-bottom: 1.5px solid var(--ink);
+  margin: 6pt 0 10pt;
+}
+.readout {
+  padding: 6pt 16pt 6pt 0;
+}
+.readout + .readout {
+  padding-left: 12pt;
+  border-left: 1px solid var(--rule);
+}
+.readout .v {
+  display: block;
+  font-family: 'DE Mono', 'DE Text', monospace;
+  font-size: 14pt;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.readout .v small {
+  font-size: 0.55em;
+  color: var(--ink-3);
+  margin-left: 2pt;
+}
+.readout .k {
+  display: block;
+  font-size: 8pt;
+  color: var(--ink-3);
+}
+
+a {
+  color: var(--trace);
+  text-underline-offset: 2px;
+}
+
+th.calc,
+td.calc {
+  color: var(--ink-3);
+}

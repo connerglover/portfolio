@@ -1,0 +1,3 @@
+Right: I successfully created the random number generator in multisim and tinkercad. I made my multisim build super compact.
+Wrong: tinkercad was late. multisim built might be a bit hard to read
+Learned: How to use bread boards a bit better. I hate bread boards.

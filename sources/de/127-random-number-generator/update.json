@@ -1,0 +1,34 @@
+{
+  "targetEntry": "c1728f3a3f28",
+  "title": "1.2.7 Understanding Digital Design: Random Number Generator",
+  "class": "Digital Electronics, Period F",
+  "unit": "1.2 Logic Design Fundamentals",
+  "status": "ready-for-import",
+  "externalImportExecuted": false,
+  "changeSchoolTaskCompletion": false,
+  "replaceSlideshow": "presentation.pdf",
+  "nativeWebsiteText": "write-up.md",
+  "separateWorksheetAnswers": "answers.pdf",
+  "animatedMedia": [
+    "assets/multisim-working.gif",
+    "assets/tinkercad-working.gif"
+  ],
+  "videoMedia": [
+    "assets/soldering-projects.mp4"
+  ],
+  "removeFromPublicPage": [
+    "old write-up PDF companion"
+  ],
+  "preserveHistoricalFiles": true,
+  "evidenceLimits": [
+    "Independent ABC input-switch truth-table test not recorded",
+    "Manual clock-cycle ABC probe table not recorded",
+    "Separate slowed CLOCK_VOLTAGE test not recorded",
+    "Question 5 prediction is prepared now, not an original pre-test student prediction",
+    "Recording playback positions are not circuit timing measurements",
+    "Brief mixed LED transition patterns are visible"
+  ],
+  "untouchedEntries": [
+    "1.2.4"
+  ]
+}

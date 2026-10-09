@@ -1,0 +1,200 @@
+---
+pagetitle: "1.2.7 Random Number Generator — Write-up"
+format:
+  html:
+    minimal: true
+    embed-resources: true
+    html-math-method: mathml
+    css:
+      - ../_theme/fonts.css
+      - ../_theme/de-doc.css
+    include-in-header:
+      text: "<style>:root { --dwg: 'DWG 1.2.7 · random number generator · write-up'; }</style>"
+---
+
+<header class="cover">
+<span class="num">PLTW DIGITAL ELECTRONICS · PROJECT 1.2.7 · WRITE-UP</span>
+<h1>Understanding digital design: a random number generator</h1>
+<p class="deck">Building the analog, sequential and combinational sections of an electronic die in Multisim, testing them, and joining them into one circuit that rolls and stops on a random face.</p>
+<div class="block"><span>Student<b>Conner Glover</b></span><span>Class<b>Digital Electronics, Period F</b></span><span>Unit<b>1.2 Logic Design Fundamentals</b></span><span>Term<b>Fall 2026</b></span></div>
+</header>
+
+## <span class="secnum">01</span>Goal
+
+The Random Number Generator is the first complete design in the course with all three kinds of circuit in it: an analog section (a 555 timer), a sequential section (a counter made of flip-flops) and a combinational section (logic gates). Together they act as a single die: seven LEDs show the dots for 1 through 6. The worksheet has the sections built and tested one at a time in the Circuit Design Software (Multisim), then combined. The teacher's schedule adds a second build of the same circuit in TinkerCAD, and the project rubric also asks for the RNG board soldered in Activity 1.1.9.
+
+## <span class="secnum">02</span>The finished Multisim circuit
+
+<figure>
+<img src="assets/multisim-window.png" alt="Multisim window titled 1.2.7 showing the full random number generator schematic while simulating">
+<figcaption>Figure 1 · My 1.2.7 Multisim file, screenshot taken 26 Sep 2026 while the simulation was running (status bar: Simulating..., Tran: 31.929 s). The SPICE netlist check reports 0 errors. Every part was selected at the time, so the parts are drawn in blue.</figcaption>
+</figure>
+
+The part values and connections below were read from the SPICE netlist exported from the same circuit (`1.2.7.cir`), because some labels overlap on screen. The netlist's designators differ from the worksheet's Figure 9 (for example, the 50 µF capacitor is C3 in my file and C1 on the worksheet), but the values match.
+
+<div class="pair">
+<figure>
+<img src="assets/multisim-555.png" alt="Close-up of the 555 timer section">
+<figcaption>Figure 2 · Analog section</figcaption>
+</figure>
+<div>
+
+**Analog section.** An LM555CN wired as an astable oscillator, with RA = 10 kΩ, RB = 18 kΩ and a 100 nF timing capacitor; a 10 nF capacitor steadies the CON pin. RA is not fed from VCC directly. It hangs off a 50 µF "roll" capacitor, which switch S1 (Key = Space) charges from 5 V through 1.2 kΩ. With S1 closed, the calculated clock is:
+
+$$T = 0.693\,(R_A + 2R_B)\,C = 0.693\,(10\,\text{k}\Omega + 36\,\text{k}\Omega)(100\,\text{nF}) = 3.19\ \text{ms}$$
+
+$$f = \frac{1}{T} \approx 314\ \text{Hz} \qquad \text{DC} = \frac{R_A + R_B}{R_A + 2R_B} \times 100\% = \frac{28\,\text{k}\Omega}{46\,\text{k}\Omega} \times 100\% = 60.9\%$$
+
+These assume a full 5 V on RA; the 1.2 kΩ resistor drops a little of that while the timer runs.
+
+</div>
+</div>
+
+<figure>
+<img style="max-width: 5.4in" src="assets/multisim-sequential.png" alt="Close-up of the three 74LS74N flip-flops and the 111 detector">
+<figcaption>Figure 3 · Sequential section: three 74LS74N D flip-flops, two 74LS08N AND gates and a 74LS04N inverter</figcaption>
+</figure>
+
+**Sequential section.** Each 74LS74N has its D input tied to its own ~Q, so it toggles on every rising clock edge. The 555 output clocks the C flip-flop (the 1s bit); C's ~Q clocks B, and B's ~Q clocks A. That makes a 3-bit ripple up-counter. Two AND gates detect ABC = 111 (A·B, then ·C), and the inverter turns that into an active-LOW signal on the asynchronous inputs: it clears A and B and presets C. The instant the count reaches 111, it is forced to 001, so the counter only shows 001 through 110 (1 through 6).
+
+<figure>
+<img style="max-width: 4.6in" src="assets/multisim-combinational.png" alt="Close-up of the gate decoder and seven LEDs; the center LED is lit">
+<figcaption>Figure 4 · Combinational section: two 74LS08N AND gates, two 74LS32N OR gates, a 74LS04N inverter and seven LEDs, each with a 220 Ω resistor to ground</figcaption>
+</figure>
+
+**Combinational section.** A die face is symmetric, so the LEDs light in opposite pairs, and four signals drive all seven:
+
+$$L1 = L5 = A + B \cdot C \qquad L2 = L6 = A \cdot B \qquad L3 = L7 = A + \overline{C} \qquad L4 = C$$
+
+This uses exactly the gates on the sheet: one AND and one OR for L1/L5, one AND for L2/L6, the inverter and the other OR for L3/L7, and a plain wire for L4.
+
+**At the moment of the screenshot**, S1 is drawn open and only the center LED, L4, is lit. That is count 001, a roll of 1: the clock had stopped and the die was holding its last value.
+
+## <span class="secnum">03</span>Answers
+
+<div class="qa"><span class="q">1b</span><div>
+<p class="ask">Toggle the switches and complete the truth table.</p>
+
+<table>
+<thead><tr><th>A</th><th>B</th><th>C</th><th>L1</th><th>L2</th><th>L3</th><th>L4</th><th>L5</th><th>L6</th><th>L7</th><th>Face</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>(looks like 2)</td></tr>
+<tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>2</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>3</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>4</td></tr>
+<tr><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>5</td></tr>
+<tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>6</td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>(all seven)</td></tr>
+</tbody>
+</table>
+<p class="tcap">Table 1 · Expected outputs, worked out from the gate equations of my circuit. 1 = LED on (HIGH).</p>
+
+<figure class="bare">
+{{< include assets/die-patterns.svg >}}
+<figcaption>Figure 5 · The same table drawn as die faces, in the worksheet's LED layout</figcaption>
+</figure>
+
+<div class="gap-box"><span class="gap-label">Missing · simulated truth table</span>
+<p>Table 1 is calculated, not observed. The truth table recorded while toggling the A, S and D switches in the step 1 circuit has not been filed.</p></div>
+</div></div>
+
+<div class="qa"><span class="q">1c</span><div>
+<p class="ask">Did inputs 001–110 display what was expected?</p>
+
+By the equations, yes: each of 001 through 110 lights the dots of faces 1 through 6. Whether the step 1 simulation matched needs the observed table above.
+</div></div>
+
+<div class="qa"><span class="q">1d</span><div>
+<p class="ask">Do the outputs for 000 and 111 make sense? Does it matter?</p>
+
+No. 000 lights only L3 and L7, which looks like a 2, and 111 lights all seven LEDs, which is not a die face. It doesn't matter, because the counter in step 2 only counts 001 through 110 and never sends 000 or 111 to the decoder.
+</div></div>
+
+<div class="qa"><span class="q">2a</span><div>
+<p class="ask">Starting from 001, cycle the clock and record A, B and C.</p>
+
+<table>
+<thead><tr><th>Clock</th><th>Initial</th><th>1st</th><th>2nd</th><th>3rd</th><th>4th</th><th>5th</th><th>6th</th><th>7th</th></tr></thead>
+<tbody><tr><td>ABC</td><td>001</td><td>010</td><td>011</td><td>100</td><td>101</td><td>110</td><td>001</td><td>010</td></tr></tbody>
+</table>
+<p class="tcap">Table 2 · Expected sequence: count up by one each cycle; the 7th state (111) is reset to 001 at once.</p>
+
+<div class="gap-box"><span class="gap-label">Missing · simulated counter table</span>
+<p>Table 2 is the expected sequence. The values recorded by toggling the clock switch in the step 2 circuit have not been filed.</p></div>
+</div></div>
+
+<div class="qa"><span class="q">2b</span><div>
+<p class="ask">Is the counter counting as expected?</p>
+
+The design counts 001, 010, 011, 100, 101, 110, 001, matching the worksheet's Figure 6. The final circuit in Figure 1 uses this counter; a record of the step 2 test itself has not been filed.
+</div></div>
+
+<div class="qa"><span class="q">2c–f</span><div>
+<p class="ask">Replace the switch with a CLOCK_VOLTAGE source, slow it down and check the count again.</p>
+
+The worksheet's prose says 50 Hz and its Figure 7 labels the source 10 Hz. At either rate the counter should repeat the same 1–6 sequence, one step per clock cycle. No observation from this step has been filed.
+</div></div>
+
+<div class="qa"><span class="q">3</span><div>
+<p class="ask">Connect the combinational and sequential sections and check the die pattern.</p>
+
+Done in the final circuit (Figure 1): the counter's A, B and C outputs drive the decoder, and the LEDs show the die faces. In the screenshot the die shows 1 (only L4 lit, count 001), which matches Table 1.
+</div></div>
+
+<div class="qa"><span class="q">4</span><div>
+<p class="ask">Plan where to add a switch so the circuit stops on a random roll.</p>
+
+The switch goes in the clock's power path, not on the LEDs or the counter. In my circuit S1 (Key = Space) sits between the 1.2 kΩ resistor from 5 V and the 50 µF capacitor that feeds RA. Closing it keeps the clock running; opening it lets the clock run down and stop, and the counter holds whatever value it reached.
+</div></div>
+
+<div class="qa"><span class="q">5</span><div>
+<p class="ask">Replace the clock with the 555 timer circuit. With the switch closed, predict what happens when it opens, then observe and explain.</p>
+
+**What the circuit should do.** With S1 closed, the 555 clocks the counter at about 314 Hz, far too fast to follow, so the LEDs flicker through all six faces. When S1 opens, the 50 µF capacitor is the only supply for RA. As it drains, the 100 nF timing capacitor takes longer and longer to charge to 2/3 of 5 V, so the clock slows down, the faces change more and more slowly, and then the clock stops and the die holds one face. The time scale is set by 50 µF and 28 kΩ: about 1.4 s. Because nobody can time the switch to one 3 ms clock period, the face it stops on is effectively random, even though the circuit itself is fully predictable.
+
+The screenshot (Figure 1) shows the end state: S1 open and the die stopped on 1.
+
+<div class="gap-box"><span class="gap-label">Missing · Conner's prediction and observation</span>
+<p>The worksheet asks for your own prediction and what you saw when the switch opened (for example, whether the die visibly slowed before stopping).</p></div>
+</div></div>
+
+## <span class="secnum">04</span>The soldered board (Activity 1.1.9)
+
+<figure>
+<img style="max-width: 4.4in" src="assets/soldered-rng-board.png" alt="The soldered PLTW/VEX Random Number Generator board with four corner LEDs lit">
+<figcaption>Figure 6 · The RNG board soldered in 1.1.9, from the 9.5 s video filed in the 1.1.8/1.1.9 entry (soldering-projects.mp4). Four corner LEDs are lit: a roll of 4.</figcaption>
+</figure>
+
+The PLTW/VEX Random Number Generator kit (P/N 270-2338) is this same design as a real board: a 555 timer with timing resistors R8–R10 and its capacitors, 74LS logic ICs for the counter and decoder, seven LEDs in a die layout, a Press To Roll button (S1) and a power switch (S2). In the video the button is pressed and the die rolls and lands on a new face. Every LED was first soldered in backwards; they were desoldered and replaced over two more class periods, and L6 did not survive the rework (from the 1.1.8/1.1.9 slides).
+
+## <span class="secnum">05</span>TinkerCAD build
+
+<figure>
+<img src="assets/tinkercad-finished.png" alt="Finished TinkerCAD RNG assembly with three connected breadboards and seven die-pattern LEDs">
+<figcaption>Figure 7 · Conner's finished TinkerCAD build, supplied 8 Oct 2026. The supply reads OFF, its displays are blank and the LEDs are unlit.</figcaption>
+</figure>
+
+**Analog.** The left breadboard carries the 555 timer, slide switch, resistors and capacitors. This section provides the clock and roll control.
+
+**Sequential.** The middle breadboard carries two 74HC74 dual D flip-flop packages. The design uses three flip-flops to count 001 through 110.
+
+**Combinational.** The right breadboard carries the 74HC04 inverter, 74HC08 AND gates, 74HC32 OR gates and seven LED resistors. These decode the count for seven LEDs arranged as a die face.
+
+The overview verifies visible components and assembly, not every component value or pin connection. The separately supplied 22.8-second GIF shows the powered circuit changing its LED pattern at 5.00 V. Sampled frames show faces 2 and 5; the last frame shows 6. The recording is provided as `assets/tinkercad-working.gif`, because a PDF cannot retain its animation. These samples do not replace the worksheet's separate truth-table and counter tests.
+
+## RWL: right, wrong, learned
+
+**Right:** I successfully created the random number generator in Multisim and TinkerCAD. I made my Multisim build super compact.
+
+**Wrong:** TinkerCAD was late. My Multisim build might be a bit hard to read.
+
+**Learned:** I learned how to use breadboards a bit better. I hate breadboards.
+
+## <span class="secnum">06</span>Sources
+
+- PLTW Project 1.2.7 *Understanding Digital Design: Random Number Generator* (worksheet pages 1–5) and the teacher's 1.2.7 rubric.
+- The teacher's fall schedule entry for 1.2.7 (Multisim build, then a repeat in TinkerCAD).
+- Two screenshots of my open Multisim file, taken 26 Sep 2026 and filed in the 1.2.7 entry.
+- `1.2.7.cir`, the SPICE netlist I exported from the circuit, for part values and wiring.
+- The 1.1.9 soldering video and slides in the 1.1.8/1.1.9 entry.

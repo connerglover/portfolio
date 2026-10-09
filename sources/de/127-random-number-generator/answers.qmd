@@ -1,0 +1,99 @@
+---
+pagetitle: 1.2.7 Worksheet Answers and Recording Observations
+format:
+  html:
+    minimal: true
+    embed-resources: true
+    html-math-method: mathml
+    css:
+    - ../_theme/fonts.css
+    - ../_theme/de-doc.css
+    include-in-header:
+      text: '<style>:root { --dwg: "DWG 1.2.7 · worksheet answers"; } @media print { h1 { color: #13202b; background: white; } }</style>'
+---
+
+# 1.2.7 Worksheet Answers and Recording Observations
+
+Conner Glover · Digital Electronics, Period F
+
+Answers prepared with AI assistance. Observations come from Conner's supplied Multisim recording. Calculated tables are not presented as separate simulator tests.
+
+## 1. Combinational logic
+
+**1b. Calculated truth table.** HIGH = 1; LOW = 0. Calculated from the decoder wiring, not an independently toggled A/B/C test.
+
+| A | B | C | L1 | L2 | L3 | L4 | L5 | L6 | L7 |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1 |
+| 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1 |
+| 0 | 1 | 1 | 1 | 0 | 0 | 1 | 1 | 0 | 0 |
+| 1 | 0 | 0 | 1 | 0 | 1 | 0 | 1 | 0 | 1 |
+| 1 | 0 | 1 | 1 | 0 | 1 | 1 | 1 | 0 | 1 |
+| 1 | 1 | 0 | 1 | 1 | 1 | 0 | 1 | 1 | 1 |
+| 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+
+**1c. Expected and recorded outputs.** Inputs 001–110 give die faces 1–6. The complete-circuit recording contains stable LED patterns matching all six faces. It does not show the independent input-switch test.
+
+**1d. Unused states.** 000 lights L3 and L7, which looks like a 2. 111 lights all seven LEDs, which is not a normal die face. The counter normally holds only 001–110. It resets when 111 is detected; brief transition patterns are possible.
+
+<div style="break-before: page"></div>
+
+## 2. Sequential logic
+
+**2a. Calculated clock-cycle table.** Each cycle has one rising clock edge. With a switch, one cycle requires two toggles.
+
+| Clock | A | B | C |
+|---|---:|---:|---:|
+| Initial | 0 | 0 | 1 |
+| 1st cycle | 0 | 1 | 0 |
+| 2nd cycle | 0 | 1 | 1 |
+| 3rd cycle | 1 | 0 | 0 |
+| 4th cycle | 1 | 0 | 1 |
+| 5th cycle | 1 | 1 | 0 |
+| 6th cycle | 0 | 0 | 1 |
+| 7th cycle | 0 | 1 | 0 |
+
+**2b. Count check.** Expected sequence: 001, 010, 011, 100, 101, 110, then 001. The recording shows the corresponding stable die faces repeating. A, B and C are not separately displayed as measured probe values, so this table remains calculated.
+
+**2c–d. Clock-source setup.** Use 5 V, 50% duty cycle and 50 Hz, following the written instruction. Calculated period: 20 ms; HIGH and LOW times: 10 ms each. The worksheet's Figure 7 instead labels 10 Hz; its text and diagram disagree. The supplied final circuit uses the 555 timer, not this separate clock-source test.
+
+**2e. Reduced frequency.** Reducing the clock frequency should make each count easier to see without changing the order. Example test setting: 1 Hz, giving one count per second. This is a proposed setting, not a recorded test.
+
+**2f. Expected result.** The same six-state sequence should repeat. No separate slowed CLOCK_VOLTAGE test is shown.
+
+## 3. Combined counter and decoder
+
+**3a–b. Assembly.** The supplied Multisim circuit connects the 555 clock, counter and decoder. The GIF shows the circuit operating.
+
+**3c–d. Recorded result.** Stable patterns for faces 1, 2, 3, 4, 5 and 6 appear, then repeat. These match the expected die patterns. Brief mixed LED patterns appear during some transitions; the recording is not a glitch-free timing measurement.
+
+<div style="break-before: page"></div>
+
+## 4. Roll switch
+
+Place S1 in the charging path from the 5 V supply through the 1.2 kΩ resistor to the 50 µF roll capacitor. Closing S1 charges the capacitor. Opening S1 stops replenishing its charge, so the timer runs down while the counter remains powered and holds the final face.
+
+## 5. Timer prediction, observation and explanation
+
+**Prediction, written now.** After S1 opens, the stored charge should keep the clock running briefly. The die should continue changing, slow down and hold its last face. This is an AI-assisted prediction, not a claim about what Conner wrote before recording the test.
+
+**Recorded observation.** S1 closes and opens twice. After the first opening, the LEDs continue cycling and eventually hold face 4. After the second opening, they change again and finally hold face 2 through the end of the recording. The stable patterns correspond to all six normal die faces.
+
+**Explanation.** The 50 µF capacitor supplies the timing-resistor path after S1 opens. As its charge decreases, the timing capacitor charges more slowly. When the timer can no longer produce another clock edge, the counter holds its final count. The roll depends on when S1 opens; the count sequence itself is deterministic.
+
+## Recording evidence
+
+| GIF playback position | Observed lit outputs | Face |
+|---|---|---:|
+| 0.00 s | L4 | 1 |
+| 2.13 s | L3, L7 | 2 |
+| 2.53 s | L1, L4, L5 | 3 |
+| 2.80 s | L1, L3, L5, L7 | 4 |
+| 3.07 s | L1, L3, L4, L5, L7 | 5 |
+| 3.33 s | L1, L2, L3, L5, L6, L7 | 6 |
+| 9.13 s | L1, L3, L5, L7 | Held 4 |
+| 14.00 s | L3, L7 | Held 2 |
+
+Source: `assets/multisim-working.gif`, 211 frames, 14.07 s playback. Times locate evidence in the recording; they are not simulation timestamps or measured clock periods. Blue LED emission arrows indicate lit LEDs. The counter's ABC values are not directly measured here.
+
