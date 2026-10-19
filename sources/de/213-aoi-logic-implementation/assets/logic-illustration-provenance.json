@@ -1,0 +1,40 @@
+{
+  "cover": "AI-authored conceptual SOP network for source F1; not observed wiring",
+  "content_diagram": "AI-authored functional redrawing of verified Multisim topology NOT(AC)(A+C)+AC NOT(B)",
+  "truth_check": [
+    [
+      "000",
+      0
+    ],
+    [
+      "001",
+      1
+    ],
+    [
+      "010",
+      0
+    ],
+    [
+      "011",
+      1
+    ],
+    [
+      "100",
+      1
+    ],
+    [
+      "101",
+      1
+    ],
+    [
+      "110",
+      1
+    ],
+    [
+      "111",
+      0
+    ]
+  ],
+  "student_report": "Alternative TinkerCAD gate counts are Conner-reported, not independently verified or equated to the traced Multisim topology.",
+  "rwl": "Right and Wrong supplied by Conner; Learned AI-proposed and explicitly approved by Conner via parent on 2026-10-15."
+}

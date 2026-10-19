@@ -92,6 +92,10 @@ finished. Digital Electronics is set up that way from its Fall schedule.
 worksheets and quizzes all render through the same viewer. `images:` renders as
 a single full-width photo, or as a thumbnail grid once there is more than one.
 
+For a package whose slideshow leads the work, set `presentationFirst: true`.
+An optional `summary:` appears above the slideshow; the Markdown write-up and
+videos follow it. Other entries keep their existing order.
+
 **After adding or replacing a PDF, run `npm run decks`.** See below.
 
 ---

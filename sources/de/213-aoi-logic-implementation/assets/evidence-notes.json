@@ -1,0 +1,149 @@
+{
+  "entry_id": "89227fcfb979",
+  "accession": "F\u00b702\u00b7027",
+  "job": "h-20261015-211952",
+  "scope": "Fall schedule page 3: problem 1 only, Multisim, TinkerCAD and breadboard; F2 not required in this package.",
+  "sources": [
+    {
+      "supplied_name": "multisim.png",
+      "indexed_original": "F - Digital Electronics PLTW DC/02 - Combinational Logic/02.20 - 2.1.3 AOI Logic Implementation/student/AOI - Multisim Schematic Still.png",
+      "sha256": "de1ad52ea1994c83476b0b9052f04aec11c405b796c98ba2b045a151c0af1481",
+      "package_asset": "assets/multisim.png"
+    },
+    {
+      "supplied_name": "multisim.gif",
+      "indexed_original": "F - Digital Electronics PLTW DC/02 - Combinational Logic/02.20 - 2.1.3 AOI Logic Implementation/student/AOI - Multisim Switch Recording.gif",
+      "sha256": "feca90c5ac359cb011ada47ef1b7a5bef201a2b443fff8510cfd9221f8c9f376",
+      "package_asset": "assets/multisim.gif"
+    },
+    {
+      "supplied_name": "tinkercad.png",
+      "indexed_original": "F - Digital Electronics PLTW DC/02 - Combinational Logic/02.20 - 2.1.3 AOI Logic Implementation/student/AOI - Tinkercad Wiring Still.png",
+      "sha256": "79f98ead46719cd534bd6cb96c4e915ddf93b3ddf6a82ce151e9e0b622d7f1a4",
+      "package_asset": "assets/tinkercad.png"
+    },
+    {
+      "supplied_name": "tinkercad.gif",
+      "indexed_original": "F - Digital Electronics PLTW DC/02 - Combinational Logic/02.20 - 2.1.3 AOI Logic Implementation/student/AOI - Tinkercad Switch Recording.gif",
+      "sha256": "de81ed56f40e4b46b2675047a1a27cadacea465d796a6a100b50609a7e6c2a0a",
+      "package_asset": "assets/tinkercad.gif"
+    },
+    {
+      "supplied_name": "irl.png",
+      "indexed_original": "F - Digital Electronics PLTW DC/02 - Combinational Logic/02.20 - 2.1.3 AOI Logic Implementation/student/AOI - Physical Breadboard Overview.png",
+      "sha256": "255523990d27b521a0a3be13b247d16759f3e30fe00b6e75e9cb41f26f97462c",
+      "package_asset": "assets/irl.png"
+    },
+    {
+      "supplied_name": "irl_isometric.png",
+      "indexed_original": "F - Digital Electronics PLTW DC/02 - Combinational Logic/02.20 - 2.1.3 AOI Logic Implementation/student/AOI - Physical Breadboard Isometric.png",
+      "sha256": "355c230a6f3fa2484fde521b62ea08892d868a241901edad134cf6e285aaaa47",
+      "package_asset": "assets/irl_isometric.png"
+    },
+    {
+      "supplied_name": "irl.mp4",
+      "indexed_original": "F - Digital Electronics PLTW DC/02 - Combinational Logic/02.20 - 2.1.3 AOI Logic Implementation/student/AOI - Physical Switch Demonstration.mp4",
+      "sha256": "1f6b87e8c46df8412be54d74fa81fe2f461e2b6a8bfbaa4884ec6b918c5be06a",
+      "package_asset": "assets/irl.mp4"
+    }
+  ],
+  "motion_review": {
+    "multisim": {
+      "all_frames_reviewed": 120,
+      "seconds": 8.0,
+      "stable_states": [
+        {
+          "A": 0,
+          "B": 0,
+          "C": 0,
+          "calculated_F1": 0,
+          "observed_Multisim_indicator": 0,
+          "gif_frame_0_based": 110,
+          "playback_s": 7.333
+        },
+        {
+          "A": 0,
+          "B": 0,
+          "C": 1,
+          "calculated_F1": 1,
+          "observed_Multisim_indicator": 1,
+          "gif_frame_0_based": 50,
+          "playback_s": 3.333
+        },
+        {
+          "A": 0,
+          "B": 1,
+          "C": 0,
+          "calculated_F1": 0,
+          "observed_Multisim_indicator": 0,
+          "gif_frame_0_based": 80,
+          "playback_s": 5.333
+        },
+        {
+          "A": 0,
+          "B": 1,
+          "C": 1,
+          "calculated_F1": 1,
+          "observed_Multisim_indicator": 1,
+          "gif_frame_0_based": 23,
+          "playback_s": 1.533
+        },
+        {
+          "A": 1,
+          "B": 0,
+          "C": 0,
+          "calculated_F1": 1,
+          "observed_Multisim_indicator": 1,
+          "gif_frame_0_based": 90,
+          "playback_s": 6.0
+        },
+        {
+          "A": 1,
+          "B": 0,
+          "C": 1,
+          "calculated_F1": 1,
+          "observed_Multisim_indicator": 1,
+          "gif_frame_0_based": 44,
+          "playback_s": 2.933
+        },
+        {
+          "A": 1,
+          "B": 1,
+          "C": 0,
+          "calculated_F1": 1,
+          "observed_Multisim_indicator": 1,
+          "gif_frame_0_based": 65,
+          "playback_s": 4.333
+        },
+        {
+          "A": 1,
+          "B": 1,
+          "C": 1,
+          "calculated_F1": 0,
+          "observed_Multisim_indicator": 0,
+          "gif_frame_0_based": 0,
+          "playback_s": 0.0
+        }
+      ],
+      "transitions_excluded": [
+        31,
+        54,
+        55,
+        56,
+        74,
+        84,
+        96
+      ]
+    },
+    "tinkercad": {
+      "all_frames_reviewed": 117,
+      "seconds": 7.8,
+      "findings": "5.00 V supply display; LED changes between bright red and dark red during switch operation. Representative source frames 20 (3.04 mA, bright) and 40 (52.7 microampere, dark). No established A/B/C mapping; no complete logical validation."
+    },
+    "physical": {
+      "duration_seconds": 10.9,
+      "sampling": "Full-duration review at 0.25 s intervals, 44 images; close LED crops and representative full-resolution frames inspected.",
+      "findings": "Finger manually operates protoboard switches. LED brightness varies, but exact ABC-to-output mapping and eight-state agreement are not established. No audio transcription or first-person claims used."
+    }
+  }
+}

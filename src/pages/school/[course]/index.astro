@@ -110,12 +110,15 @@ const attachments = (item: (typeof all)[number]) => {
                       {item.data.partners.length > 0 && (
                         <p class="byline">With {item.data.partners.join(', ')}</p>
                       )}
+                      {item.data.summary && <p class="prose">{item.data.summary}</p>}
+                      {item.data.presentationFirst && item.data.decks.map((d) => <Deck pdf={d.pdf} title={d.title} />)}
                       <div class="prose">
-                        {item.data.videos.map((video) => <Video {...video} />)}
+                        {!item.data.presentationFirst && item.data.videos.map((video) => <Video {...video} />)}
                         <Content />
+                        {item.data.presentationFirst && item.data.videos.map((video) => <Video {...video} />)}
                       </div>
                       <Gallery images={item.data.images} />
-                      {item.data.decks.map((d) => <Deck pdf={d.pdf} title={d.title} />)}
+                      {!item.data.presentationFirst && item.data.decks.map((d) => <Deck pdf={d.pdf} title={d.title} />)}
                       {item.data.files.map((f) => <DriveFile id={f.id} title={f.title} />)}
                     </div>
                   </details>

@@ -19,6 +19,10 @@ const school = defineCollection({
     unit: z.string(),
     // Sorts assignments within a unit. Mirrors the PLTW numbering.
     order: z.number(),
+    // A supplied project package can lead with its slideshow and keep the
+    // supplementary write-up and motion evidence below it.
+    presentationFirst: z.boolean().default(false),
+    summary: z.string().optional(),
     // Slide decks, self-hosted as PDFs under public/decks/. Exported out of
     // Google Slides during the migration; `id` is the original Slides file id,
     // kept for provenance only (those links are not publicly readable).

@@ -1,0 +1,572 @@
+/*-- scss:defaults --*/
+// Digital Electronics deck theme: an engineering drawing sheet.
+// Drafting-paper grid, blue-black ink, a signal-orange trace and a teal
+// probe colour; dark "bench" slides for section breaks. Fonts come from
+// fonts.css (embedded), so decks print without system fallbacks.
+
+$de-paper: #f2efe6;
+$de-paper-2: #e9e5d8;
+$de-ink: #13202b;
+$de-ink-2: #3f4b57;
+$de-ink-3: #6b7682;
+$de-signal: #e0502a;
+$de-trace: #0e7f7b;
+$de-amber: #f2b134;
+$de-night: #0f1a24;
+$de-night-2: #172633;
+
+$body-bg: $de-paper;
+$body-color: $de-ink-2;
+$link-color: $de-trace;
+$selection-bg: rgba($de-signal, 0.25);
+$font-family-sans-serif: 'DE Text', sans-serif;
+$font-family-monospace: 'DE Mono', 'DE Text', monospace;
+$presentation-font-size-root: 32px;
+$presentation-line-height: 1.45;
+$presentation-heading-font: 'DE Display', 'DE Text', sans-serif;
+$presentation-heading-color: $de-ink;
+$presentation-heading-font-weight: 780;
+$presentation-heading-line-height: 1.04;
+$presentation-heading-letter-spacing: -0.015em;
+$presentation-heading-text-transform: none;
+$presentation-h1-font-size: 132px;
+$presentation-h2-font-size: 66px;
+$presentation-h3-font-size: 40px;
+$code-color: $de-ink;
+
+/*-- scss:rules --*/
+:root {
+  --paper: #{$de-paper};
+  --ink: #{$de-ink};
+  --ink-2: #{$de-ink-2};
+  --ink-3: #{$de-ink-3};
+  --signal: #{$de-signal};
+  --trace: #{$de-trace};
+  --amber: #{$de-amber};
+  --night: #{$de-night};
+  --grid-minor: rgba(19, 32, 43, 0.055);
+  --grid-major: rgba(19, 32, 43, 0.1);
+}
+
+::selection {
+  background: rgba($de-signal, 0.25);
+}
+
+// ---- The sheet: a 40px drafting grid with a 200px major grid.
+.reveal .slide-background {
+  background-color: $de-paper;
+  background-image:
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid-minor) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
+  background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px;
+  background-position: -1px -1px;
+}
+.reveal .slide-background.has-dark-background {
+  background-color: $de-night;
+  background-image:
+    linear-gradient(rgba(14, 127, 123, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 127, 123, 0.2) 1px, transparent 1px),
+    linear-gradient(rgba(14, 127, 123, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 127, 123, 0.08) 1px, transparent 1px);
+  background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px;
+}
+
+// ---- Slide frame: content sits inside the drawing border.
+// Reveal's print view wraps each slide in a .pdf-page and zeroes section
+// padding with its own !important rule, so this selector skips the child
+// combinator and is one step more specific. Decks set
+// pdf-max-pages-per-slide: 1, so every slide prints as exactly one page.
+html .reveal .slides section.slide {
+  box-sizing: border-box !important;
+  padding: 104px 128px 150px !important;
+  text-align: left;
+}
+// The drawing border lives on the slide background, which is sized to the
+// page on screen and in print alike.
+.reveal .slide-background::after {
+  content: '';
+  position: absolute;
+  inset: 36px;
+  border: 2px solid rgba(19, 32, 43, 0.55);
+  pointer-events: none;
+}
+.reveal .slide-background.has-dark-background::after {
+  border-color: rgba(14, 127, 123, 0.55);
+}
+
+// ---- Title block (the slide number), bottom right like a drawing sheet.
+// Reveal's print view forces display: block on the PDF number, so the
+// label and the number are laid out inline.
+.reveal .slide-number,
+.reveal .slide-number-pdf {
+  position: absolute !important;
+  right: 36px !important;
+  bottom: 36px !important;
+  top: auto !important;
+  left: auto !important;
+  display: block !important;
+  padding: 0 24px 0 0 !important;
+  background: $de-paper !important;
+  color: $de-ink !important;
+  border: 2px solid rgba(19, 32, 43, 0.55);
+  border-right: 0;
+  border-bottom: 0;
+  font-family: 'DE Mono', 'DE Text', monospace !important;
+  font-size: 18px !important;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 50px !important;
+  white-space: nowrap;
+  z-index: 30;
+}
+.reveal .slide-number::before,
+.reveal .slide-number-pdf::before {
+  content: var(--dwg, 'PLTW DE') '  ·  SHEET';
+  display: inline-block;
+  padding: 0 0 0 24px;
+  margin-right: 12px;
+  text-transform: uppercase;
+  white-space: pre;
+}
+.reveal .slide-number a,
+.reveal .slide-number span {
+  color: $de-ink !important;
+}
+.reveal .slide-number-pdf {
+  color: $de-ink !important;
+}
+
+// ---- Type.
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  font-stretch: 112%;
+  text-wrap: balance;
+  margin: 0 0 40px;
+}
+.reveal h2 {
+  max-width: 1540px;
+}
+.reveal h3 {
+  font-weight: 700;
+  font-stretch: 100%;
+  margin-bottom: 18px;
+}
+.reveal p,
+.reveal li {
+  max-width: 62ch;
+}
+.reveal p {
+  margin: 0 0 22px;
+}
+.reveal strong {
+  color: $de-ink;
+  font-weight: 600;
+}
+.reveal ul,
+.reveal ol {
+  display: block;
+  margin: 0 0 0 1.1em;
+}
+.reveal li + li {
+  margin-top: 10px;
+}
+.reveal li::marker {
+  color: $de-signal;
+}
+.reveal code,
+.reveal .mono {
+  font-family: 'DE Mono', 'DE Text', monospace;
+  font-variant-numeric: tabular-nums;
+}
+.reveal .lede {
+  font-size: 38px;
+  line-height: 1.4;
+  color: $de-ink;
+  max-width: 44ch;
+}
+.reveal .small {
+  font-size: 24px;
+  line-height: 1.45;
+}
+.reveal .muted {
+  color: $de-ink-3;
+}
+.reveal .accent {
+  color: $de-signal;
+}
+.reveal .teal {
+  color: $de-trace;
+}
+.reveal math {
+  font-family: 'DE Math', math;
+  font-size: 1.05em;
+}
+.reveal math[display='block'] {
+  font-size: 1.35em;
+  margin: 10px 0;
+}
+// In the printed deck each page carries its own number; the live one would
+// print once more over the last page.
+html.print-pdf .reveal > .slide-number {
+  display: none !important;
+}
+
+// ---- Layouts.
+.reveal .cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 80px;
+  align-items: start;
+}
+.reveal .cols.w37 {
+  grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
+}
+.reveal .cols.w73 {
+  grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+}
+.reveal .cols.w46 {
+  grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
+}
+.reveal .cols.w64 {
+  grid-template-columns: minmax(0, 6fr) minmax(0, 4fr);
+}
+.reveal .cols.center {
+  align-items: center;
+}
+.reveal .stack > * + * {
+  margin-top: 28px;
+}
+
+// ---- Figures: framed on the sheet, captioned like drawing callouts.
+.reveal .fig {
+  margin: 0;
+}
+.reveal .fig img,
+.reveal .fig svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: none;
+  margin: 0;
+  background: #fff;
+  border: 2px solid $de-ink;
+  box-shadow: 0 2px 0 rgba(19, 32, 43, 0.08), 0 18px 36px -18px rgba(19, 32, 43, 0.45);
+}
+.reveal .fig.bare img,
+.reveal .fig.bare svg {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.reveal .fig figcaption,
+.reveal .caption {
+  max-width: none;
+  margin-top: 16px;
+  font-family: 'DE Mono', 'DE Text', monospace;
+  font-size: 19px;
+  letter-spacing: 0.02em;
+  color: $de-ink-3;
+  // No uppercase: it turns µ into a capital Mu that reads as M.
+}
+.reveal .fig figcaption b {
+  color: $de-signal;
+  font-weight: 500;
+}
+
+// ---- Readouts: measured or calculated values, set like instrument digits.
+.reveal .readouts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  border-top: 2px solid $de-ink;
+  border-bottom: 2px solid $de-ink;
+}
+.reveal .readout {
+  padding: 22px 26px 20px 0;
+}
+.reveal .readout + .readout {
+  padding-left: 26px;
+  border-left: 1px solid rgba(19, 32, 43, 0.25);
+}
+.reveal .readout .v {
+  display: block;
+  font-family: 'DE Mono', 'DE Text', monospace;
+  font-size: 56px;
+  font-weight: 500;
+  line-height: 1.05;
+  color: $de-ink;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.reveal .readout .v small {
+  font-size: 0.5em;
+  margin-left: 6px;
+  color: $de-ink-3;
+}
+.reveal .readout .k {
+  display: block;
+  margin-top: 8px;
+  font-size: 22px;
+  color: $de-ink-3;
+}
+
+// ---- Tables: data first, mono figures, ruled like a notebook table.
+.reveal table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 25px;
+  font-variant-numeric: tabular-nums;
+  color: $de-ink;
+}
+.reveal table th {
+  font-family: 'DE Text', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.03em;
+  text-align: right;
+  color: $de-ink-2;
+  border-bottom: 2px solid $de-ink !important;
+  padding: 10px 16px !important;
+}
+.reveal table td {
+  font-family: 'DE Mono', 'DE Text', monospace;
+  text-align: right;
+  padding: 11px 16px !important;
+  border-bottom: 1px solid rgba(19, 32, 43, 0.18) !important;
+}
+.reveal table th:first-child,
+.reveal table td:first-child {
+  padding-left: 0 !important;
+}
+.reveal table tr.base td {
+  background: rgba(242, 177, 52, 0.22);
+}
+.reveal table td.gap {
+  color: $de-signal;
+  text-align: center;
+  font-family: 'DE Text', sans-serif;
+  font-size: 20px;
+  background: repeating-linear-gradient(-45deg, transparent 0 8px, rgba(224, 80, 42, 0.08) 8px 16px);
+}
+
+// ---- Missing evidence: labeled, never faked.
+.reveal .gap-box {
+  position: relative;
+  padding: 34px 40px 34px;
+  border: 2.5px dashed $de-signal;
+  background: repeating-linear-gradient(-45deg, rgba(224, 80, 42, 0.035) 0 14px, rgba(224, 80, 42, 0.09) 14px 28px);
+  color: $de-ink;
+}
+.reveal .gap-box .gap-label {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 5px 12px;
+  background: $de-signal;
+  color: #fff;
+  font-family: 'DE Mono', 'DE Text', monospace;
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.reveal .gap-box p:last-child {
+  margin-bottom: 0;
+}
+
+// ---- Dark bench slides.
+.reveal section.has-dark-background,
+.reveal section.has-dark-background p,
+.reveal section.has-dark-background li {
+  color: #c9d5dc;
+}
+.reveal section.has-dark-background h1,
+.reveal section.has-dark-background h2,
+.reveal section.has-dark-background h3,
+.reveal section.has-dark-background strong {
+  color: #f4f1e8;
+}
+.reveal section.has-dark-background .muted {
+  color: #8ea1ad;
+}
+
+// Presentation covers are expressive, subject-specific compositions. The
+// plain-white title rule applies to document PDFs, not presentation slides.
+// Existing shipped decks are not rebuilt by this theme refinement.
+
+// ---- Title slide.
+.reveal .title-slide-de h1 {
+  font-size: 132px;
+  font-weight: 820;
+  font-stretch: 118%;
+  line-height: 0.94;
+  letter-spacing: -0.025em;
+  max-width: 1400px;
+  margin: 0 0 36px;
+}
+.reveal .title-slide-de .num {
+  display: block;
+  font-family: 'DE Mono', 'DE Text', monospace;
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: $de-amber;
+  margin-bottom: 26px;
+}
+.reveal .title-slide-de .meta {
+  font-size: 28px;
+  color: #8ea1ad;
+  margin: 0;
+}
+.reveal .title-slide-de .wave svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+// ---- Rubric map.
+.reveal .map {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  border-top: 2px solid $de-ink;
+}
+.reveal .map > div {
+  padding: 24px 0;
+  border-bottom: 1px solid rgba(19, 32, 43, 0.2);
+}
+.reveal .map > div:nth-child(odd) {
+  font-family: 'DE Display', 'DE Text', sans-serif;
+  font-weight: 720;
+  font-stretch: 108%;
+  font-size: 34px;
+  color: $de-ink;
+}
+
+// Reveal chrome that does not belong on a printed sheet.
+.reveal .controls,
+.reveal .progress {
+  display: none !important;
+}
+
+// ---- Calculated reference columns sit back from the measured ones.
+.reveal table th.calc,
+.reveal table td.calc {
+  color: $de-ink-3;
+}
+.reveal table.compare {
+  font-size: 28px;
+}
+.reveal table.compare td:first-child {
+  font-family: 'DE Text', sans-serif;
+  text-align: left;
+  color: $de-ink-2;
+}
+
+// ---- RWL: the closing reflection, three columns on the sheet.
+.reveal .rwl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 56px;
+  margin-top: 24px;
+}
+.reveal .rwl__col {
+  position: relative;
+  padding-top: 28px;
+  border-top: 6px solid var(--rwl, #{$de-ink});
+}
+.reveal .rwl--right { --rwl: #{$de-trace}; }
+.reveal .rwl--wrong { --rwl: #{$de-signal}; }
+.reveal .rwl--learned { --rwl: #{$de-amber}; }
+.reveal .rwl__letter {
+  display: block;
+  font-family: 'DE Display', 'DE Text', sans-serif;
+  font-size: 150px;
+  font-weight: 820;
+  font-stretch: 118%;
+  line-height: 0.85;
+  color: var(--rwl);
+  margin-bottom: 22px;
+}
+.reveal .rwl__col h3 {
+  font-size: 36px;
+  margin-bottom: 14px;
+}
+.reveal .rwl__col p {
+  font-size: 30px;
+  line-height: 1.45;
+  color: $de-ink;
+}
+
+// ---- Opt-in logic-atlas compositions. Keep evidence readable over authored
+// subject-specific background SVGs; background motifs never imply observations.
+html .reveal .slides section.slide.logic-atlas { padding: 78px 96px 92px !important; color: #13202b; }
+.reveal .logic-atlas h2 { font-size: 66px; max-width: 1710px; margin: 0 0 30px; line-height: 1.06; }
+.reveal .logic-atlas p { max-width: none; }
+.reveal .logic-atlas .note { font-family: 'DE Text'; font-size: 28px; line-height: 1.25; margin: 18px 0 0; color: #3f4b57; }
+.reveal .logic-atlas .body { font-size: 32px; line-height: 1.3; }
+.reveal .logic-atlas.night, .reveal .logic-atlas.night p { color: #f2efe6; }
+.reveal .logic-atlas.night h1, .reveal .logic-atlas.night h2, .reveal .logic-atlas.night h3 { color: #f2efe6; }
+.reveal .logic-atlas.night .note { color: #b7ccd2; }
+.reveal .logic-atlas .cover-layout { display: grid; grid-template-columns: 690px 1fr; gap: 24px; align-items: center; }
+.reveal .logic-atlas .cover-title { font-family: 'DE Display'; font-size: 226px; font-weight: 850; line-height: .85; letter-spacing: -.035em; margin: 18px 0 34px; }
+.reveal .logic-atlas .cover-subtitle { font-family: 'DE Display'; font-size: 62px; font-weight: 720; line-height: 1.02; margin: 0 0 32px; }
+.reveal .logic-atlas .cover-meta { font-size: 30px; line-height: 1.4; }
+.reveal .logic-atlas .cover-circuit svg { width: 100%; height: 645px; display: block; }
+.reveal .logic-atlas .binary-strip { display: grid; grid-template-columns: repeat(8,1fr); gap: 12px; margin-top: 38px; }
+.reveal .logic-atlas .binary-cell { color:#f2efe6; border-top: 2px solid #57717b; padding-top: 14px; display:flex; justify-content:space-between; align-items:center; font-family:'DE Mono';font-size:30px; }
+.reveal .logic-atlas .binary-cell b { display:block; background:#e0502a; color:#fff; padding: 2px 10px; font-weight:500; }
+.reveal .logic-atlas .binary-cell b.low { background:#293f4a; color:#c7d6da; }
+.reveal .logic-atlas .truth-layout { display:grid;grid-template-columns: 570px 1fr;gap:80px;align-items:center; }
+.reveal .logic-atlas .formula { font-size:44px; line-height:1.35; margin:40px 0; }
+.reveal .logic-atlas .truth-table { font-size:38px;width:100%;margin:0; }
+.reveal .logic-atlas .truth-table th { font-size:28px; }
+.reveal .logic-atlas .truth-table td { padding:12px 24px !important; }
+.reveal .logic-atlas .truth-table td:first-child { text-align:left; }
+.reveal .logic-atlas .truth-table .observed { background:#d9e8e1;color:#075f5d; }
+.reveal .logic-atlas .truth-table .calc { color:#53616b; }
+.reveal .logic-atlas .truth-table tr:last-child td {border-bottom:0 !important;}
+.reveal .logic-atlas .equation-stage {height:640px;display:grid;grid-template-columns:1fr 550px;gap:40px;align-items:center;}
+.reveal .logic-atlas .equation-stage svg {width:100%;height:620px;}
+.reveal .logic-atlas .trace-proof img {width:550px;height:auto;margin:0;display:block;}
+.reveal .logic-atlas .trace-proof p {font-size:30px;line-height:1.3;margin-top:24px;}
+.reveal .logic-atlas .states {display:grid;grid-template-columns:repeat(8,1fr);gap:14px;margin-top:30px;}
+.reveal .logic-atlas .state {text-align:center;}
+.reveal .logic-atlas .state .bits {font-family:'DE Mono';font-size:40px;padding-bottom:18px;}
+.reveal .logic-atlas .state .switch {height:395px;width:112px;margin:0 auto;display:block;}
+.reveal .logic-atlas .state .probe {height:102px;width:88px;margin:0 auto;display:block;}
+.reveal .logic-atlas .state .result {font-size:32px;font-weight:600;margin:12px 0 4px;}
+.reveal .logic-atlas .state .time {font-size:28px;color:#b7ccd2;}
+.reveal .logic-atlas .wiring {width:100%;height:610px;object-fit:contain;display:block;margin:0;background:#f4f5f7;}
+.reveal .logic-atlas .reported {display:grid;grid-template-columns:330px 1fr;gap:30px;align-items:start;margin-top:22px;}
+.reveal .logic-atlas .reported h3 {font-size:32px;margin:0;}
+.reveal .logic-atlas .reported p {font-size:29px;line-height:1.25;margin:0;}
+.reveal .logic-atlas .image-pair {display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+.reveal .logic-atlas .image-pair img {display:block;width:100%;height:590px;object-fit:contain;margin:0;background:#f4f5f7;}
+.reveal .logic-atlas .readout-line {display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;}
+.reveal .logic-atlas .readout-line strong {font-size:40px;color:#13202b;}
+.reveal .logic-atlas .readout-line span {font-size:30px;}
+.reveal .logic-atlas .photo-spread {display:grid;grid-template-columns: 1.25fr 1fr;gap:28px;align-items:end;}
+.reveal .logic-atlas .photo-spread img {height:625px;width:100%;object-fit:cover;display:block;margin:0;}
+.reveal .logic-atlas .photo-spread .secondary {height:540px;}
+.reveal .logic-atlas .video-frame {height:700px;width:100%;object-fit:cover;display:block;margin:0;object-position:center;}
+.reveal .logic-atlas .evidence-lanes {margin-top:55px;}
+.reveal .logic-atlas .lane {display:grid;grid-template-columns:380px 1fr;gap:40px;align-items:center;padding:30px 0;border-bottom:1px solid #587d80;}
+.reveal .logic-atlas .lane h3 {font-size:40px;margin:0;}
+.reveal .logic-atlas .lane p {font-size:30px;margin:7px 0 0;}
+.reveal .logic-atlas .lane .outputs {color:#f2efe6;display:grid;grid-template-columns:repeat(8,1fr);gap:14px;font-family:'DE Mono';font-size:44px;}
+.reveal .logic-atlas .lane .outputs span {text-align:center;border-bottom:2px solid #89aeb0;padding:12px 0;}
+.reveal .logic-atlas .lane .outputs.header {font-size:28px;color:#c8dcda;}
+.reveal .logic-atlas .lane .outputs.header span {border:0;}
+.reveal .logic-atlas a {color:inherit;text-decoration:underline;text-underline-offset:6px;}
+.reveal .logic-atlas .reflection {display:grid;grid-template-columns: 1.38fr .8fr 1fr;gap:56px;margin-top:48px;}
+.reveal .logic-atlas .reflection h3 {font-family:'DE Display';font-size:60px;margin:0 0 30px;}
+.reveal .logic-atlas .reflection p {font-size:32px;line-height:1.34;margin:0 0 20px;}
+.reveal .logic-atlas .reflection .letter {font-family:'DE Display';font-size:112px;line-height:1;display:block;color:#0e7f7b;margin-bottom:28px;font-weight:800;}
+.reveal .logic-atlas .reflection .wrong .letter {color:#e0502a;}
+.reveal .logic-atlas .reflection .learned .letter {color:#ad6b00;}
+// Blank RWL: ruled writing lines where Conner's reflection goes.
+.reveal .rwl__col .rwl__lines {
+  height: 300px;
+  background-image: repeating-linear-gradient(transparent 0 58px, rgba(19, 32, 43, 0.28) 58px 60px);
+}
