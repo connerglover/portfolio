@@ -391,15 +391,9 @@ html.print-pdf .reveal > .slide-number {
   color: #8ea1ad;
 }
 
-// Simple title slides: dark type on white; no drafting decoration.
-.reveal .backgrounds > .slide-background:first-child,
-.reveal .pdf-page:first-child .slide-background { background: #fff !important; }
-.reveal .backgrounds > .slide-background:first-child::after,
-.reveal .pdf-page:first-child .slide-background::after { display: none; }
-.reveal .title-slide-de h1 { color: #13202b !important; font-family: 'DE Text', sans-serif; font-size: 96px !important; font-weight: 600 !important; }
-.reveal .title-slide-de .num,
-.reveal .title-slide-de .meta,
-.reveal .title-slide-de .lede { color: #3f4b57 !important; }
+// Presentation covers are expressive, subject-specific compositions. The
+// plain-white title rule applies to document PDFs, not presentation slides.
+// Existing shipped decks are not rebuilt by this theme refinement.
 
 // ---- Title slide.
 .reveal .title-slide-de h1 {
@@ -504,6 +498,73 @@ html.print-pdf .reveal > .slide-number {
   color: $de-ink;
 }
 
+// ---- Opt-in logic-atlas compositions. Keep evidence readable over authored
+// subject-specific background SVGs; background motifs never imply observations.
+html .reveal .slides section.slide.logic-atlas { padding: 78px 96px 92px !important; color: #13202b; }
+.reveal .logic-atlas h2 { font-size: 66px; max-width: 1710px; margin: 0 0 30px; line-height: 1.06; }
+.reveal .logic-atlas p { max-width: none; }
+.reveal .logic-atlas .note { font-family: 'DE Text'; font-size: 28px; line-height: 1.25; margin: 18px 0 0; color: #3f4b57; }
+.reveal .logic-atlas .body { font-size: 32px; line-height: 1.3; }
+.reveal .logic-atlas.night, .reveal .logic-atlas.night p { color: #f2efe6; }
+.reveal .logic-atlas.night h1, .reveal .logic-atlas.night h2, .reveal .logic-atlas.night h3 { color: #f2efe6; }
+.reveal .logic-atlas.night .note { color: #b7ccd2; }
+.reveal .logic-atlas .cover-layout { display: grid; grid-template-columns: 690px 1fr; gap: 24px; align-items: center; }
+.reveal .logic-atlas .cover-title { font-family: 'DE Display'; font-size: 226px; font-weight: 850; line-height: .85; letter-spacing: -.035em; margin: 18px 0 34px; }
+.reveal .logic-atlas .cover-subtitle { font-family: 'DE Display'; font-size: 62px; font-weight: 720; line-height: 1.02; margin: 0 0 32px; }
+.reveal .logic-atlas .cover-meta { font-size: 30px; line-height: 1.4; }
+.reveal .logic-atlas .cover-circuit svg { width: 100%; height: 645px; display: block; }
+.reveal .logic-atlas .binary-strip { display: grid; grid-template-columns: repeat(8,1fr); gap: 12px; margin-top: 38px; }
+.reveal .logic-atlas .binary-cell { color:#f2efe6; border-top: 2px solid #57717b; padding-top: 14px; display:flex; justify-content:space-between; align-items:center; font-family:'DE Mono';font-size:30px; }
+.reveal .logic-atlas .binary-cell b { display:block; background:#e0502a; color:#fff; padding: 2px 10px; font-weight:500; }
+.reveal .logic-atlas .binary-cell b.low { background:#293f4a; color:#c7d6da; }
+.reveal .logic-atlas .truth-layout { display:grid;grid-template-columns: 570px 1fr;gap:80px;align-items:center; }
+.reveal .logic-atlas .formula { font-size:44px; line-height:1.35; margin:40px 0; }
+.reveal .logic-atlas .truth-table { font-size:38px;width:100%;margin:0; }
+.reveal .logic-atlas .truth-table th { font-size:28px; }
+.reveal .logic-atlas .truth-table td { padding:12px 24px !important; }
+.reveal .logic-atlas .truth-table td:first-child { text-align:left; }
+.reveal .logic-atlas .truth-table .observed { background:#d9e8e1;color:#075f5d; }
+.reveal .logic-atlas .truth-table .calc { color:#53616b; }
+.reveal .logic-atlas .truth-table tr:last-child td {border-bottom:0 !important;}
+.reveal .logic-atlas .equation-stage {height:640px;display:grid;grid-template-columns:1fr 550px;gap:40px;align-items:center;}
+.reveal .logic-atlas .equation-stage svg {width:100%;height:620px;}
+.reveal .logic-atlas .trace-proof img {width:550px;height:auto;margin:0;display:block;}
+.reveal .logic-atlas .trace-proof p {font-size:30px;line-height:1.3;margin-top:24px;}
+.reveal .logic-atlas .states {display:grid;grid-template-columns:repeat(8,1fr);gap:14px;margin-top:30px;}
+.reveal .logic-atlas .state {text-align:center;}
+.reveal .logic-atlas .state .bits {font-family:'DE Mono';font-size:40px;padding-bottom:18px;}
+.reveal .logic-atlas .state .switch {height:395px;width:112px;margin:0 auto;display:block;}
+.reveal .logic-atlas .state .probe {height:102px;width:88px;margin:0 auto;display:block;}
+.reveal .logic-atlas .state .result {font-size:32px;font-weight:600;margin:12px 0 4px;}
+.reveal .logic-atlas .state .time {font-size:28px;color:#b7ccd2;}
+.reveal .logic-atlas .wiring {width:100%;height:610px;object-fit:contain;display:block;margin:0;background:#f4f5f7;}
+.reveal .logic-atlas .reported {display:grid;grid-template-columns:330px 1fr;gap:30px;align-items:start;margin-top:22px;}
+.reveal .logic-atlas .reported h3 {font-size:32px;margin:0;}
+.reveal .logic-atlas .reported p {font-size:29px;line-height:1.25;margin:0;}
+.reveal .logic-atlas .image-pair {display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+.reveal .logic-atlas .image-pair img {display:block;width:100%;height:590px;object-fit:contain;margin:0;background:#f4f5f7;}
+.reveal .logic-atlas .readout-line {display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;}
+.reveal .logic-atlas .readout-line strong {font-size:40px;color:#13202b;}
+.reveal .logic-atlas .readout-line span {font-size:30px;}
+.reveal .logic-atlas .photo-spread {display:grid;grid-template-columns: 1.25fr 1fr;gap:28px;align-items:end;}
+.reveal .logic-atlas .photo-spread img {height:625px;width:100%;object-fit:cover;display:block;margin:0;}
+.reveal .logic-atlas .photo-spread .secondary {height:540px;}
+.reveal .logic-atlas .video-frame {height:700px;width:100%;object-fit:cover;display:block;margin:0;object-position:center;}
+.reveal .logic-atlas .evidence-lanes {margin-top:55px;}
+.reveal .logic-atlas .lane {display:grid;grid-template-columns:380px 1fr;gap:40px;align-items:center;padding:30px 0;border-bottom:1px solid #587d80;}
+.reveal .logic-atlas .lane h3 {font-size:40px;margin:0;}
+.reveal .logic-atlas .lane p {font-size:30px;margin:7px 0 0;}
+.reveal .logic-atlas .lane .outputs {color:#f2efe6;display:grid;grid-template-columns:repeat(8,1fr);gap:14px;font-family:'DE Mono';font-size:44px;}
+.reveal .logic-atlas .lane .outputs span {text-align:center;border-bottom:2px solid #89aeb0;padding:12px 0;}
+.reveal .logic-atlas .lane .outputs.header {font-size:28px;color:#c8dcda;}
+.reveal .logic-atlas .lane .outputs.header span {border:0;}
+.reveal .logic-atlas a {color:inherit;text-decoration:underline;text-underline-offset:6px;}
+.reveal .logic-atlas .reflection {display:grid;grid-template-columns: 1.38fr .8fr 1fr;gap:56px;margin-top:48px;}
+.reveal .logic-atlas .reflection h3 {font-family:'DE Display';font-size:60px;margin:0 0 30px;}
+.reveal .logic-atlas .reflection p {font-size:32px;line-height:1.34;margin:0 0 20px;}
+.reveal .logic-atlas .reflection .letter {font-family:'DE Display';font-size:112px;line-height:1;display:block;color:#0e7f7b;margin-bottom:28px;font-weight:800;}
+.reveal .logic-atlas .reflection .wrong .letter {color:#e0502a;}
+.reveal .logic-atlas .reflection .learned .letter {color:#ad6b00;}
 // Blank RWL: ruled writing lines where Conner's reflection goes.
 .reveal .rwl__col .rwl__lines {
   height: 300px;

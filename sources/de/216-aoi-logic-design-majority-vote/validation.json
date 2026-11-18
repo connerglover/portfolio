@@ -1,0 +1,51 @@
+{
+  "pdf_pages": 16,
+  "pdf_bytes": 4816613,
+  "pdf_sha256": "c22669d67f90fc6f0b848cf07667e76aa9b7562dfb58f65917c812cfa6f614d7",
+  "native_rebuild_pixel_equal_pages": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "final_vs_visually_reviewed_pass2_non_schematic_pages_equal": true,
+  "all_16_boolean_states_verified": true,
+  "passing_minterms": [
+    7,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "source_media_sha256": {
+    "multisim.png": "a74f89edc63838a771b3c49fe0fe614d57490fc09b6a473b59cd3468153d192b",
+    "multisim.gif": "e279e38cd15afbcafd3758868aafaba62e2334d24b0ac88a93de47e3895700c4",
+    "tinkercad.png": "f139c7c66b45b8d0c88aabe722571b7721348c671f495ca30bbc6d066767abd7",
+    "tinkercad.gif": "a691143e8b7a6bda9259d2b5799138ba1a3f6565c3a91b991f454886840b6073",
+    "irl.MOV": "eaf6e6f2a470e6595164f70ecb21d620b55757d2e987aedbee8887ce2f1e7e4d"
+  },
+  "missing_local_links": [],
+  "rwl_directly_supplied": true,
+  "fonts_embedded": true,
+  "publication_or_submission": false,
+  "content_bounds_over_960px": [],
+  "index_job": "h-20261027-224741",
+  "index_verdict": "finished",
+  "class_F_verification": "ok",
+  "task_remains_open": "d-5fc813462f"
+}

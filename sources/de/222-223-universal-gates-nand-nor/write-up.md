@@ -1,0 +1,3 @@
+The original Multisim animation and the breadboard video preserve changes that the presentation PDF cannot show. The Multisim recording places the original AOI circuits beside the NAND-only and NOR-only versions, so their indicators can be compared during the same playback. The TinkerCAD images document the two wiring layouts; their blank supply displays do not establish an active test state. The physical recording shows the built circuit and input-switch operation. Conner confirmed that all teacher-required work was finished and working.
+
+Media: [Multisim animation](assets/multisim-nand-nor.gif) and [breadboard demonstration](assets/breadboard-demonstration.mp4).

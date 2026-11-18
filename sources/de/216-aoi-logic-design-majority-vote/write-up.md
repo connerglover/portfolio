@@ -1,0 +1,3 @@
+The final two-input design needs more than one AND package because a three-input product must be built as two cascaded gates. Unused gates remain available in the second package. Shared input labels in the conceptual diagrams represent common electrical nets, not separate votes. The supplied TinkerCAD circuit uses HC-family devices, so its component evidence should remain distinct from the LS-family parts named in the activity. The recording files are retained separately because a PDF cannot preserve switch operation or LED changes.
+
+Motion evidence: [Multisim](assets/multisim.gif), [TinkerCAD](assets/tinkercad.gif), and [physical build](assets/irl.MOV). Original Multisim snapshot: [multisim.png](assets/multisim.png).

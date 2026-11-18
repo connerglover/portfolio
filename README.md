@@ -241,7 +241,7 @@ browsers refuse to render one inline at all.
 To make that work, `scripts/render_decks.py` rasterises every page of every PDF
 in `public/decks/` to a WebP image in `public/deck-pages/`, and writes
 `src/data/decks.json` so the component knows the page count and aspect ratio.
-All 49 attachments come to 287 pages and about 19 MB.
+All 66 attachments come to 434 pages and about 27 MB.
 
 The aspect ratio also picks the presentation, with no configuration needed:
 

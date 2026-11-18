@@ -1,0 +1,182 @@
+{
+  "three_input": [
+    {
+      "ABC": "000",
+      "specified": 0,
+      "unsimplified": 0,
+      "simplified": 0,
+      "pass_spec": true
+    },
+    {
+      "ABC": "001",
+      "specified": 0,
+      "unsimplified": 0,
+      "simplified": 0,
+      "pass_spec": true
+    },
+    {
+      "ABC": "010",
+      "specified": null,
+      "unsimplified": 0,
+      "simplified": 1,
+      "pass_spec": true
+    },
+    {
+      "ABC": "011",
+      "specified": 1,
+      "unsimplified": 1,
+      "simplified": 1,
+      "pass_spec": true
+    },
+    {
+      "ABC": "100",
+      "specified": 0,
+      "unsimplified": 0,
+      "simplified": 0,
+      "pass_spec": true
+    },
+    {
+      "ABC": "101",
+      "specified": null,
+      "unsimplified": 0,
+      "simplified": 0,
+      "pass_spec": true
+    },
+    {
+      "ABC": "110",
+      "specified": 1,
+      "unsimplified": 1,
+      "simplified": 1,
+      "pass_spec": true
+    },
+    {
+      "ABC": "111",
+      "specified": 0,
+      "unsimplified": 0,
+      "simplified": 0,
+      "pass_spec": true
+    }
+  ],
+  "majority": [
+    {
+      "ABCD": "0000",
+      "original": 0,
+      "simplified": 0,
+      "match": true
+    },
+    {
+      "ABCD": "0001",
+      "original": 0,
+      "simplified": 0,
+      "match": true
+    },
+    {
+      "ABCD": "0010",
+      "original": 0,
+      "simplified": 0,
+      "match": true
+    },
+    {
+      "ABCD": "0011",
+      "original": 0,
+      "simplified": 0,
+      "match": true
+    },
+    {
+      "ABCD": "0100",
+      "original": 0,
+      "simplified": 0,
+      "match": true
+    },
+    {
+      "ABCD": "0101",
+      "original": 0,
+      "simplified": 0,
+      "match": true
+    },
+    {
+      "ABCD": "0110",
+      "original": 0,
+      "simplified": 0,
+      "match": true
+    },
+    {
+      "ABCD": "0111",
+      "original": 1,
+      "simplified": 1,
+      "match": true
+    },
+    {
+      "ABCD": "1000",
+      "original": 0,
+      "simplified": 0,
+      "match": true
+    },
+    {
+      "ABCD": "1001",
+      "original": 1,
+      "simplified": 1,
+      "match": true
+    },
+    {
+      "ABCD": "1010",
+      "original": 1,
+      "simplified": 1,
+      "match": true
+    },
+    {
+      "ABCD": "1011",
+      "original": 1,
+      "simplified": 1,
+      "match": true
+    },
+    {
+      "ABCD": "1100",
+      "original": 1,
+      "simplified": 1,
+      "match": true
+    },
+    {
+      "ABCD": "1101",
+      "original": 1,
+      "simplified": 1,
+      "match": true
+    },
+    {
+      "ABCD": "1110",
+      "original": 1,
+      "simplified": 1,
+      "match": true
+    },
+    {
+      "ABCD": "1111",
+      "original": 1,
+      "simplified": 1,
+      "match": true
+    }
+  ],
+  "specified_rows_passed": 6,
+  "majority_rows_passed": 16,
+  "interpretation": "Calculated equivalence, not simulated observations. ABC 010 changes 0 to 1 at a don't-care row. ABC 101 remains 0.",
+  "gif": {
+    "frame_count": 86,
+    "size": [
+      2399,
+      1017
+    ],
+    "representative_observations": [
+      {
+        "frame": 7,
+        "ABCD": "0000",
+        "X1": "LOW",
+        "X2": "LOW"
+      },
+      {
+        "frame": 85,
+        "ABCD": "1111",
+        "X1": "HIGH",
+        "X2": "HIGH"
+      }
+    ]
+  }
+}

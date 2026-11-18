@@ -1,6 +1,6 @@
 {
   "entry_id": "89227fcfb979",
-  "accession": "F\u00b702\u00b7027",
+  "accession": "F·02·027",
   "job": "h-20261015-211952",
   "scope": "Fall schedule page 3: problem 1 only, Multisim, TinkerCAD and breadboard; F2 not required in this package.",
   "sources": [
@@ -145,5 +145,13 @@
       "sampling": "Full-duration review at 0.25 s intervals, 44 images; close LED crops and representative full-resolution frames inspected.",
       "findings": "Finger manually operates protoboard switches. LED brightness varies, but exact ABC-to-output mapping and eight-state agreement are not established. No audio transcription or first-person claims used."
     }
+  },
+  "current_confirmation": {
+    "recorded": "2026-11-17",
+    "source": "Conner reports teacher review; not a direct teacher message",
+    "finding": "All three implementations were completed correctly",
+    "notebook": "Conner reports no notebook mandate for this activity",
+    "scope": "Problem 1 / F1 only; no additional state logs requested",
+    "historical_inspection_note": "Earlier image and recording inspection limits below are retained as provenance; they do not represent outstanding assignment work."
   }
 }
